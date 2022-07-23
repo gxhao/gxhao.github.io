@@ -13,7 +13,7 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://www.paincker.com
+url: https://gxhao2020.store
 permalink: :url/
 permalink_defaults:
 pretty_urls:
@@ -109,7 +109,7 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  repo: git@github.com:jzj1993/jzj1993.github.io.git
+  repo: git@github.com:gxhao2020/gxhao2020.github.io.git
   branch: gh-pages
 
 plugins:
