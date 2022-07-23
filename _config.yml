@@ -13,7 +13,7 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://gxhao2020.store
+url: https://xhaosoft.com
 permalink: :url/
 permalink_defaults:
 pretty_urls:
@@ -70,7 +70,7 @@ default_category: 开发技术
 category_map:
   开发技术: develop
   学习思考: study
-  Android测试初探: android-test
+  运维开发: deployment
   单片机小白学步: mcu-primer
   装系统不求人: sysinst
   网站搭建从零开始: website-primer
@@ -114,6 +114,11 @@ deploy:
 
 plugins:
 - hexo-generator-cname
+
+# 自动生成sitemap
+sitemap:
+	path: sitemap.xml
+
 
 excerpt:
   depth: 2  #按层来算，也就是按代码块来算

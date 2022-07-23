@@ -1,6 +1,15 @@
-# shell proxy via proxychains-ng
+---
+title: shell proxy via proxychains-ng
+id: '32'
+tags: ['shell','deploy','proxy']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /shell-proxy
+---
 
-## 
+
+## Introduce
 
 
 Usually when we use `GNU/Linux` we visit some external websites, and in many cases the relevant content is downloaded through a shell, such as `git`,`wget`,etc.

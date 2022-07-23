@@ -1,3 +1,13 @@
+---
+title: NFS filesystem mount 
+id: '32'
+tags: ['nfs','mount']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /nfsmount
+---
+
 # 使用nfs文件系统挂载
 1. 服务器端挂载配置  https://cloud.tencent.com/developer/article/1626660  
 2. 参考文章    ：[How to share a directory on a Linux machine to a Windows machine via NFS?](https://superuser.com/questions/1363062/how-to-share-a-directory-on-a-linux-machine-to-a-windows-machine-via-nfs)

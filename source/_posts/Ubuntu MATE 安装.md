@@ -1,3 +1,13 @@
+---
+title: Ubuntu MATE Install
+id: '32'
+tags: ['ubuntu','linux']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /ubuntu-install
+---
+
 # Ubuntu MATE安装及初始配置
 ## 前言
 家里有个老电脑、还是在我上初中的时候买的，到现在他的使用率也很低了。考虑配置为amd双核、4G内存、250G硬盘，拿来搭一个小型的Linux服务器，用来学习和跑一些常用的软件还是很不错的。以下是操作详情。

@@ -1,3 +1,12 @@
+---
+title: 远程连接linux桌面的几种方式
+id: '32'
+tags: ['linux','remote']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /remote-linux
+---
 # 前言
 家里有个老电脑想使用起来，最适合的就是linux系统了，安装了Ubuntu。除了远程命令执行外还需要远程窗口帮助家里长辈处理一些问题。问题描述如下:  
 v2ex类似问题：[远程访问 Linux 桌面最快速最高效的方式是什么 VNC,RDP?](https://v2ex.com/t/462243)

@@ -1,4 +1,12 @@
-# Clash for Linux 部署
+---
+title: linux 部署clash的三种方式
+id: '32'
+tags: ['linux','proxy','clash']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /clashlinux
+---
 ## 前言
 
 Clash for Windows 是一款非常好用的代理软件，它通过简单的配置能实现通过代理的网路自动切换直连或者代理。也提供了允许局域网其他设备连接和游戏模式等非常好i用的功能。在Windows的图形化界面操作非常友好。由于我家里有台设备是Linux Ubuntu。想通过这个软件走代理。以下是配置三种方法

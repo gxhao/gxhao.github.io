@@ -1,3 +1,12 @@
+---
+title: docker开启代理
+id: '32'
+tags: ['docker','proxy']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /dockerproxy
+---
 # 前言
 在国内网路情况下docker 拉取DockerHub仓库的镜像是非常慢的，这时候我们经常使用镜像加速器来解决这一问题，但是镜像加速器并不是始终生效的，在一些情况下可能会失效。
 [docker rigster test](https://github.com/docker-practice/docker-registry-cn-mirror-test/actions)每天提供了镜像的测试功能。如果你经常使用代理的话，这边可以配置Docker代理。

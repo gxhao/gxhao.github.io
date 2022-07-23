@@ -101,11 +101,11 @@ creative_commons:
 # Schemes
 # scheme: Muse
 # scheme: Mist
-scheme: Pisces
-# scheme: Gemini
+# scheme: Pisces
+scheme: Gemini
 
 # Dark Mode
-darkmode: false
+darkmode: auto
 
 
 # ---------------------------------------------------------------
@@ -179,7 +179,7 @@ site_state: true
 # Key is the link label showing to end users.
 # Value before `||` delimiter is the target permalink, value after `||` delimiter is the name of Font Awesome icon.
 social:
-  GitHub: https://github.com/jzj1993 || fab fa-github
+  GitHub: https://github.com/gxhao2020 || fab fa-github
   #E-Mail: mailto:yourname@gmail.com || fa fa-envelope
   #Weibo: https://weibo.com/yourname || fab fa-weibo
   #Google: https://plus.google.com/yourname || fab fa-google
@@ -203,11 +203,7 @@ links_settings:
   layout: block
 
 links:
-  DAppChaser: http://www.dappchaser.com
-  陈文管的博客: https://www.chenwenguan.com/
-  程序亦非猿: http://yifeiyuan.me/
-  Trinea: https://www.trinea.cn/
-  Shinya: https://blog.weshinekx.cn/
+  Anduin: https://anduin.aiursoft.com/
 
 # Table of Contents in the Sidebar
 # Front-matter variable (unsupport wrap expand_all).

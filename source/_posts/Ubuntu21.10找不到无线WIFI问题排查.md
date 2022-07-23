@@ -1,4 +1,12 @@
-# Ubuntu 21.10 找不到无线WIFI问题排查
+---
+title: Ubuntu 21.10 安装后找不到无线wifi问题排查
+id: '32'
+tags: ['ubuntu','linux']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /ubuntu-wifi
+---
 
 ## 起因
 

@@ -1,3 +1,12 @@
+---
+title: SQL Server 死锁问题排查
+id: '32'
+tags: ['sql','lock']
+categories:
+  - - deployment
+date: 2022-07-22 15:59:16
+url: /sql-lock
+---
 
 参考：
 [微软官方api](https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-lock-transact-sql?view=sql-server-ver15)
