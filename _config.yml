@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: gxhao2020
+title: gxhao
 subtitle: 'personal blog'
 description: '郭晓豪的个人博客，传统软件行业，政府企业平台，记录日常开发时的一些思考，分享相关知识'
 keywords: ['计算机','开发','编程','网站','博客','技术','学习','Java','DevOps']
-author: gxhao2020
+author: gxhao
 language: zh-CN
 timezone: 'Asia/Shanghai'
 
