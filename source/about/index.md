@@ -73,7 +73,7 @@ GitHub (1.6k star) ：[https://github.com/meituan/WMRouter](https://github.com/m
 
 发布Markdown文件到WordPress等博客的开源、跨平台桌面工具，支持中英文。提供简易编辑预览功能，支持主流Markdown语法、代码高亮、MathJax；一键发布，批量传图，文章属性设置。
 
-GitHub主页：[https://github.com/jzj1993/PublishMarkdown](https://github.com/jzj1993/PublishMarkdown)
+GitHub主页：[https://github.com/gxhao2020/PublishMarkdown](https://github.com/gxhao2020/PublishMarkdown)
 
 实现：Electron / Vue.js / ES6 / Sass
 
@@ -93,9 +93,9 @@ Android方法耗时分析工具。
 
 ### 相关链接
 
-- [GitHub](https://github.com/jzj1993)
+- [GitHub](https://github.com/gxhao2020)
 
-- [CSDN博客](http://blog.csdn.net/jzj1993)
+- [CSDN博客](http://blog.csdn.net/gxhao2020)
 
 ## 公众号
 

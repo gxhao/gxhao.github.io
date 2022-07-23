@@ -4,7 +4,7 @@
 
 博客文章放在sources目录，其中 `source/_posts` 为Markdown源文件和图片存放位置，配置了gitignore，本地软链接到笔记目录。
 
-渲染器使用自己fork修改的[hexo-renderer-markdown-it-jzj](https://github.com/jzj1993/hexo-renderer-markdown-it-jzj)，可以处理`source/_posts`中使用相对路径引用的图片文件，并自动复制到`public`目录。
+渲染器使用自己fork修改的[hexo-renderer-markdown-it-jzj](https://github.com/gxhao2020/hexo-renderer-markdown-it-jzj)，可以处理`source/_posts`中使用相对路径引用的图片文件，并自动复制到`public`目录。
 
 测试文章放在`source-test`目录，用于开发测试。
 

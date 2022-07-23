@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Paincker
-subtitle: ''
-description: '江子健的个人博客，90后理工男、微软程序员、互联网从业者，分享软件编程、开发技术、学习与思考'
-keywords: ['计算机','开发','编程','网站','博客','技术','学习']
-author: jzj1993
+title: gxhao2020
+subtitle: 'personal blog'
+description: '郭晓豪的个人博客，传统软件行业，政府企业平台，记录日常开发时的一些思考，分享相关知识'
+keywords: ['计算机','开发','编程','网站','博客','技术','学习'，Java,DevOps]
+author: gxhao2020
 language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://blog.gxhao2020.store
+url: https://gxhao2020.store
 permalink: :url/
 permalink_defaults:
 pretty_urls:
