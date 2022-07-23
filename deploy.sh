@@ -50,7 +50,7 @@ hexo generate
 echo
 echo "Fetch git data from remote"
 if [ ! -d "remote" ]; then
-  git clone --branch gh-pages git@github.com:jzj1993/jzj1993.github.io.git remote
+  git clone --branch gh-pages git@github.com:gxhao2020/gxhao2020.github.io.git remote
 fi
 pushd remote > /dev/null
 git fetch origin gh-pages
