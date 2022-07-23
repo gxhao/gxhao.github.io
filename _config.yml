@@ -1,1 +1,5 @@
-theme: jekyll-theme-cayman
+theme: vexo
+deploy:
+  type: git
+  repo: https://github.com/gxhao2020/gxhao2020.github.io.git
+  branch: main
