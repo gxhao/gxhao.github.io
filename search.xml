@@ -177,33 +177,6 @@ Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">ht
       </tags>
   </entry>
   <entry>
-    <title>SQL Server 死锁问题排查</title>
-    <url>//sql-lock/</url>
-    <content><![CDATA[<p>参考：<br>
-<a href="https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-lock-transact-sql?view=sql-server-ver15">微软官方api</a></p>
-<h2 id="问题日志描述">问题日志描述</h2>
-<blockquote>
-<p>事务(进程 ID 140)与另一个进程被死锁在 锁 | 通信缓冲区 资源上，并且已被选作死锁牺牲品。请重新运行该事务</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:196)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1454)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:388)        </span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:338)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.TDSCommand.ex</span><br></pre></td></tr></table></figure>
-<h2 id="问题排查">问题排查</h2>
-<h3 id="1、查询哪些进程导致的死锁">1、查询哪些进程导致的死锁</h3>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> request_session_id spid, object_name( resource_associated_entity_id )</span><br><span class="line">tablename <span class="keyword">from</span> sys.dm_tran_locks <span class="keyword">where</span> resource_type <span class="operator">=</span> <span class="string">&#x27;object&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="2、查询死锁的原因">2、查询死锁的原因</h3>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Who(spid <span class="type">int</span>,</span><br><span class="line">    ecid <span class="type">int</span>,</span><br><span class="line">    status nvarchar(<span class="number">50</span>),</span><br><span class="line">    loginname nvarchar(<span class="number">50</span>),</span><br><span class="line">    hostname nvarchar(<span class="number">50</span>),</span><br><span class="line">    blk <span class="type">int</span>,</span><br><span class="line">    dbname nvarchar(<span class="number">50</span>),</span><br><span class="line">    cmd nvarchar(<span class="number">50</span>),</span><br><span class="line">    request_ID <span class="type">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Lock(spid <span class="type">int</span>,</span><br><span class="line">    dpid <span class="type">int</span>,</span><br><span class="line">    objid <span class="type">int</span>,</span><br><span class="line">    indld <span class="type">int</span>,</span><br><span class="line">    [Type]  nvarchar(<span class="number">20</span>),</span><br><span class="line">    Resource nvarchar(<span class="number">50</span>),</span><br><span class="line">    Mode nvarchar(<span class="number">10</span>),</span><br><span class="line">    Status nvarchar(<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Who    <span class="keyword">EXEC</span> sp_who active  </span><br><span class="line"><span class="comment">--看哪个引起的阻塞，blk \</span></span><br><span class="line"> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Lock     <span class="keyword">EXEC</span> sp_lock  </span><br><span class="line"><span class="comment">--看锁住了那个资源id，objid </span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@DBName</span> nvarchar(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@DBName</span><span class="operator">=</span><span class="string">&#x27;czggzy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> #Who.<span class="operator">*</span> <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname<span class="operator">=</span><span class="variable">@DBName</span></span><br><span class="line"><span class="keyword">SELECT</span> #Lock.<span class="operator">*</span> <span class="keyword">FROM</span> #Lock</span><br><span class="line">    <span class="keyword">JOIN</span> #Who</span><br><span class="line">        <span class="keyword">ON</span> #Who.spid<span class="operator">=</span>#Lock.spid</span><br><span class="line">            <span class="keyword">AND</span> dbname<span class="operator">=</span><span class="variable">@DBName</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--最后发送到SQL Server的语句</span></span><br><span class="line"><span class="keyword">DECLARE</span> crsr <span class="keyword">Cursor</span> <span class="keyword">FOR</span>     <span class="keyword">SELECT</span> blk <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span> <span class="keyword">AND</span> blk <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@blk</span> <span class="type">int</span>;</span><br><span class="line"><span class="keyword">open</span> crsr;</span><br><span class="line"><span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line">WHILE (@<span class="variable">@FETCH</span>_STATUS  <span class="operator">=</span>  <span class="number">0</span>)<span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line">    dbcc inputbuffer(<span class="variable">@blk</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">close</span> crsr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DEALLOCATE</span> crsr;</span><br><span class="line"><span class="comment">--锁定的资源</span></span><br><span class="line"> <span class="keyword">SELECT</span> #Who.spid,</span><br><span class="line">hostname,</span><br><span class="line">objid,</span><br><span class="line">[type],</span><br><span class="line">mode,</span><br><span class="line">object_name(objid) <span class="keyword">as</span> objName <span class="keyword">FROM</span> #Lock    <span class="keyword">JOIN</span> #Who        <span class="keyword">ON</span> #Who.spid <span class="operator">=</span>#Lock.spid             <span class="keyword">AND</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span>    <span class="keyword">WHERE</span> objid <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Who;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Lock;</span><br></pre></td></tr></table></figure>
-<h2 id="问题处理">问题处理</h2>
-<h3 id="杀死进程">杀死进程</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kill spid  --杀死进程</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>sql</tag>
-        <tag>lock</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu MATE Install</title>
     <url>//ubuntu-install/</url>
     <content><![CDATA[<h1>Ubuntu MATE安装及初始配置</h1>
@@ -268,6 +241,33 @@ Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">ht
       <tags>
         <tag>ubuntu</tag>
         <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server 死锁问题排查</title>
+    <url>//sql-lock/</url>
+    <content><![CDATA[<p>参考：<br>
+<a href="https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-lock-transact-sql?view=sql-server-ver15">微软官方api</a></p>
+<h2 id="问题日志描述">问题日志描述</h2>
+<blockquote>
+<p>事务(进程 ID 140)与另一个进程被死锁在 锁 | 通信缓冲区 资源上，并且已被选作死锁牺牲品。请重新运行该事务</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:196)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1454)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:388)        </span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:338)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.TDSCommand.ex</span><br></pre></td></tr></table></figure>
+<h2 id="问题排查">问题排查</h2>
+<h3 id="1、查询哪些进程导致的死锁">1、查询哪些进程导致的死锁</h3>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> request_session_id spid, object_name( resource_associated_entity_id )</span><br><span class="line">tablename <span class="keyword">from</span> sys.dm_tran_locks <span class="keyword">where</span> resource_type <span class="operator">=</span> <span class="string">&#x27;object&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2、查询死锁的原因">2、查询死锁的原因</h3>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Who(spid <span class="type">int</span>,</span><br><span class="line">    ecid <span class="type">int</span>,</span><br><span class="line">    status nvarchar(<span class="number">50</span>),</span><br><span class="line">    loginname nvarchar(<span class="number">50</span>),</span><br><span class="line">    hostname nvarchar(<span class="number">50</span>),</span><br><span class="line">    blk <span class="type">int</span>,</span><br><span class="line">    dbname nvarchar(<span class="number">50</span>),</span><br><span class="line">    cmd nvarchar(<span class="number">50</span>),</span><br><span class="line">    request_ID <span class="type">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Lock(spid <span class="type">int</span>,</span><br><span class="line">    dpid <span class="type">int</span>,</span><br><span class="line">    objid <span class="type">int</span>,</span><br><span class="line">    indld <span class="type">int</span>,</span><br><span class="line">    [Type]  nvarchar(<span class="number">20</span>),</span><br><span class="line">    Resource nvarchar(<span class="number">50</span>),</span><br><span class="line">    Mode nvarchar(<span class="number">10</span>),</span><br><span class="line">    Status nvarchar(<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Who    <span class="keyword">EXEC</span> sp_who active  </span><br><span class="line"><span class="comment">--看哪个引起的阻塞，blk \</span></span><br><span class="line"> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Lock     <span class="keyword">EXEC</span> sp_lock  </span><br><span class="line"><span class="comment">--看锁住了那个资源id，objid </span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@DBName</span> nvarchar(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@DBName</span><span class="operator">=</span><span class="string">&#x27;czggzy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> #Who.<span class="operator">*</span> <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname<span class="operator">=</span><span class="variable">@DBName</span></span><br><span class="line"><span class="keyword">SELECT</span> #Lock.<span class="operator">*</span> <span class="keyword">FROM</span> #Lock</span><br><span class="line">    <span class="keyword">JOIN</span> #Who</span><br><span class="line">        <span class="keyword">ON</span> #Who.spid<span class="operator">=</span>#Lock.spid</span><br><span class="line">            <span class="keyword">AND</span> dbname<span class="operator">=</span><span class="variable">@DBName</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--最后发送到SQL Server的语句</span></span><br><span class="line"><span class="keyword">DECLARE</span> crsr <span class="keyword">Cursor</span> <span class="keyword">FOR</span>     <span class="keyword">SELECT</span> blk <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span> <span class="keyword">AND</span> blk <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@blk</span> <span class="type">int</span>;</span><br><span class="line"><span class="keyword">open</span> crsr;</span><br><span class="line"><span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line">WHILE (@<span class="variable">@FETCH</span>_STATUS  <span class="operator">=</span>  <span class="number">0</span>)<span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line">    dbcc inputbuffer(<span class="variable">@blk</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">close</span> crsr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DEALLOCATE</span> crsr;</span><br><span class="line"><span class="comment">--锁定的资源</span></span><br><span class="line"> <span class="keyword">SELECT</span> #Who.spid,</span><br><span class="line">hostname,</span><br><span class="line">objid,</span><br><span class="line">[type],</span><br><span class="line">mode,</span><br><span class="line">object_name(objid) <span class="keyword">as</span> objName <span class="keyword">FROM</span> #Lock    <span class="keyword">JOIN</span> #Who        <span class="keyword">ON</span> #Who.spid <span class="operator">=</span>#Lock.spid             <span class="keyword">AND</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span>    <span class="keyword">WHERE</span> objid <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Who;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Lock;</span><br></pre></td></tr></table></figure>
+<h2 id="问题处理">问题处理</h2>
+<h3 id="杀死进程">杀死进程</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kill spid  --杀死进程</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>sql</tag>
+        <tag>lock</tag>
       </tags>
   </entry>
   <entry>
@@ -342,6 +342,51 @@ Example: /share *(insecure,rw)<br>
       </tags>
   </entry>
   <entry>
+    <title>Ubuntu 21.10 安装后找不到无线wifi问题排查</title>
+    <url>//ubuntu-wifi/</url>
+    <content><![CDATA[<h2 id="起因">起因</h2>
+<p>家用笔记本在更新win11 最新的更新后频繁出现系统黑屏进入休眠状态的问题，但是我系统设置<code>休眠状态</code>为永不休眠。一气之下选择更换系统为 <code>Ubuntu（21.10）</code>（听说gnome40挺好用的</p>
+<p>装好后出现了找不到wifi模块的问题，因为笔记本没有网线接口，有线网络也没法使用了。经过网上的搜索排查，最终解决，以下记录一下解决的思路。</p>
+<h2 id="解决">解决</h2>
+<h3 id="确定网卡型号">确定网卡型号</h3>
+<p>通过厂商的下载中心，<a href="https://www.asus.com/support/Download-Center/">华硕全球支持中心</a>查询到我这台电脑的网卡型号为<strong>MT7921</strong>。</p>
+<p><img data-src="" alt="图片1"></p>
+<h3 id="是否是驱动问题">是否是驱动问题</h3>
+<p>查看相关问题说MT7921在Linux内核为5.12以下不会自动识别,但是Ubuntu21.10内核为lunux kernel 5.13.应该不是这个问题</p>
+<h3 id="linux防火墙">linux防火墙</h3>
+<p>看<a href="https://miloserdov.org/?p=6899">这个帖子</a>说即使<code>linux</code>内核高于5.12也会因为防火墙问题导致无法查找wifi模块，安装linux防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install linux-firmware</span><br></pre></td></tr></table></figure>
+<h3 id="关闭快速启动">关闭快速启动</h3>
+<p>在<a href="https://bbs.archlinux.org/viewtopic.php?id=267229">archlinux</a> 的论坛上翻到一个安装了防火墙仍然不起作用的回答。</p>
+<blockquote>
+<p>There is a bug report with not much more information in the upstream repository:<br>
+<a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a><br>
+If you dual-boot with windows, disable its fast-startup mode. <a href="https://wiki.archlinux.org/title/Dual_b">https://wiki.archlinux.org/title/Dual_b</a> … ibernation</p>
+</blockquote>
+<p>定位到github issue,通过完全关闭电脑，并且拔掉电源线再启动解决。幸运的是我也是通过这种方法解决的。</p>
+<h2 id="参考">参考</h2>
+<blockquote>
+<p><a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://bbs.archlinux.org/viewtopic.php?id=267229">https://bbs.archlinux.org/viewtopic.php?id=267229</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth">https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://miloserdov.org/?p=6899">https://miloserdov.org/?p=6899</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>ubuntu</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>linux 部署clash的三种方式</title>
     <url>//clashlinux/</url>
     <content><![CDATA[<h2 id="前言">前言</h2>
@@ -409,51 +454,6 @@ Example: /share *(insecure,rw)<br>
         <tag>proxy</tag>
         <tag>shell</tag>
         <tag>deploy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ubuntu 21.10 安装后找不到无线wifi问题排查</title>
-    <url>//ubuntu-wifi/</url>
-    <content><![CDATA[<h2 id="起因">起因</h2>
-<p>家用笔记本在更新win11 最新的更新后频繁出现系统黑屏进入休眠状态的问题，但是我系统设置<code>休眠状态</code>为永不休眠。一气之下选择更换系统为 <code>Ubuntu（21.10）</code>（听说gnome40挺好用的</p>
-<p>装好后出现了找不到wifi模块的问题，因为笔记本没有网线接口，有线网络也没法使用了。经过网上的搜索排查，最终解决，以下记录一下解决的思路。</p>
-<h2 id="解决">解决</h2>
-<h3 id="确定网卡型号">确定网卡型号</h3>
-<p>通过厂商的下载中心，<a href="https://www.asus.com/support/Download-Center/">华硕全球支持中心</a>查询到我这台电脑的网卡型号为<strong>MT7921</strong>。</p>
-<p><img data-src="" alt="图片1"></p>
-<h3 id="是否是驱动问题">是否是驱动问题</h3>
-<p>查看相关问题说MT7921在Linux内核为5.12以下不会自动识别,但是Ubuntu21.10内核为lunux kernel 5.13.应该不是这个问题</p>
-<h3 id="linux防火墙">linux防火墙</h3>
-<p>看<a href="https://miloserdov.org/?p=6899">这个帖子</a>说即使<code>linux</code>内核高于5.12也会因为防火墙问题导致无法查找wifi模块，安装linux防火墙</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install linux-firmware</span><br></pre></td></tr></table></figure>
-<h3 id="关闭快速启动">关闭快速启动</h3>
-<p>在<a href="https://bbs.archlinux.org/viewtopic.php?id=267229">archlinux</a> 的论坛上翻到一个安装了防火墙仍然不起作用的回答。</p>
-<blockquote>
-<p>There is a bug report with not much more information in the upstream repository:<br>
-<a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a><br>
-If you dual-boot with windows, disable its fast-startup mode. <a href="https://wiki.archlinux.org/title/Dual_b">https://wiki.archlinux.org/title/Dual_b</a> … ibernation</p>
-</blockquote>
-<p>定位到github issue,通过完全关闭电脑，并且拔掉电源线再启动解决。幸运的是我也是通过这种方法解决的。</p>
-<h2 id="参考">参考</h2>
-<blockquote>
-<p><a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://bbs.archlinux.org/viewtopic.php?id=267229">https://bbs.archlinux.org/viewtopic.php?id=267229</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth">https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://miloserdov.org/?p=6899">https://miloserdov.org/?p=6899</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>ubuntu</tag>
-        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
