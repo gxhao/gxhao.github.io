@@ -105,7 +105,7 @@ creative_commons:
 scheme: Gemini
 
 # Dark Mode
-darkmode: auto
+darkmode: false
 
 
 # ---------------------------------------------------------------
