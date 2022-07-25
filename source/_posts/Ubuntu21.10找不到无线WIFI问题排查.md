@@ -4,7 +4,7 @@ id: '32'
 tags: ['ubuntu','linux']
 categories:
   - - deployment
-date: 2022-07-22 15:59:16
+date: 2022-06-22 15:59:16
 url: /ubuntu-wifi
 ---
 

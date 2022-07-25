@@ -4,7 +4,7 @@ id: '32'
 tags: ['DevOps','Gitlab','CI/CD']
 categories:
   - - deployment
-date: 2022-07-31 15:59:16
+date: 2022-01-31 15:59:16
 url: /gitlab-cicd
 ---
 ## 背景

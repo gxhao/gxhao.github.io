@@ -4,7 +4,7 @@ id: '32'
 tags: ['Samba','deploy','Server']
 categories:
   - - deployment
-date: 2022-07-22 15:59:16
+date: 2022-04-22 15:59:16
 url: /samba-share
 ---
 

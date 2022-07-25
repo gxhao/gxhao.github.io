@@ -1961,6 +1961,11 @@
   dependencies:
     "hexo-pagination" "1.0.0"
 
+"hexo-generator-topindex@^0.3.0":
+  "integrity" "sha512-nyyZ091e+HuvE6eG0Ii19BnPW8YpmwXMrd9LFa1pBwhqzF1Ff04CyFFdk6LoAYrBvjm/PyWHCDibSk+RFmT4+Q=="
+  "resolved" "https://registry.npmjs.org/hexo-generator-topindex/-/hexo-generator-topindex-0.3.0.tgz"
+  "version" "0.3.0"
+
 "hexo-i18n@^0.2.1":
   "integrity" "sha1-hPFBQyvwnYtVjth4xygWS20c1t4= sha512-QhVmN/eLohu9UzvrX85zhfL7yN5O4MOkXKYmCRI8GPcg0EczX+blYYmMCugZKu/NIJ9XD5/etAVWCi/5F+fS6g=="
   "resolved" "https://registry.npmjs.org/hexo-i18n/-/hexo-i18n-0.2.1.tgz"

@@ -4,7 +4,7 @@ id: '32'
 tags: ['shell','deploy','proxy']
 categories:
   - - deployment
-date: 2022-07-22 15:59:16
+date: 2022-05-22 15:59:16
 url: /shell-proxy
 ---
 

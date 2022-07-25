@@ -4,7 +4,7 @@ id: '32'
 tags: ['nfs','mount']
 categories:
   - - deployment
-date: 2022-07-22 15:59:16
+date: 2021-09-22 15:59:16
 url: /nfsmount
 ---
 

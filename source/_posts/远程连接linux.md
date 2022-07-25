@@ -4,7 +4,7 @@ id: '32'
 tags: ['linux','remote']
 categories:
   - - deployment
-date: 2022-07-22 15:59:16
+date: 2021-07-22 15:59:16
 url: /remote-linux
 ---
 # 前言
