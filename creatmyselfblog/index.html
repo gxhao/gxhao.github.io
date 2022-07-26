@@ -28,8 +28,10 @@
 <meta property="og:description" content="事件起因 在2022年初的时候，因为一直使用的有道云笔记出现同步错误问题（一台电脑上写的在另一个电脑始终无法同步过来），同时也想把自己的想法和平常遇到问题的解决方式分享给其他人，希望能够对别人有所帮助，于是有了创建自己博客的想法。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xhaosoft.com/blog-imgs/image/selfblog1.png">
+<meta property="og:image" content="https://xhaosoft.com/blog-imgs/image/myselfblog2.png">
+<meta property="og:image" content="https://xhaosoft.com/blog-imgs/image/myselfblog1.png">
 <meta property="article:published_time" content="2022-07-25T16:10:09.000Z">
-<meta property="article:modified_time" content="2022-07-26T14:41:13.000Z">
+<meta property="article:modified_time" content="2022-07-26T16:23:42.000Z">
 <meta property="article:author" content="gxhao">
 <meta property="article:tag" content="blog">
 <meta property="article:tag" content="ssl">
@@ -266,7 +268,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>723</span>
+              <span>1.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -306,7 +308,33 @@
 <h3 id="独立域名">独立域名</h3>
 <p>虽然说访问博客园官网再加上自己主页的后缀访问起来也很方便，但是总是感觉隔一层怪怪的感觉。还是使用自己的域名访问更清真一些。</p>
 <h2 id="自建博客">自建博客</h2>
+<h3 id="通过Github-Pages创建博客。">通过Github Pages创建博客。</h3>
+<ol>
+<li>首先我们需要在GitHub上创建username.github.io的仓库</li>
+<li>将<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/github-pages">Hexo</a>部署上去。</li>
+<li>访问 <a target="_blank" rel="noopener" href="http://username.github.io">username.github.io</a></li>
+</ol>
 <h3 id="申请域名">申请域名</h3>
+<ol>
+<li>我们可以通过世界最大的域名售卖网站<a target="_blank" rel="noopener" href="https://hk.godaddy.com/">GoDaddy</a>购买，注意不要选择额外的服务。我是通过银联购买的（不得不说，银联的支付才是悄无声息！）</li>
+<li>购买完成后，我们可以通过<a target="_blank" rel="noopener" href="https://dash.cloudflare.com/">cloudflare</a>配置域名防护、CDN、域名服务器等。</li>
+<li>在cloudflare的DNS配置中配置域名解析，配置一个A记录到GitHub网址，例如<code>185.199.109.153</code>，配置另一个CNAME记录到你自己的博客地址,例如 <a target="_blank" rel="noopener" href="http://username.github.io">username.github.io</a>。</li>
+</ol>
+<h3 id="部署在其他网站">部署在其他网站</h3>
+<p>也可以将博客部署在其他网站，这里主要推荐三个比较好用的网站。</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://id.heroku.com/login">heroku</a><br>
+主要适用于部署后端服务，java等，有一个问题是付款支持的账户较少。<br>
+<img data-src="/blog-imgs/image/myselfblog2.png" alt=""></li>
+<li><a target="_blank" rel="noopener" href="https://vercel.com/dashboard">vercel</a><br>
+主要用来部署前端服务，部署起来非常的方便快捷，而且提供完善的pipline，预发环境，自定义域名等服务，用来部署博客非常合适<br>
+<img data-src="/blog-imgs/image/myselfblog1.png" alt=""></li>
+<li><a target="_blank" rel="noopener" href="https://codelabs.developers.google.com/codelabs/cloud-app-engine-springboot/index.html?index=..%2F..index#8">Google Cloud Platform</a><br>
+提供完善的稳定和命令函支持也非常方便</li>
+</ol>
+<h2 id="链接">链接</h2>
+<p><a target="_blank" rel="noopener" href="https://hackmd.io/@Heidi-Liu/note-hexo-github">Hexo部署</a><br>
+<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021923137">基于Hexo的matery主题搭建博客并深度优化</a></p>
 
     </div>
 
@@ -395,7 +423,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">事件起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8cnblogs%E4%B8%8A%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">2.</span> <span class="nav-text">在cnblogs上创建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#markdown%E5%9B%BE%E7%89%87%E4%BF%9D%E5%AD%98"><span class="nav-number">2.1.</span> <span class="nav-text">markdown图片保存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%96%99%E5%B1%95%E7%A4%BA%E7%81%B5%E6%B4%BB"><span class="nav-number">2.2.</span> <span class="nav-text">资料展示灵活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E5%9F%9F%E5%90%8D"><span class="nav-number">2.3.</span> <span class="nav-text">独立域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">3.</span> <span class="nav-text">自建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B3%E8%AF%B7%E5%9F%9F%E5%90%8D"><span class="nav-number">3.1.</span> <span class="nav-text">申请域名</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">事件起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8cnblogs%E4%B8%8A%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">2.</span> <span class="nav-text">在cnblogs上创建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#markdown%E5%9B%BE%E7%89%87%E4%BF%9D%E5%AD%98"><span class="nav-number">2.1.</span> <span class="nav-text">markdown图片保存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%96%99%E5%B1%95%E7%A4%BA%E7%81%B5%E6%B4%BB"><span class="nav-number">2.2.</span> <span class="nav-text">资料展示灵活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E5%9F%9F%E5%90%8D"><span class="nav-number">2.3.</span> <span class="nav-text">独立域名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">3.</span> <span class="nav-text">自建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Github-Pages%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">通过Github Pages创建博客。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B3%E8%AF%B7%E5%9F%9F%E5%90%8D"><span class="nav-number">3.2.</span> <span class="nav-text">申请域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%9C%A8%E5%85%B6%E4%BB%96%E7%BD%91%E7%AB%99"><span class="nav-number">3.3.</span> <span class="nav-text">部署在其他网站</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
