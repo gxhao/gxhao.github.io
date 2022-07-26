@@ -1,4 +1,11 @@
-
+---
+title: 利用batch脚本自动更新部署构建系统
+date: 2022-07-26 00:10:09
+url: buildbyjenkins
+tags: ['DevOps','jenkins','batch']]
+categories:
+  - - deployment
+---
 
 在我们项目开发过程中，由于生产开发svn地址和系统部署svn地址不一致，所以在我们开发完功能后，需要手动使用maven构建工具打包，然后登录到远程服务器，再将修改的包放到远程仓库的svn目录下，再提交，然后在运维平台构建，等待构建完成后再切换版本更新。
 
