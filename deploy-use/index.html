@@ -20,28 +20,22 @@
     var CONFIG = {"hostname":"xhaosoft.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="关于本站 因为想构建一套属于自己的软件生态，包含运维监控，drive，im，搜索，邮件等，所以先部署了一个博客系统作为主站，后续添加各种应用。 关于我 我是一个爱学习，勤思考的程序员，目前从事于传统软件开发行业，喜欢将一些重复性的工作自动化。目前在学习运维平台，监控平台，日志分析平台等自动化部署平台。 个人经历 2016.9 – 2020.7：新乡学院，河南新乡 2020.9 ~ 至今：苏州国泰新">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于 &amp; 留言">
-<meta property="og:url" content="https://xhaosoft.com/about/">
+  <meta name="description" content="去除网易有道笔记左下角广告 在安装目录，找到 \YoudaoNote\theme\default\skin.xml 删除">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日常常用小技巧">
+<meta property="og:url" content="https://xhaosoft.com/deploy-use/">
 <meta property="og:site_name" content="gxhao">
-<meta property="og:description" content="关于本站 因为想构建一套属于自己的软件生态，包含运维监控，drive，im，搜索，邮件等，所以先部署了一个博客系统作为主站，后续添加各种应用。 关于我 我是一个爱学习，勤思考的程序员，目前从事于传统软件开发行业，喜欢将一些重复性的工作自动化。目前在学习运维平台，监控平台，日志分析平台等自动化部署平台。 个人经历 2016.9 – 2020.7：新乡学院，河南新乡 2020.9 ~ 至今：苏州国泰新">
+<meta property="og:description" content="去除网易有道笔记左下角广告 在安装目录，找到 \YoudaoNote\theme\default\skin.xml 删除">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-07-25T07:59:16.000Z">
-<meta property="article:modified_time" content="2022-07-25T15:55:23.633Z">
+<meta property="article:published_time" content="2022-07-22T07:59:16.000Z">
+<meta property="article:modified_time" content="2022-07-23T17:37:15.000Z">
 <meta property="article:author" content="gxhao">
-<meta property="article:tag" content="计算机">
-<meta property="article:tag" content="开发">
-<meta property="article:tag" content="编程">
-<meta property="article:tag" content="网站">
-<meta property="article:tag" content="博客">
-<meta property="article:tag" content="技术">
-<meta property="article:tag" content="学习">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="deploy">
+<meta property="article:tag" content="CI&#x2F;CD">
+<meta property="article:tag" content="life">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://xhaosoft.com/about/">
+<link rel="canonical" href="https://xhaosoft.com/deploy-use/">
 
 
 <script id="page-configurations">
@@ -49,13 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>关于 & 留言 | gxhao
-</title>
+  <title>日常常用小技巧 | gxhao</title>
   
 
 
@@ -201,58 +194,157 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xhaosoft.com/deploy-use/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="gxhao">
+      <meta itemprop="description" content="郭晓豪的个人博客，传统软件行业，喜欢利用工具来简化软件开发中的重复性操作，记录日常开发时的一些思考，分享相关知识">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="gxhao">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          日常常用小技巧
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">关于 & 留言
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<div class="post-meta">
+              <time title="创建时间：2022-07-22 15:59:16" itemprop="dateCreated datePublished" datetime="2022-07-22T15:59:16+08:00">2022-07-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deployment/" itemprop="url" rel="index"><span itemprop="name">deployment</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/deploy-use/" class="post-meta-item leancloud_visitors" data-flag-title="日常常用小技巧" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/deploy-use/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/deploy-use/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>790</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="去除网易有道笔记左下角广告">去除网易有道笔记左下角广告</h2>
+<p>在安装目录，找到 <strong>\YoudaoNote\theme\default\skin.xml</strong> 删除</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;PanelAd Bounds=&quot;0,0,0,161&quot; DockStyle=&quot;bottom&quot;&gt; &lt;/PanelAd&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="判断一台机器是不是虚拟机">判断一台机器是不是虚拟机</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemd-detect-virt</span><br></pre></td></tr></table></figure>
+<h2 id="windows-入站规则开启不生效">windows 入站规则开启不生效</h2>
+<p>检查专用与公用网络配置。这俩并不公用一个网络配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">设置某网络为专用链接</span><br><span class="line">Get-NetConnectionProfile</span><br><span class="line"></span><br><span class="line">Set-NetConnectionProfile  -InterfaceIndex 18 -NetworkCategory Private</span><br></pre></td></tr></table></figure>
+<h2 id="docker-容器内tomcat应用与当前时间相差8个小时">docker 容器内tomcat应用与当前时间相差8个小时</h2>
+<p>在<code>catalina.sh</code>配置文件中加入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_OPTS=&quot;$JAVA_OPTS -Duser.timezone=Asia/shanghai&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="node降版本">node降版本</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Determining your Node version</span><br><span class="line"></span><br><span class="line">node -v  // or node --version</span><br><span class="line">npm -v   // npm version or long npm --version</span><br><span class="line"># Ensure that you have n installed</span><br><span class="line"></span><br><span class="line">sudo npm install -g n // -g for global installation </span><br><span class="line"># Upgrading to the latest stable version</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br><span class="line"># Changing to a specific version</span><br><span class="line"></span><br><span class="line">sudo n 16.13.0</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\shell-proxy\" rel="bookmark">shell proxy via proxychains-ng</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\samba-share\" rel="bookmark">Use Samba to share files in Linux and Windows</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\gitlab-cicd\" rel="bookmark">gitlab,DevOps CI/CD全自动部署实战</a></div>
+    </li>
+  </ul>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/deploy/" rel="tag"># deploy</a>
+              <a href="/tags/CI-CD/" rel="tag"># CI/CD</a>
+              <a href="/tags/life/" rel="tag"># life</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/reimage/" rel="prev" title="Windows重装后全自动下载所需软件和配置开发环境">
+      <i class="fa fa-chevron-left"></i> Windows重装后全自动下载所需软件和配置开发环境
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/clashlinux/" rel="next" title="linux 部署clash的三种方式">
+      linux 部署clash的三种方式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <h2 id="关于本站">关于本站</h2>
-<p>因为想构建一套属于自己的软件生态，包含运维监控，drive，im，搜索，邮件等，所以先部署了一个博客系统作为主站，后续添加各种应用。</p>
-<h2 id="关于我">关于我</h2>
-<p>我是一个爱学习，勤思考的程序员，目前从事于传统软件开发行业，喜欢将一些重复性的工作自动化。目前在学习运维平台，监控平台，日志分析平台等自动化部署平台。</p>
-<h3 id="个人经历">个人经历</h3>
-<p><strong>2016.9 – 2020.7：新乡学院，河南新乡</strong></p>
-<p><strong>2020.9 ~ 至今：苏州国泰新点软件</strong></p>
-<ul>
-<li>主要开发企业招采平台，实现企业招标采购全流程线上化，提高企业办事效率。</li>
-</ul>
-<h3 id="部分作品展示">部分作品展示</h3>
-<h3 id="相关链接">相关链接</h3>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/gxhao2020">GitHub</a></li>
-</ul>
-
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -304,7 +396,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99"><span class="nav-number">1.</span> <span class="nav-text">关于本站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%88%91"><span class="nav-number">2.</span> <span class="nav-text">关于我</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E7%BB%8F%E5%8E%86"><span class="nav-number">2.1.</span> <span class="nav-text">个人经历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E5%88%86%E4%BD%9C%E5%93%81%E5%B1%95%E7%A4%BA"><span class="nav-number">2.2.</span> <span class="nav-text">部分作品展示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="nav-number">2.3.</span> <span class="nav-text">相关链接</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4%E7%BD%91%E6%98%93%E6%9C%89%E9%81%93%E7%AC%94%E8%AE%B0%E5%B7%A6%E4%B8%8B%E8%A7%92%E5%B9%BF%E5%91%8A"><span class="nav-number">1.</span> <span class="nav-text">去除网易有道笔记左下角广告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E6%98%AF%E4%B8%8D%E6%98%AF%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">判断一台机器是不是虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-%E5%85%A5%E7%AB%99%E8%A7%84%E5%88%99%E5%BC%80%E5%90%AF%E4%B8%8D%E7%94%9F%E6%95%88"><span class="nav-number">3.</span> <span class="nav-text">windows 入站规则开启不生效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E5%AE%B9%E5%99%A8%E5%86%85tomcat%E5%BA%94%E7%94%A8%E4%B8%8E%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4%E7%9B%B8%E5%B7%AE8%E4%B8%AA%E5%B0%8F%E6%97%B6"><span class="nav-number">4.</span> <span class="nav-text">docker 容器内tomcat应用与当前时间相差8个小时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node%E9%99%8D%E7%89%88%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">node降版本</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
