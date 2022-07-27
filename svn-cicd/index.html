@@ -20,29 +20,27 @@
     var CONFIG = {"hostname":"xhaosoft.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="背景 由于项目上需要，上周申请了公司的服务器作为演示临时使用。我使用常规方式，将部署包上传到服务器，编写dockerfile文件，然后使用docker容器部署。做完这一套大概要半个小时，并且我还得全程监控服务器的状态，命令一个一个手敲，之后的更新还有重复上面的步骤，这对我这种懒人来说实在是太麻烦了。突然想到公司在大力推进集成开发平台CI&#x2F;CD持续集成、持续部署，那我是不是也可以用这种方式快速部署开">
+  <meta name="description" content="缘起 项目上使用集成开发平台构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要提交代码-&gt;集成开发平台更新-&gt;服务器远程构建更新。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码自动进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="gitlab,DevOps CI&#x2F;CD全自动部署实战">
-<meta property="og:url" content="https://xhaosoft.com/gitlab-cicd/">
+<meta property="og:title" content="利用Svn Hooks触发自动部署流水线">
+<meta property="og:url" content="https://xhaosoft.com/svn-cicd/">
 <meta property="og:site_name" content="gxhao">
-<meta property="og:description" content="背景 由于项目上需要，上周申请了公司的服务器作为演示临时使用。我使用常规方式，将部署包上传到服务器，编写dockerfile文件，然后使用docker容器部署。做完这一套大概要半个小时，并且我还得全程监控服务器的状态，命令一个一个手敲，之后的更新还有重复上面的步骤，这对我这种懒人来说实在是太麻烦了。突然想到公司在大力推进集成开发平台CI&#x2F;CD持续集成、持续部署，那我是不是也可以用这种方式快速部署开">
+<meta property="og:description" content="缘起 项目上使用集成开发平台构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要提交代码-&gt;集成开发平台更新-&gt;服务器远程构建更新。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码自动进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/A732675291764B7FA6EF496DDAFB8DE4?method=download&amp;shareKey=cf18868bf11347e64d0e8410f748c777">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/DD0B7E1588E047C7BE4250FB5157F611?method=download&amp;shareKey=1ba1ed9773f99d68801fc49d1695fbda">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/DAE56F52D63D4EA19E7579EC5F948F35?method=download&amp;shareKey=eed42c83b5ce17eb9d2d644d2abc5787">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/8703BFE3C0B441AA958F0EAA18B1B0BE?method=download&amp;shareKey=f041327e21086d384d276d0691b6865d">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/91107AE83B4E4437B776CE40B7AB0A7A?method=download&amp;shareKey=22783e09eee20e8e886d3781b370f108">
-<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/A1861E8959B5402E94BD265C16EE382B?method=download&amp;shareKey=6a4d7ea7a1abb507a4362423fce79f9d">
+<meta property="og:image" content="https://gxhao.aiur.site/svnhook1.png">
+<meta property="og:image" content="https://gxhao.aiur.site/svnhook2.png">
+<meta property="og:image" content="https://gxhao.aiur.site/svnhook.png">
+<meta property="og:image" content="https://gxhao.aiur.site/svnhook3.png">
 <meta property="article:published_time" content="2022-01-31T07:59:16.000Z">
-<meta property="article:modified_time" content="2022-07-27T14:54:53.000Z">
+<meta property="article:modified_time" content="2022-07-27T15:11:35.000Z">
 <meta property="article:author" content="gxhao">
 <meta property="article:tag" content="DevOps">
 <meta property="article:tag" content="Gitlab">
 <meta property="article:tag" content="CI&#x2F;CD">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/A732675291764B7FA6EF496DDAFB8DE4?method=download&amp;shareKey=cf18868bf11347e64d0e8410f748c777">
+<meta name="twitter:image" content="https://gxhao.aiur.site/svnhook1.png">
 
-<link rel="canonical" href="https://xhaosoft.com/gitlab-cicd/">
+<link rel="canonical" href="https://xhaosoft.com/svn-cicd/">
 
 
 <script id="page-configurations">
@@ -55,7 +53,7 @@
   };
 </script>
 
-  <title>gitlab,DevOps CI/CD全自动部署实战 | gxhao</title>
+  <title>利用Svn Hooks触发自动部署流水线 | gxhao</title>
   
 
 
@@ -209,7 +207,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xhaosoft.com/gitlab-cicd/">
+    <link itemprop="mainEntityOfPage" href="https://xhaosoft.com/svn-cicd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -222,7 +220,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          gitlab,DevOps CI/CD全自动部署实战
+          利用Svn Hooks触发自动部署流水线
         </h1>
 
         <div class="post-meta">
@@ -245,7 +243,7 @@
             </span>
 
           
-            <span id="/gitlab-cicd/" class="post-meta-item leancloud_visitors" data-flag-title="gitlab,DevOps CI/CD全自动部署实战" title="阅读次数">
+            <span id="/svn-cicd/" class="post-meta-item leancloud_visitors" data-flag-title="利用Svn Hooks触发自动部署流水线" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -260,8 +258,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/gitlab-cicd/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/gitlab-cicd/" itemprop="commentCount"></span>
+    <a title="valine" href="/svn-cicd/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/svn-cicd/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -271,14 +269,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
+              <span>2.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -290,50 +288,74 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="背景">背景</h2>
-<p>由于项目上需要，上周申请了公司的服务器作为演示临时使用。我使用常规方式，将部署包上传到服务器，编写dockerfile文件，然后使用docker容器部署。做完这一套大概要半个小时，并且我还得全程监控服务器的状态，命令一个一个手敲，之后的更新还有重复上面的步骤，这对我这种懒人来说实在是太麻烦了。突然想到公司在大力推进集成开发平台CI/CD持续集成、持续部署，那我是不是也可以用这种方式快速部署开发，提升工作效率。</p>
-<!-- ## 引言
-受顾佳文[新点易维背后的故事（一）：“终端妙囊，百宝锦囊”的从 0 到 1](https://oa.epoint.com.cn/EpointCommunity/EpointCommunity/Dis/ShowTopic.aspx?TopicID=29303)这篇帖子的启发，再加上公司目前已经部署了gitlab代码托管服务器，利用周末的时间研究了下gitlab的ci/cd流程。内心os：那我是不是可以通过gitlab来实现**全自动**构建部署? -->
-<h2 id="实战">实战</h2>
-<p>1、先写一个最简单的web服务，可以参考这个</p>
+        <h2 id="缘起">缘起</h2>
+<p>项目上使用<a target="_blank" rel="noopener" href="https://dev.epoint.com.cn/clouddev-web/frame/fui/pages/themes/clouddev/clouddev">集成开发平台</a>构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要<strong>提交代码</strong>-&gt;<strong>集成开发平台更新</strong>-&gt;<strong>服务器远程构建更新</strong>。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码<strong>自动</strong>进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。</p>
+<h2 id="思路">思路</h2>
+<ol>
+<li>gitlab 有个配置项<a target="_blank" rel="noopener" href="http://xxx/mtjt/custom/-/hooks">Webhooks</a>可以触发集成开发平台构建。</li>
+</ol>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="http://192.168.0.200/mtjt/java-servlet-hello/-/tree/master">http://192.168.0.200/mtjt/java-servlet-hello/-/tree/master</a></p>
+<p>Webhooks enable you to send notifications to web applications in response to events in a group or project.</p>
 </blockquote>
-<p>2、部署gitlab Runer</p>
-<h3 id="安装Runner执行器">安装Runner执行器</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 下载执行器</span><br><span class="line">sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64</span><br><span class="line"># 赋予文件夹权限</span><br><span class="line">chmod +x /usr/local/bin/gitlab-runner</span><br><span class="line"># 新建操作用户</span><br><span class="line">useradd --comment &#x27;gitlab-runner&#x27; --create-home gitlab-runner --shell /bin/bash</span><br><span class="line"># 添加 docker 用户组</span><br><span class="line">usermod -a -G docker gitlab-runner</span><br><span class="line"># gitlab-runner 作为管理员执行</span><br><span class="line">sudo visudo -f /etc/sudoers.d/gitlab-runner</span><br><span class="line">gitlab-runner ALL=(ALL) NOPASSWD: ALL</span><br><span class="line"># 安装</span><br><span class="line">gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner</span><br><span class="line"># 启动</span><br><span class="line">gitlab-runner start</span><br><span class="line"># 验证</span><br><span class="line">gitlab-runner verify </span><br></pre></td></tr></table></figure>
-<h3 id="注册Runner执行器">注册Runner执行器</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gitlab-runner register </span><br><span class="line"></span><br><span class="line">选择shell </span><br><span class="line">It supposes you have configured a shell Runner and have installed Docker.</span><br></pre></td></tr></table></figure>
-<h3 id="效果">效果</h3>
-<ul>
-<li>整体效果<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/A732675291764B7FA6EF496DDAFB8DE4?method=download&amp;shareKey=cf18868bf11347e64d0e8410f748c777" alt="gitlab-ci1"></li>
-<li>局部管道<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/DD0B7E1588E047C7BE4250FB5157F611?method=download&amp;shareKey=1ba1ed9773f99d68801fc49d1695fbda" alt="gitlab-ci2"></li>
-<li>实际结果<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/DAE56F52D63D4EA19E7579EC5F948F35?method=download&amp;shareKey=eed42c83b5ce17eb9d2d644d2abc5787" alt="gitlab-cd1"></li>
-</ul>
-<h2 id="他有什么作用？">他有什么作用？</h2>
-<h3 id="提高开发人员效率">提高开发人员效率</h3>
-<p>当开发人员将代码合并到gitlab-ci.yaml文件所在的分支，会<strong>自动触发</strong>持续集成、持续部署流程、不必将代码手动上传至服务器，然后一步步等待服务器执行。开发人员能够专注与系统设计和开发，加快客户响应速度。如果管道构建失败，会通过oa发送邮件提醒，类似这样：<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/8703BFE3C0B441AA958F0EAA18B1B0BE?method=download&amp;shareKey=f041327e21086d384d276d0691b6865d" alt="gitlab-cd2"></p>
-<h3 id="整改能够及时更新">整改能够及时更新</h3>
-<p>目前整改基本上是一个月一次，但是实际情况是开发负责人并不能在发布整改后立即更新，尤其是当开发负责人负责8、9个项目的时候、整改对于开发负责人造成了额外的负担。如果可能的话，可以添加一系列安全验证，开放maven仓库，gitlab通过运行maven命令实现从公司仓库拉取最近的发布包，及时完成整改。<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/91107AE83B4E4437B776CE40B7AB0A7A?method=download&amp;shareKey=22783e09eee20e8e886d3781b370f108" alt="gitlabcd3"></p>
-<h3 id="满足条线在更新服务器之前先进行单元测试的要求">满足条线在更新服务器之前先进行单元测试的要求</h3>
-<p>通过在gitlab-ci.yaml 中引入test管道，可以实现在更新服务器之前，先通过test管道访问云测平台接口，自行编写测试用例等方式保证更新到服务器的代码是通过完整测试的代码。<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/A1861E8959B5402E94BD265C16EE382B?method=download&amp;shareKey=6a4d7ea7a1abb507a4362423fce79f9d" alt="gitlab-test"></p>
-<h3 id="一键部署到生产、仿真系统">一键部署到生产、仿真系统</h3>
-<p>在测试系统验证完成后，配置手动触发部署正式服务器管道，可以一键完成正式服务器部署，避免二次打包。</p>
-<h2 id="下一个目标规划">下一个目标规划</h2>
-<ul>
-<li>部署harbor镜像仓库，允许版本回退</li>
-<li>docker-compose，多容器部署。</li>
-<li>利用ssh部署到远程服务器</li>
-</ul>
+<ol start="2">
+<li>svn应该有相关触发事件</li>
+<li>编写个后台Restful接口，svn触发这个接口，这个接口触发集成开发平台更新</li>
+</ol>
+<h2 id="调研与设计">调研与设计</h2>
+<h3 id="svn监听如何实现？">svn监听如何实现？</h3>
+<h4 id="1-svn本身仓库自带了hooks功能">1. svn本身仓库自带了hooks功能</h4>
+<p>在svn仓库的hooks文件夹也自带了相关的模板。配置相关shell命令即可使用<br>
+<img data-src="https://gxhao.aiur.site/svnhook1.png" alt=""><br>
+<em>没有访问项目svn仓库的权限，此实现方法不考虑。</em>(否决)</p>
+<h4 id="2-svn-开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor">2. svn 开发人员开发了基于apache开源的svn提交监听工具-<a target="_blank" rel="noopener" href="https://tools.stefankueng.com/CommitMonitor.html">CommitMonitor</a></h4>
+<p><em>这个工具可以监听svn提交操作，然后发送通知在桌面右下角。但是于我而言，我不需要他在右下角提醒我，我需要他提供一个通知的api，我可以利用这个api去做一些别的事情。很遗憾没有找到</em>（否决）</p>
+<h4 id="3-TortoiseSVN-提供的Hooks-Script脚本">3. TortoiseSVN 提供的<a target="_blank" rel="noopener" href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">Hooks Script</a>脚本</h4>
+<p>查看官方介绍，貌似此方法是一种比较可行的方法，且貌似官方文档上没有限定必须是什么类型的脚本。</p>
+<h3 id="脚本如何选择？">脚本如何选择？</h3>
+<h4 id="1-shell-脚本">1.shell 脚本</h4>
+<p>直接编写shell执行访问Rest接口或者相关jar包，但是这样在执行后会有一堆提交报错（实际是执行成功的），类似这样：<br>
+<img data-src="https://gxhao.aiur.site/svnhook2.png" alt=""><br>
+这可能导致体验不太好，<s>明明我提交了完了，你却说我提交错了</s></p>
+<h4 id="2-JavaScript">2.JavaScript</h4>
+<p>js可以编写http请求的代码，然后利用<code>node</code>去执行脚本。考虑环境兼容性，大部分人电脑应该没有安装node相关工具包。</p>
+<h4 id="3-Wscript">3.<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">Wscript</a></h4>
+<p>这是微软在<code>Windows98</code>上就推出的Windows系统自带的脚本，可以理解为<code>Windows js</code>,这样环境就不用担心了，开始编写<code>Wscript</code>脚本代码。</p>
+<h3 id="如何触发集成开发平台构建？">如何触发集成开发平台构建？</h3>
+<p>联系集成开发平台同事，目前集成开发平台已有相关触发构建的接口，接口地址为：</p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/ci/ssh_keys/">https://docs.gitlab.com/ee/ci/ssh_keys/</a></p>
+<p><a target="_blank" rel="noopener" href="http://xxx/web/rest/dev/job/start">http://xxx/web/rest/dev/job/start</a></p>
 </blockquote>
+<p>简单传入pipelinGuid和loginId即可触发构建更新。pipelineGuid获取方法：<a target="_blank" rel="noopener" href="https://fdoc.epoint.com.cn/onlinedoc/docshow/docshow?columnguid=031&amp;menuguid=031011&amp;nodeguid=6c84b072-a834-43ee-b0bc-f30f858be42d">获取流水线guid</a></p>
+<h2 id="开发与测试">开发与测试</h2>
+<h3 id="编写代码">编写代码</h3>
+<p>Wscript有个很方便的对象（<code>WinHttp.WinHttpRequest.5.1</code>），可以直接访问http请求。<br>
+编写Wscript代码如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/web/rest/dev/job/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
+<h3 id="配置TortoiseSvn">配置TortoiseSvn</h3>
+<p><img data-src="https://gxhao.aiur.site/svnhook.png" alt=""></p>
+<p><code>Hook Type</code>选择Post-Commit-Hook，即在提交完成时触发。<code>Working Copy Path</code> 选择你要提交的代码目录（可配置多个）。<code>Command Line To Execute</code>选择你要执行的Wscript脚本(注意双引号)。</p>
+<h3 id="测试提交">测试提交</h3>
+<p>结果大概时这样：</p>
+<p><img data-src="https://gxhao.aiur.site/svnhook3.png" alt=""></p>
+<h2 id="目前存在的一些问题">目前存在的一些问题</h2>
+<ol>
+<li>只能在TortoiseSvn的工具中提交才能触发，ide提交不会触发。</li>
+<li>集成平台构建完成后没有相关通知到msg/邮件。</li>
+</ol>
+<h2 id="结语">结语</h2>
+<p>gitlab仓库：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://192.168.0.200/gxhao/svn-hook/-/tree/main">http://192.168.0.200/gxhao/svn-hook/-/tree/main</a></p>
+</blockquote>
+<p>引用：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks</a></p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript</a></p>
+</blockquote>
+<p>感谢：</p>
+<p><strong>非常感谢中研院庄晟琪，顾疆飞两位大佬的帮助和支持</strong>，希望此脚本能够对大家在开发时有所帮助，提高开发效率，减少更新构建时间。</p>
 
     </div>
 
@@ -344,7 +366,7 @@
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\svn-cicd\" rel="bookmark">利用Svn Hooks触发自动部署流水线</a></div>
+      <div class="popular-posts-title"><a href="\gitlab-cicd\" rel="bookmark">gitlab,DevOps CI/CD全自动部署实战</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\buildbyjenkins\" rel="bookmark">利用batch脚本自动更新部署构建系统</a></div>
@@ -368,12 +390,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/svn-cicd/" rel="prev" title="利用Svn Hooks触发自动部署流水线">
-      <i class="fa fa-chevron-left"></i> 利用Svn Hooks触发自动部署流水线
+    <a href="/2021Summary/" rel="prev" title="2021年终总结">
+      <i class="fa fa-chevron-left"></i> 2021年终总结
     </a></div>
       <div class="post-nav-item">
-    <a href="/ubuntu-install/" rel="next" title="Ubuntu MATE Install">
-      Ubuntu MATE Install <i class="fa fa-chevron-right"></i>
+    <a href="/gitlab-cicd/" rel="next" title="gitlab,DevOps CI/CD全自动部署实战">
+      gitlab,DevOps CI/CD全自动部署实战 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -434,7 +456,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98"><span class="nav-number">2.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Runner%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">安装Runner执行器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8CRunner%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">注册Runner执行器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">2.3.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%96%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">他有什么作用？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%AB%98%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E6%95%88%E7%8E%87"><span class="nav-number">3.1.</span> <span class="nav-text">提高开发人员效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E6%94%B9%E8%83%BD%E5%A4%9F%E5%8F%8A%E6%97%B6%E6%9B%B4%E6%96%B0"><span class="nav-number">3.2.</span> <span class="nav-text">整改能够及时更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%A1%E8%B6%B3%E6%9D%A1%E7%BA%BF%E5%9C%A8%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B9%8B%E5%89%8D%E5%85%88%E8%BF%9B%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-number">3.3.</span> <span class="nav-text">满足条线在更新服务器之前先进行单元测试的要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E7%94%9F%E4%BA%A7%E3%80%81%E4%BB%BF%E7%9C%9F%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.4.</span> <span class="nav-text">一键部署到生产、仿真系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E4%B8%AA%E7%9B%AE%E6%A0%87%E8%A7%84%E5%88%92"><span class="nav-number">4.</span> <span class="nav-text">下一个目标规划</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%A0%94%E4%B8%8E%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">调研与设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#svn%E7%9B%91%E5%90%AC%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">svn监听如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-svn%E6%9C%AC%E8%BA%AB%E4%BB%93%E5%BA%93%E8%87%AA%E5%B8%A6%E4%BA%86hooks%E5%8A%9F%E8%83%BD"><span class="nav-number">3.1.1.</span> <span class="nav-text">1. svn本身仓库自带了hooks功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-svn-%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BC%80%E5%8F%91%E4%BA%86%E5%9F%BA%E4%BA%8Eapache%E5%BC%80%E6%BA%90%E7%9A%84svn%E6%8F%90%E4%BA%A4%E7%9B%91%E5%90%AC%E5%B7%A5%E5%85%B7-CommitMonitor"><span class="nav-number">3.1.2.</span> <span class="nav-text">2. svn 开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-TortoiseSVN-%E6%8F%90%E4%BE%9B%E7%9A%84Hooks-Script%E8%84%9A%E6%9C%AC"><span class="nav-number">3.1.3.</span> <span class="nav-text">3. TortoiseSVN 提供的Hooks Script脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">脚本如何选择？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-shell-%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.1.</span> <span class="nav-text">1.shell 脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-JavaScript"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.JavaScript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Wscript"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.Wscript</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E5%B9%B3%E5%8F%B0%E6%9E%84%E5%BB%BA%EF%BC%9F"><span class="nav-number">3.3.</span> <span class="nav-text">如何触发集成开发平台构建？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">开发与测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.</span> <span class="nav-text">编写代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AETortoiseSvn"><span class="nav-number">4.2.</span> <span class="nav-text">配置TortoiseSvn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%8F%90%E4%BA%A4"><span class="nav-number">4.3.</span> <span class="nav-text">测试提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">目前存在的一些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">6.</span> <span class="nav-text">结语</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
