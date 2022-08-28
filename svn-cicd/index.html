@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://gxhao.aiur.site/svnhook.png">
 <meta property="og:image" content="https://gxhao.aiur.site/svnhook3.png">
 <meta property="article:published_time" content="2022-01-31T07:59:16.000Z">
-<meta property="article:modified_time" content="2022-08-10T15:32:21.000Z">
+<meta property="article:modified_time" content="2022-08-28T03:29:20.092Z">
 <meta property="article:author" content="gxhao">
 <meta property="article:tag" content="DevOps">
 <meta property="article:tag" content="Gitlab">
@@ -269,7 +269,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
+              <span>2.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -320,11 +320,17 @@
 <p>js可以编写http请求的代码，然后利用<code>node</code>去执行脚本。考虑环境兼容性，大部分人电脑应该没有安装node相关工具包。</p>
 <h4 id="3-Wscript">3.<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">Wscript</a></h4>
 <p>这是微软在<code>Windows98</code>上就推出的Windows系统自带的脚本，可以理解为<code>Windows js</code>,这样环境就不用担心了，开始编写<code>Wscript</code>脚本代码。</p>
+<h3 id="如何触发集成开发平台构建？">如何触发集成开发平台构建？</h3>
+<p>联系集成开发平台同事，目前集成开发平台已有相关触发构建的接口，接口地址为：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://xxx/web/rest/dev/job/start">http://xxx/web/rest/dev/job/start</a></p>
+</blockquote>
+<p>简单传入pipelinGuid和loginId即可触发构建更新。pipelineGuid获取方法：<a target="_blank" rel="noopener" href="https://fdoc.epoint.com.cn/onlinedoc/docshow/docshow?columnguid=031&amp;menuguid=031011&amp;nodeguid=6c84b072-a834-43ee-b0bc-f30f858be42d">获取流水线guid</a></p>
 <h2 id="开发与测试">开发与测试</h2>
 <h3 id="编写代码">编写代码</h3>
 <p>Wscript有个很方便的对象（<code>WinHttp.WinHttpRequest.5.1</code>），可以直接访问http请求。<br>
 编写Wscript代码如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/web/rest/dev/job/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
 <h3 id="配置TortoiseSvn">配置TortoiseSvn</h3>
 <p><img data-src="https://gxhao.aiur.site/svnhook.png" alt=""></p>
 <p><code>Hook Type</code>选择Post-Commit-Hook，即在提交完成时触发。<code>Working Copy Path</code> 选择你要提交的代码目录（可配置多个）。<code>Command Line To Execute</code>选择你要执行的Wscript脚本(注意双引号)。</p>
@@ -337,6 +343,10 @@
 <li>集成平台构建完成后没有相关通知到msg/邮件。</li>
 </ol>
 <h2 id="结语">结语</h2>
+<p>gitlab仓库：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://192.168.0.200/gxhao/svn-hook/-/tree/main">http://192.168.0.200/gxhao/svn-hook/-/tree/main</a></p>
+</blockquote>
 <p>引用：</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks</a></p>
@@ -380,12 +390,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021Summary/" rel="prev" title="2021年终总结">
-      <i class="fa fa-chevron-left"></i> 2021年终总结
+    <a href="/gitlab-cicd/" rel="prev" title="gitlab,DevOps CI/CD全自动部署实战">
+      <i class="fa fa-chevron-left"></i> gitlab,DevOps CI/CD全自动部署实战
     </a></div>
       <div class="post-nav-item">
-    <a href="/gitlab-cicd/" rel="next" title="gitlab,DevOps CI/CD全自动部署实战">
-      gitlab,DevOps CI/CD全自动部署实战 <i class="fa fa-chevron-right"></i>
+    <a href="/ubuntu-install/" rel="next" title="Ubuntu MATE Install">
+      Ubuntu MATE Install <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -446,7 +456,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%A0%94%E4%B8%8E%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">调研与设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#svn%E7%9B%91%E5%90%AC%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">svn监听如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-svn%E6%9C%AC%E8%BA%AB%E4%BB%93%E5%BA%93%E8%87%AA%E5%B8%A6%E4%BA%86hooks%E5%8A%9F%E8%83%BD"><span class="nav-number">3.1.1.</span> <span class="nav-text">1. svn本身仓库自带了hooks功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-svn-%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BC%80%E5%8F%91%E4%BA%86%E5%9F%BA%E4%BA%8Eapache%E5%BC%80%E6%BA%90%E7%9A%84svn%E6%8F%90%E4%BA%A4%E7%9B%91%E5%90%AC%E5%B7%A5%E5%85%B7-CommitMonitor"><span class="nav-number">3.1.2.</span> <span class="nav-text">2. svn 开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-TortoiseSVN-%E6%8F%90%E4%BE%9B%E7%9A%84Hooks-Script%E8%84%9A%E6%9C%AC"><span class="nav-number">3.1.3.</span> <span class="nav-text">3. TortoiseSVN 提供的Hooks Script脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">脚本如何选择？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-shell-%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.1.</span> <span class="nav-text">1.shell 脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-JavaScript"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.JavaScript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Wscript"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.Wscript</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">开发与测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.</span> <span class="nav-text">编写代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AETortoiseSvn"><span class="nav-number">4.2.</span> <span class="nav-text">配置TortoiseSvn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%8F%90%E4%BA%A4"><span class="nav-number">4.3.</span> <span class="nav-text">测试提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">目前存在的一些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">6.</span> <span class="nav-text">结语</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%98%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">缘起</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%A0%94%E4%B8%8E%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">调研与设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#svn%E7%9B%91%E5%90%AC%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">svn监听如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-svn%E6%9C%AC%E8%BA%AB%E4%BB%93%E5%BA%93%E8%87%AA%E5%B8%A6%E4%BA%86hooks%E5%8A%9F%E8%83%BD"><span class="nav-number">3.1.1.</span> <span class="nav-text">1. svn本身仓库自带了hooks功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-svn-%E5%BC%80%E5%8F%91%E4%BA%BA%E5%91%98%E5%BC%80%E5%8F%91%E4%BA%86%E5%9F%BA%E4%BA%8Eapache%E5%BC%80%E6%BA%90%E7%9A%84svn%E6%8F%90%E4%BA%A4%E7%9B%91%E5%90%AC%E5%B7%A5%E5%85%B7-CommitMonitor"><span class="nav-number">3.1.2.</span> <span class="nav-text">2. svn 开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-TortoiseSVN-%E6%8F%90%E4%BE%9B%E7%9A%84Hooks-Script%E8%84%9A%E6%9C%AC"><span class="nav-number">3.1.3.</span> <span class="nav-text">3. TortoiseSVN 提供的Hooks Script脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">脚本如何选择？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-shell-%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.1.</span> <span class="nav-text">1.shell 脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-JavaScript"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.JavaScript</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Wscript"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.Wscript</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A6%E5%8F%91%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E5%B9%B3%E5%8F%B0%E6%9E%84%E5%BB%BA%EF%BC%9F"><span class="nav-number">3.3.</span> <span class="nav-text">如何触发集成开发平台构建？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">开发与测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.</span> <span class="nav-text">编写代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AETortoiseSvn"><span class="nav-number">4.2.</span> <span class="nav-text">配置TortoiseSvn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%8F%90%E4%BA%A4"><span class="nav-number">4.3.</span> <span class="nav-text">测试提交</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%89%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">目前存在的一些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">6.</span> <span class="nav-text">结语</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -496,6 +506,9 @@
       友情链接
     </div>
     <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.paincker.com/" title="https:&#x2F;&#x2F;www.paincker.com&#x2F;" rel="noopener" target="_blank">jzj1993</a>
+        </li>
         <li class="links-of-blogroll-item">
           <a href="https://anduin.aiursoft.com/" title="https:&#x2F;&#x2F;anduin.aiursoft.com&#x2F;" rel="noopener" target="_blank">Anduin</a>
         </li>

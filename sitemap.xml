@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://xhaosoft.com/svn-cicd/</loc>
+    <loc>https://xhaosoft.com/gitlab-cicd/</loc>
     
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/gitlab-cicd/</loc>
+    <loc>https://xhaosoft.com/svn-cicd/</loc>
+    
+    <lastmod>2022-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/buildbyjenkins/</loc>
     
     <lastmod>2022-07-27</lastmod>
     
@@ -22,6 +31,15 @@
   <url>
     <loc>https://xhaosoft.com/creatmyselfblog/</loc>
     
+    <lastmod>2022-07-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/</loc>
+    
     <lastmod>2022-07-26</lastmod>
     
     <changefreq>monthly</changefreq>
@@ -29,7 +47,52 @@
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/buildbyjenkins/</loc>
+    <loc>https://xhaosoft.com/categories/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/reimage/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/about/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/remote-linux/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/deploy-use/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/clashlinux/</loc>
     
     <lastmod>2022-07-26</lastmod>
     
@@ -47,63 +110,9 @@
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/ubuntu-wifi/</loc>
-    
-    <lastmod>2022-07-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/ubuntu-install/</loc>
-    
-    <lastmod>2022-07-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/sql-lock/</loc>
-    
-    <lastmod>2022-07-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/nfsmount/</loc>
-    
-    <lastmod>2022-07-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/dockerproxy/</loc>
-    
-    <lastmod>2022-07-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/remote-linux/</loc>
-    
-    <lastmod>2022-07-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://xhaosoft.com/samba-share/</loc>
     
-    <lastmod>2022-07-25</lastmod>
+    <lastmod>2022-07-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -112,25 +121,52 @@
   <url>
     <loc>https://xhaosoft.com/design/</loc>
     
-    <lastmod>2022-07-25</lastmod>
+    <lastmod>2022-07-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/about/</loc>
+    <loc>https://xhaosoft.com/ubuntu-wifi/</loc>
     
-    <lastmod>2022-07-25</lastmod>
+    <lastmod>2022-07-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/reimage/</loc>
+    <loc>https://xhaosoft.com/sql-lock/</loc>
     
-    <lastmod>2022-07-25</lastmod>
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/ubuntu-install/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/nfsmount/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/dockerproxy/</loc>
+    
+    <lastmod>2022-07-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -139,43 +175,7 @@
   <url>
     <loc>https://xhaosoft.com/2021Summary/</loc>
     
-    <lastmod>2022-07-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/deploy-use/</loc>
-    
-    <lastmod>2022-07-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/clashlinux/</loc>
-    
-    <lastmod>2022-07-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/categories/</loc>
-    
-    <lastmod>2022-07-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/</loc>
-    
-    <lastmod>2022-07-23</lastmod>
+    <lastmod>2022-07-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -184,218 +184,218 @@
 
   <url>
     <loc>https://xhaosoft.com/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://xhaosoft.com/tags/%E5%BF%83%E5%BE%97/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/%E6%83%B3%E6%B3%95/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/docker/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/proxy/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://xhaosoft.com/tags/nfs/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/mount/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/sql/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/docker/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/lock/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/proxy/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/%E5%BF%83%E5%BE%97/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/%E6%83%B3%E6%B3%95/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/ubuntu/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/linux/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/clash/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/sql/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/shell/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/deploy/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/Samba/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/Server/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/lock/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/DevOps/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/jenkins/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/batch/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/Java/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/blog/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/ssl/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://xhaosoft.com/tags/domain/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/Gitlab/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/CI-CD/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/windows/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/jenkins/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/reimage/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/batch/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/tags/life/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/tags/blog/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/ssl/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/domain/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/clash/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/shell/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/deploy/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/Samba/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/Server/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/tags/remote/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/life/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/Java/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/windows/</loc>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/tags/reimage/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -403,29 +403,29 @@
 
   
   <url>
-    <loc>https://xhaosoft.com/categories/study/</loc>
-    <lastmod>2022-08-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://xhaosoft.com/categories/deployment/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://xhaosoft.com/categories/develop/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <loc>https://xhaosoft.com/categories/study/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xhaosoft.com/categories/website-primer/</loc>
-    <lastmod>2022-08-10</lastmod>
+    <lastmod>2022-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://xhaosoft.com/categories/develop/</loc>
+    <lastmod>2022-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
