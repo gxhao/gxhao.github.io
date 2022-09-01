@@ -49,14 +49,6 @@ js可以编写http请求的代码，然后利用`node`去执行脚本。考虑�
 
 这是微软在`Windows98`上就推出的Windows系统自带的脚本，可以理解为`Windows js`,这样环境就不用担心了，开始编写`Wscript`脚本代码。
 
-### 如何触发集成开发平台构建？
-
-联系集成开发平台同事，目前集成开发平台已有相关触发构建的接口，接口地址为：
-
-> http://xxx/web/rest/dev/job/start
-
-简单传入pipelinGuid和loginId即可触发构建更新。pipelineGuid获取方法：[获取流水线guid](https://fdoc.epoint.com.cn/onlinedoc/docshow/docshow?columnguid=031&menuguid=031011&nodeguid=6c84b072-a834-43ee-b0bc-f30f858be42d)
-
 
 ## 开发与测试
 
@@ -65,7 +57,7 @@ Wscript有个很方便的对象（`WinHttp.WinHttpRequest.5.1`），可以直接
 编写Wscript代码如下
 ```
 var http = WScript.CreateObject("WinHttp.WinHttpRequest.5.1"); 
-http.Open("POST", "http://xxx/web/rest/dev/job/start", false);
+http.Open("POST", "http://xxx/start", false);
 http.SetRequestHeader("Accept", "*/*");
 http.SetRequestHeader("Accept-Language", "zh-cn,zh");
 http.SetRequestHeader("User-Agent", "Mozilla/6.0");
@@ -100,9 +92,6 @@ WScript.Echo(http.ResponseText);
 
 
 ## 结语
-
-gitlab仓库：
-> http://192.168.0.200/gxhao/svn-hook/-/tree/main
 
 引用：  
 
