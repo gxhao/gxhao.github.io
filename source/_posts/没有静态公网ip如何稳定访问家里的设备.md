@@ -1,6 +1,6 @@
 ---
 title: 没有静态公网ip如何稳定访问家里的设备
-id: '32'
+id: '38'
 tags: ['network','DDNS']
 categories:
   - - deployment
