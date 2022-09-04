@@ -4,7 +4,6 @@ id: '38'
 tags: ['network','DDNS']
 categories:
   - - deployment
-  - - network
 date: 2022-09-01 22:59:16
 url: /cloudflare-ddns
 ---
