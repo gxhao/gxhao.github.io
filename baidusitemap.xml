@@ -1,39 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://xhaosoft.com//gitlab-cicd/</loc>
-    <lastmod>2022-08-28</lastmod>
+    <loc>https://xhaosoft.com//cloudflare-ddns/</loc>
+    <lastmod>2022-09-01</lastmod>
   </url>
   <url>
     <loc>https://xhaosoft.com//svn-cicd/</loc>
-    <lastmod>2022-08-28</lastmod>
+    <lastmod>2022-08-10</lastmod>
   </url>
   <url>
-    <loc>https://xhaosoft.com/buildbyjenkins/</loc>
+    <loc>https://xhaosoft.com//gitlab-cicd/</loc>
     <lastmod>2022-07-27</lastmod>
   </url>
   <url>
     <loc>https://xhaosoft.com/creatmyselfblog/</loc>
-    <lastmod>2022-07-27</lastmod>
-  </url>
-  <url>
-    <loc>https://xhaosoft.com//reimage/</loc>
     <lastmod>2022-07-26</lastmod>
   </url>
   <url>
-    <loc>https://xhaosoft.com/about/index.html</loc>
-    <lastmod>2022-07-26</lastmod>
-  </url>
-  <url>
-    <loc>https://xhaosoft.com//remote-linux/</loc>
-    <lastmod>2022-07-26</lastmod>
-  </url>
-  <url>
-    <loc>https://xhaosoft.com//deploy-use/</loc>
-    <lastmod>2022-07-26</lastmod>
-  </url>
-  <url>
-    <loc>https://xhaosoft.com//clashlinux/</loc>
+    <loc>https://xhaosoft.com/buildbyjenkins/</loc>
     <lastmod>2022-07-26</lastmod>
   </url>
   <url>
@@ -41,35 +25,55 @@
     <lastmod>2022-07-26</lastmod>
   </url>
   <url>
-    <loc>https://xhaosoft.com//samba-share/</loc>
-    <lastmod>2022-07-26</lastmod>
-  </url>
-  <url>
-    <loc>https://xhaosoft.com//design/</loc>
-    <lastmod>2022-07-26</lastmod>
-  </url>
-  <url>
     <loc>https://xhaosoft.com//ubuntu-wifi/</loc>
-    <lastmod>2022-07-26</lastmod>
-  </url>
-  <url>
-    <loc>https://xhaosoft.com//sql-lock/</loc>
-    <lastmod>2022-07-26</lastmod>
+    <lastmod>2022-07-25</lastmod>
   </url>
   <url>
     <loc>https://xhaosoft.com//ubuntu-install/</loc>
-    <lastmod>2022-07-26</lastmod>
+    <lastmod>2022-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//sql-lock/</loc>
+    <lastmod>2022-07-25</lastmod>
   </url>
   <url>
     <loc>https://xhaosoft.com//nfsmount/</loc>
-    <lastmod>2022-07-26</lastmod>
+    <lastmod>2022-07-25</lastmod>
   </url>
   <url>
     <loc>https://xhaosoft.com//dockerproxy/</loc>
-    <lastmod>2022-07-26</lastmod>
+    <lastmod>2022-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//remote-linux/</loc>
+    <lastmod>2022-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//samba-share/</loc>
+    <lastmod>2022-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//design/</loc>
+    <lastmod>2022-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com/about/index.html</loc>
+    <lastmod>2022-07-25</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//reimage/</loc>
+    <lastmod>2022-07-25</lastmod>
   </url>
   <url>
     <loc>https://xhaosoft.com//2021Summary/</loc>
-    <lastmod>2022-07-26</lastmod>
+    <lastmod>2022-07-23</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//deploy-use/</loc>
+    <lastmod>2022-07-23</lastmod>
+  </url>
+  <url>
+    <loc>https://xhaosoft.com//clashlinux/</loc>
+    <lastmod>2022-07-23</lastmod>
   </url>
 </urlset> 

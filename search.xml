@@ -89,6 +89,47 @@
       </tags>
   </entry>
   <entry>
+    <title>没有静态公网ip如何稳定访问家里的设备</title>
+    <url>//cloudflare-ddns/</url>
+    <content><![CDATA[<h2 id="前置条件">前置条件</h2>
+<ul>
+<li>Linux系统或者可以装docker的路由器</li>
+<li>域名</li>
+<li><a href="https://www.cloudflare.com/zh-cn/">cloudflare</a>账号</li>
+</ul>
+<h2 id="开整">开整</h2>
+<h3 id="1、创建配置文件">1、创建配置文件</h3>
+<p>新建一个DDNS目录并创建<code>config.json</code>配置文件，文件内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;cloudflare&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;authentication&quot;: &#123;</span><br><span class="line">        &quot;api_token&quot;: &quot;api_token_here&quot;,</span><br><span class="line">        &quot;api_key&quot;: &#123;</span><br><span class="line">          &quot;api_key&quot;: &quot;api_key_here&quot;,</span><br><span class="line">          &quot;account_email&quot;: &quot;your_email_here&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;zone_id&quot;: &quot;your_zone_id_here&quot;,</span><br><span class="line">      &quot;subdomains&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;remove_or_replace_with_your_subdomain&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;a&quot;: true,</span><br><span class="line">  &quot;aaaa&quot;: true,</span><br><span class="line">  &quot;purgeUnknownRecords&quot;: false</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<p><strong>api_token</strong>：<br>
+在cloudflare账户的<a href="https://dash.cloudflare.com/profile/api-tokens">个人配置</a>中设置。</p>
+<p>.、<img data-src="/blog-imgs/image/ddns1.png" alt="ddns1"><br>
+<strong>zone_id</strong>:<br>
+在cloudflare账户的域名配置右下角Api下<br>
+<strong>name</strong>:<br>
+三级域名前缀，例如我想设置访问域名为<strong><a href="http://gxhao.xhaosoft.com">gxhao.xhaosoft.com</a></strong>，这边设置为gxhao</p>
+<h3 id="2、-使用Docker-compose-运行">2、 使用Docker-compose 运行</h3>
+<p>编写docekr-compose.yaml 文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &#x27;3.7&#x27;</span><br><span class="line">services:</span><br><span class="line">  cloudflare-ddns:</span><br><span class="line">    image: timothyjmiller/cloudflare-ddns:latest</span><br><span class="line">    container_name: cloudflare-ddns</span><br><span class="line">    security_opt:</span><br><span class="line">      - no-new-privileges:true</span><br><span class="line">    network_mode: &#x27;host&#x27;</span><br><span class="line">    environment:</span><br><span class="line">      - PUID=1000</span><br><span class="line">      - PGID=1000</span><br><span class="line">    volumes:</span><br><span class="line">      - /YOUR/PATH/HERE/config.json:/config.json</span><br><span class="line">    restart: unless-stopped</span><br></pre></td></tr></table></figure>
+<p>运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker-compose up .</span><br></pre></td></tr></table></figure>
+<h2 id="最后">最后</h2>
+<p>大功告成，现在你可以在cloudflare中看到一条ip域名映射记录，并且每五分钟更新一次。现在你就可以使用你自定义的域名访问家里的设备了。</p>
+<h2 id="链接">链接</h2>
+<blockquote>
+<p><a href="https://github.com/timothymiller/cloudflare-ddns">https://github.com/timothymiller/cloudflare-ddns</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>network</tag>
+        <tag>DDNS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>利用batch脚本自动更新部署构建系统</title>
     <url>/buildbyjenkins/</url>
     <content><![CDATA[<p>在我们项目开发过程中，由于生产开发svn地址和系统部署svn地址不一致，所以在我们开发完功能后，需要手动使用maven构建工具打包，然后登录到远程服务器，再将修改的包放到远程仓库的svn目录下，再提交，然后在运维平台构建，等待构建完成后再切换版本更新。</p>
@@ -262,8 +303,8 @@
         <category>deployment</category>
       </categories>
       <tags>
-        <tag>CI/CD</tag>
         <tag>deploy</tag>
+        <tag>CI/CD</tag>
         <tag>life</tag>
       </tags>
   </entry>
@@ -590,87 +631,6 @@ Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">ht
       </tags>
   </entry>
   <entry>
-    <title>利用Svn Hooks触发自动部署流水线</title>
-    <url>//svn-cicd/</url>
-    <content><![CDATA[<h2 id="缘起">缘起</h2>
-<p>项目上使用<a href="https://dev.epoint.com.cn/clouddev-web/frame/fui/pages/themes/clouddev/clouddev">集成开发平台</a>构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要<strong>提交代码</strong>-&gt;<strong>集成开发平台更新</strong>-&gt;<strong>服务器远程构建更新</strong>。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码<strong>自动</strong>进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。</p>
-<h2 id="思路">思路</h2>
-<ol>
-<li>gitlab 有个配置项<a href="http://xxx/mtjt/custom/-/hooks">Webhooks</a>可以触发集成开发平台构建。</li>
-</ol>
-<blockquote>
-<p>Webhooks enable you to send notifications to web applications in response to events in a group or project.</p>
-</blockquote>
-<ol start="2">
-<li>svn应该有相关触发事件</li>
-<li>编写个后台Restful接口，svn触发这个接口，这个接口触发集成开发平台更新</li>
-</ol>
-<h2 id="调研与设计">调研与设计</h2>
-<h3 id="svn监听如何实现？">svn监听如何实现？</h3>
-<h4 id="1-svn本身仓库自带了hooks功能">1. svn本身仓库自带了hooks功能</h4>
-<p>在svn仓库的hooks文件夹也自带了相关的模板。配置相关shell命令即可使用<br>
-<img data-src="https://gxhao.aiur.site/svnhook1.png" alt=""><br>
-<em>没有访问项目svn仓库的权限，此实现方法不考虑。</em>(否决)</p>
-<h4 id="2-svn-开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor">2. svn 开发人员开发了基于apache开源的svn提交监听工具-<a href="https://tools.stefankueng.com/CommitMonitor.html">CommitMonitor</a></h4>
-<p><em>这个工具可以监听svn提交操作，然后发送通知在桌面右下角。但是于我而言，我不需要他在右下角提醒我，我需要他提供一个通知的api，我可以利用这个api去做一些别的事情。很遗憾没有找到</em>（否决）</p>
-<h4 id="3-TortoiseSVN-提供的Hooks-Script脚本">3. TortoiseSVN 提供的<a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">Hooks Script</a>脚本</h4>
-<p>查看官方介绍，貌似此方法是一种比较可行的方法，且貌似官方文档上没有限定必须是什么类型的脚本。</p>
-<h3 id="脚本如何选择？">脚本如何选择？</h3>
-<h4 id="1-shell-脚本">1.shell 脚本</h4>
-<p>直接编写shell执行访问Rest接口或者相关jar包，但是这样在执行后会有一堆提交报错（实际是执行成功的），类似这样：<br>
-<img data-src="https://gxhao.aiur.site/svnhook2.png" alt=""><br>
-这可能导致体验不太好，<s>明明我提交了完了，你却说我提交错了</s></p>
-<h4 id="2-JavaScript">2.JavaScript</h4>
-<p>js可以编写http请求的代码，然后利用<code>node</code>去执行脚本。考虑环境兼容性，大部分人电脑应该没有安装node相关工具包。</p>
-<h4 id="3-Wscript">3.<a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">Wscript</a></h4>
-<p>这是微软在<code>Windows98</code>上就推出的Windows系统自带的脚本，可以理解为<code>Windows js</code>,这样环境就不用担心了，开始编写<code>Wscript</code>脚本代码。</p>
-<h3 id="如何触发集成开发平台构建？">如何触发集成开发平台构建？</h3>
-<p>联系集成开发平台同事，目前集成开发平台已有相关触发构建的接口，接口地址为：</p>
-<blockquote>
-<p><a href="http://xxx/web/rest/dev/job/start">http://xxx/web/rest/dev/job/start</a></p>
-</blockquote>
-<p>简单传入pipelinGuid和loginId即可触发构建更新。pipelineGuid获取方法：<a href="https://fdoc.epoint.com.cn/onlinedoc/docshow/docshow?columnguid=031&amp;menuguid=031011&amp;nodeguid=6c84b072-a834-43ee-b0bc-f30f858be42d">获取流水线guid</a></p>
-<h2 id="开发与测试">开发与测试</h2>
-<h3 id="编写代码">编写代码</h3>
-<p>Wscript有个很方便的对象（<code>WinHttp.WinHttpRequest.5.1</code>），可以直接访问http请求。<br>
-编写Wscript代码如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/web/rest/dev/job/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
-<h3 id="配置TortoiseSvn">配置TortoiseSvn</h3>
-<p><img data-src="https://gxhao.aiur.site/svnhook.png" alt=""></p>
-<p><code>Hook Type</code>选择Post-Commit-Hook，即在提交完成时触发。<code>Working Copy Path</code> 选择你要提交的代码目录（可配置多个）。<code>Command Line To Execute</code>选择你要执行的Wscript脚本(注意双引号)。</p>
-<h3 id="测试提交">测试提交</h3>
-<p>结果大概时这样：</p>
-<p><img data-src="https://gxhao.aiur.site/svnhook3.png" alt=""></p>
-<h2 id="目前存在的一些问题">目前存在的一些问题</h2>
-<ol>
-<li>只能在TortoiseSvn的工具中提交才能触发，ide提交不会触发。</li>
-<li>集成平台构建完成后没有相关通知到msg/邮件。</li>
-</ol>
-<h2 id="结语">结语</h2>
-<p>gitlab仓库：</p>
-<blockquote>
-<p><a href="http://192.168.0.200/gxhao/svn-hook/-/tree/main">http://192.168.0.200/gxhao/svn-hook/-/tree/main</a></p>
-</blockquote>
-<p>引用：</p>
-<blockquote>
-<p><a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript</a></p>
-</blockquote>
-<p>感谢：</p>
-<p><strong>非常感谢中研院庄晟琪，顾疆飞两位大佬的帮助和支持</strong>，希望此脚本能够对大家在开发时有所帮助，提高开发效率，减少更新构建时间。</p>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>DevOps</tag>
-        <tag>Gitlab</tag>
-        <tag>CI/CD</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>gitlab,DevOps CI/CD全自动部署实战</title>
     <url>//gitlab-cicd/</url>
     <content><![CDATA[<h2 id="背景">背景</h2>
@@ -717,6 +677,77 @@ Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">ht
 <blockquote>
 <p><a href="https://docs.gitlab.com/ee/ci/ssh_keys/">https://docs.gitlab.com/ee/ci/ssh_keys/</a></p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>DevOps</tag>
+        <tag>Gitlab</tag>
+        <tag>CI/CD</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用Svn Hooks触发自动部署流水线</title>
+    <url>//svn-cicd/</url>
+    <content><![CDATA[<h2 id="缘起">缘起</h2>
+<p>项目上使用<a href="https://dev.epoint.com.cn/clouddev-web/frame/fui/pages/themes/clouddev/clouddev">集成开发平台</a>构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要<strong>提交代码</strong>-&gt;<strong>集成开发平台更新</strong>-&gt;<strong>服务器远程构建更新</strong>。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码<strong>自动</strong>进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。</p>
+<h2 id="思路">思路</h2>
+<ol>
+<li>gitlab 有个配置项<a href="http://xxx/mtjt/custom/-/hooks">Webhooks</a>可以触发集成开发平台构建。</li>
+</ol>
+<blockquote>
+<p>Webhooks enable you to send notifications to web applications in response to events in a group or project.</p>
+</blockquote>
+<ol start="2">
+<li>svn应该有相关触发事件</li>
+<li>编写个后台Restful接口，svn触发这个接口，这个接口触发集成开发平台更新</li>
+</ol>
+<h2 id="调研与设计">调研与设计</h2>
+<h3 id="svn监听如何实现？">svn监听如何实现？</h3>
+<h4 id="1-svn本身仓库自带了hooks功能">1. svn本身仓库自带了hooks功能</h4>
+<p>在svn仓库的hooks文件夹也自带了相关的模板。配置相关shell命令即可使用<br>
+<img data-src="https://gxhao.aiur.site/svnhook1.png" alt=""><br>
+<em>没有访问项目svn仓库的权限，此实现方法不考虑。</em>(否决)</p>
+<h4 id="2-svn-开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor">2. svn 开发人员开发了基于apache开源的svn提交监听工具-<a href="https://tools.stefankueng.com/CommitMonitor.html">CommitMonitor</a></h4>
+<p><em>这个工具可以监听svn提交操作，然后发送通知在桌面右下角。但是于我而言，我不需要他在右下角提醒我，我需要他提供一个通知的api，我可以利用这个api去做一些别的事情。很遗憾没有找到</em>（否决）</p>
+<h4 id="3-TortoiseSVN-提供的Hooks-Script脚本">3. TortoiseSVN 提供的<a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">Hooks Script</a>脚本</h4>
+<p>查看官方介绍，貌似此方法是一种比较可行的方法，且貌似官方文档上没有限定必须是什么类型的脚本。</p>
+<h3 id="脚本如何选择？">脚本如何选择？</h3>
+<h4 id="1-shell-脚本">1.shell 脚本</h4>
+<p>直接编写shell执行访问Rest接口或者相关jar包，但是这样在执行后会有一堆提交报错（实际是执行成功的），类似这样：<br>
+<img data-src="https://gxhao.aiur.site/svnhook2.png" alt=""><br>
+这可能导致体验不太好，<s>明明我提交了完了，你却说我提交错了</s></p>
+<h4 id="2-JavaScript">2.JavaScript</h4>
+<p>js可以编写http请求的代码，然后利用<code>node</code>去执行脚本。考虑环境兼容性，大部分人电脑应该没有安装node相关工具包。</p>
+<h4 id="3-Wscript">3.<a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">Wscript</a></h4>
+<p>这是微软在<code>Windows98</code>上就推出的Windows系统自带的脚本，可以理解为<code>Windows js</code>,这样环境就不用担心了，开始编写<code>Wscript</code>脚本代码。</p>
+<h2 id="开发与测试">开发与测试</h2>
+<h3 id="编写代码">编写代码</h3>
+<p>Wscript有个很方便的对象（<code>WinHttp.WinHttpRequest.5.1</code>），可以直接访问http请求。<br>
+编写Wscript代码如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
+<h3 id="配置TortoiseSvn">配置TortoiseSvn</h3>
+<p><img data-src="https://gxhao.aiur.site/svnhook.png" alt=""></p>
+<p><code>Hook Type</code>选择Post-Commit-Hook，即在提交完成时触发。<code>Working Copy Path</code> 选择你要提交的代码目录（可配置多个）。<code>Command Line To Execute</code>选择你要执行的Wscript脚本(注意双引号)。</p>
+<h3 id="测试提交">测试提交</h3>
+<p>结果大概时这样：</p>
+<p><img data-src="https://gxhao.aiur.site/svnhook3.png" alt=""></p>
+<h2 id="目前存在的一些问题">目前存在的一些问题</h2>
+<ol>
+<li>只能在TortoiseSvn的工具中提交才能触发，ide提交不会触发。</li>
+<li>集成平台构建完成后没有相关通知到msg/邮件。</li>
+</ol>
+<h2 id="结语">结语</h2>
+<p>引用：</p>
+<blockquote>
+<p><a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript</a></p>
+</blockquote>
+<p>感谢：</p>
+<p><strong>非常感谢中研院庄晟琪，顾疆飞两位大佬的帮助和支持</strong>，希望此脚本能够对大家在开发时有所帮助，提高开发效率，减少更新构建时间。</p>
 ]]></content>
       <categories>
         <category>deployment</category>

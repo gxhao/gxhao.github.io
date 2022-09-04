@@ -20,28 +20,23 @@
     var CONFIG = {"hostname":"xhaosoft.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="郭晓豪的个人博客，传统软件行业，喜欢利用工具来简化软件开发中的重复性操作，记录日常开发时的一些思考，分享相关知识">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="https://xhaosoft.com/categories/">
+  <meta name="description" content="前置条件  Linux系统或者可以装docker的路由器 域名 cloudflare账号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="没有静态公网ip如何稳定访问家里的设备">
+<meta property="og:url" content="https://xhaosoft.com/cloudflare-ddns/">
 <meta property="og:site_name" content="gxhao">
-<meta property="og:description" content="郭晓豪的个人博客，传统软件行业，喜欢利用工具来简化软件开发中的重复性操作，记录日常开发时的一些思考，分享相关知识">
+<meta property="og:description" content="前置条件  Linux系统或者可以装docker的路由器 域名 cloudflare账号">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-01-03T14:59:11.000Z">
-<meta property="article:modified_time" content="2022-07-23T09:38:42.196Z">
+<meta property="og:image" content="https://xhaosoft.com/blog-imgs/image/ddns1.png">
+<meta property="article:published_time" content="2022-09-01T14:59:16.000Z">
+<meta property="article:modified_time" content="2022-09-01T16:40:45.000Z">
 <meta property="article:author" content="gxhao">
-<meta property="article:tag" content="计算机">
-<meta property="article:tag" content="开发">
-<meta property="article:tag" content="编程">
-<meta property="article:tag" content="网站">
-<meta property="article:tag" content="博客">
-<meta property="article:tag" content="技术">
-<meta property="article:tag" content="学习">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="network">
+<meta property="article:tag" content="DDNS">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xhaosoft.com/blog-imgs/image/ddns1.png">
 
-<link rel="canonical" href="https://xhaosoft.com/categories/">
+<link rel="canonical" href="https://xhaosoft.com/cloudflare-ddns/">
 
 
 <script id="page-configurations">
@@ -49,13 +44,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>分类 | gxhao
-</title>
+  <title>没有静态公网ip如何稳定访问家里的设备 | gxhao</title>
   
 
 
@@ -201,55 +195,162 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xhaosoft.com/cloudflare-ddns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="gxhao">
+      <meta itemprop="description" content="郭晓豪的个人博客，传统软件行业，喜欢利用工具来简化软件开发中的重复性操作，记录日常开发时的一些思考，分享相关知识">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="gxhao">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          没有静态公网ip如何稳定访问家里的设备
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">分类
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<div class="post-meta">
+              <time title="创建时间：2022-09-01 22:59:16" itemprop="dateCreated datePublished" datetime="2022-09-01T22:59:16+08:00">2022-09-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deployment/" itemprop="url" rel="index"><span itemprop="name">deployment</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/cloudflare-ddns/" class="post-meta-item leancloud_visitors" data-flag-title="没有静态公网ip如何稳定访问家里的设备" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/cloudflare-ddns/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/cloudflare-ddns/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前置条件">前置条件</h2>
+<ul>
+<li>Linux系统或者可以装docker的路由器</li>
+<li>域名</li>
+<li><a target="_blank" rel="noopener" href="https://www.cloudflare.com/zh-cn/">cloudflare</a>账号</li>
+</ul>
+<h2 id="开整">开整</h2>
+<h3 id="1、创建配置文件">1、创建配置文件</h3>
+<p>新建一个DDNS目录并创建<code>config.json</code>配置文件，文件内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;cloudflare&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;authentication&quot;: &#123;</span><br><span class="line">        &quot;api_token&quot;: &quot;api_token_here&quot;,</span><br><span class="line">        &quot;api_key&quot;: &#123;</span><br><span class="line">          &quot;api_key&quot;: &quot;api_key_here&quot;,</span><br><span class="line">          &quot;account_email&quot;: &quot;your_email_here&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;zone_id&quot;: &quot;your_zone_id_here&quot;,</span><br><span class="line">      &quot;subdomains&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;remove_or_replace_with_your_subdomain&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;a&quot;: true,</span><br><span class="line">  &quot;aaaa&quot;: true,</span><br><span class="line">  &quot;purgeUnknownRecords&quot;: false</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<p><strong>api_token</strong>：<br>
+在cloudflare账户的<a target="_blank" rel="noopener" href="https://dash.cloudflare.com/profile/api-tokens">个人配置</a>中设置。</p>
+<p>.、<img data-src="/blog-imgs/image/ddns1.png" alt="ddns1"><br>
+<strong>zone_id</strong>:<br>
+在cloudflare账户的域名配置右下角Api下<br>
+<strong>name</strong>:<br>
+三级域名前缀，例如我想设置访问域名为<strong><a target="_blank" rel="noopener" href="http://gxhao.xhaosoft.com">gxhao.xhaosoft.com</a></strong>，这边设置为gxhao</p>
+<h3 id="2、-使用Docker-compose-运行">2、 使用Docker-compose 运行</h3>
+<p>编写docekr-compose.yaml 文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;3.7&#x27;</span><br><span class="line">services:</span><br><span class="line">  cloudflare-ddns:</span><br><span class="line">    image: timothyjmiller/cloudflare-ddns:latest</span><br><span class="line">    container_name: cloudflare-ddns</span><br><span class="line">    security_opt:</span><br><span class="line">      - no-new-privileges:true</span><br><span class="line">    network_mode: &#x27;host&#x27;</span><br><span class="line">    environment:</span><br><span class="line">      - PUID=1000</span><br><span class="line">      - PGID=1000</span><br><span class="line">    volumes:</span><br><span class="line">      - /YOUR/PATH/HERE/config.json:/config.json</span><br><span class="line">    restart: unless-stopped</span><br></pre></td></tr></table></figure>
+<p>运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up .</span><br></pre></td></tr></table></figure>
+<h2 id="最后">最后</h2>
+<p>大功告成，现在你可以在cloudflare中看到一条ip域名映射记录，并且每五分钟更新一次。现在你就可以使用你自定义的域名访问家里的设备了。</p>
+<h2 id="链接">链接</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/timothymiller/cloudflare-ddns">https://github.com/timothymiller/cloudflare-ddns</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+      
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+              <a href="/tags/DDNS/" rel="tag"># DDNS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/buildbyjenkins/" rel="prev" title="利用batch脚本自动更新部署构建系统">
+      <i class="fa fa-chevron-left"></i> 利用batch脚本自动更新部署构建系统
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <div class="category-all-page">
-            <div class="category-all-title">
-              目前共计 4 个分类
-            </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/deployment/">deployment</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/develop/">develop</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/study/">study</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/website-primer/">website-primer</a><span class="category-list-count">1</span></li></ul>
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -296,6 +397,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">前置条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%95%B4"><span class="nav-number">2.</span> <span class="nav-text">开整</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">1、创建配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81-%E4%BD%BF%E7%94%A8Docker-compose-%E8%BF%90%E8%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">2、 使用Docker-compose 运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">3.</span> <span class="nav-text">最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
