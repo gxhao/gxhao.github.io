@@ -27,13 +27,16 @@
 <meta property="og:site_name" content="gxhao">
 <meta property="og:description" content="去除网易有道笔记左下角广告 在安装目录，找到 \YoudaoNote\theme\default\skin.xml 删除">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://gxhao.aiursoft.cn/image/img-c84ba9ee-a0b4-41b5-875d-38235d264a82.png">
+<meta property="og:image" content="https://gxhao.aiursoft.cn/image/img-116c73f7-06bb-496f-a726-5d180289a1fb.png">
 <meta property="article:published_time" content="2022-07-22T07:59:16.000Z">
-<meta property="article:modified_time" content="2022-07-23T17:37:15.000Z">
+<meta property="article:modified_time" content="2022-11-25T07:35:49.916Z">
 <meta property="article:author" content="gxhao">
 <meta property="article:tag" content="deploy">
 <meta property="article:tag" content="CI&#x2F;CD">
 <meta property="article:tag" content="life">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gxhao.aiursoft.cn/image/img-c84ba9ee-a0b4-41b5-875d-38235d264a82.png">
 
 <link rel="canonical" href="https://xhaosoft.com/deploy-use/">
 
@@ -133,12 +136,12 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">18</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">21</span></a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">32</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">38</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -264,7 +267,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>790</span>
+              <span>1.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -296,6 +299,23 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_OPTS=&quot;$JAVA_OPTS -Duser.timezone=Asia/shanghai&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="node降版本">node降版本</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Determining your Node version</span><br><span class="line"></span><br><span class="line">node -v  // or node --version</span><br><span class="line">npm -v   // npm version or long npm --version</span><br><span class="line"># Ensure that you have n installed</span><br><span class="line"></span><br><span class="line">sudo npm install -g n // -g for global installation </span><br><span class="line"># Upgrading to the latest stable version</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br><span class="line"># Changing to a specific version</span><br><span class="line"></span><br><span class="line">sudo n 16.13.0</span><br></pre></td></tr></table></figure>
+<h2 id="磁盘清理">磁盘清理</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## 进入磁盘清理命令</span><br><span class="line">diskpart</span><br><span class="line">## 选择清理的磁盘</span><br><span class="line">select disk 1</span><br><span class="line">## 清理</span><br><span class="line">clean</span><br></pre></td></tr></table></figure>
+<h2 id="运维监控">运维监控</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## 查看内存使用情况</span><br><span class="line">free</span><br><span class="line">## 服务器实时情况</span><br><span class="line">dstat</span><br><span class="line">## 其他</span><br><span class="line">htop iotop top</span><br></pre></td></tr></table></figure>
+<h2 id="Windows-Terminal">Windows Terminal</h2>
+<p>配置文件地址</p>
+<blockquote>
+<p>C:\Users\16255\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState</p>
+</blockquote>
+<h2 id="wsl解决每次启动IP地址变化问题">wsl解决每次启动IP地址变化问题</h2>
+<ul>
+<li>取消默认的NAT</li>
+<li>开启Hyper-V manager</li>
+</ul>
+<p><img data-src="https://gxhao.aiursoft.cn/image/img-c84ba9ee-a0b4-41b5-875d-38235d264a82.png" alt="file"></p>
+<p>开启Virtual Switch Manager<br>
+<img data-src="https://gxhao.aiursoft.cn/image/img-116c73f7-06bb-496f-a726-5d180289a1fb.png" alt="file"></p>
 
     </div>
 
@@ -312,10 +332,10 @@
       <div class="popular-posts-title"><a href="\samba-share\" rel="bookmark">Use Samba to share files in Linux and Windows</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\gitlab-cicd\" rel="bookmark">gitlab,DevOps CI/CD全自动部署实战</a></div>
+      <div class="popular-posts-title"><a href="\svn-cicd\" rel="bookmark">利用Svn Hooks触发自动部署流水线</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\svn-cicd\" rel="bookmark">利用Svn Hooks触发自动部署流水线</a></div>
+      <div class="popular-posts-title"><a href="\gitlab-cicd\" rel="bookmark">gitlab,DevOps CI/CD全自动部署实战</a></div>
     </li>
   </ul>
 
@@ -333,12 +353,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/design/" rel="prev" title="如何减少代码中的if else,设计模式实战">
-      <i class="fa fa-chevron-left"></i> 如何减少代码中的if else,设计模式实战
+    <a href="/reimage/" rel="prev" title="Windows重装后全自动下载所需软件和配置开发环境">
+      <i class="fa fa-chevron-left"></i> Windows重装后全自动下载所需软件和配置开发环境
     </a></div>
       <div class="post-nav-item">
-    <a href="/reimage/" rel="next" title="Windows重装后全自动下载所需软件和配置开发环境">
-      Windows重装后全自动下载所需软件和配置开发环境 <i class="fa fa-chevron-right"></i>
+    <a href="/clashlinux/" rel="next" title="linux 部署clash的三种方式">
+      linux 部署clash的三种方式 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -399,7 +419,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4%E7%BD%91%E6%98%93%E6%9C%89%E9%81%93%E7%AC%94%E8%AE%B0%E5%B7%A6%E4%B8%8B%E8%A7%92%E5%B9%BF%E5%91%8A"><span class="nav-number">1.</span> <span class="nav-text">去除网易有道笔记左下角广告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E6%98%AF%E4%B8%8D%E6%98%AF%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">判断一台机器是不是虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-%E5%85%A5%E7%AB%99%E8%A7%84%E5%88%99%E5%BC%80%E5%90%AF%E4%B8%8D%E7%94%9F%E6%95%88"><span class="nav-number">3.</span> <span class="nav-text">windows 入站规则开启不生效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E5%AE%B9%E5%99%A8%E5%86%85tomcat%E5%BA%94%E7%94%A8%E4%B8%8E%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4%E7%9B%B8%E5%B7%AE8%E4%B8%AA%E5%B0%8F%E6%97%B6"><span class="nav-number">4.</span> <span class="nav-text">docker 容器内tomcat应用与当前时间相差8个小时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node%E9%99%8D%E7%89%88%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">node降版本</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4%E7%BD%91%E6%98%93%E6%9C%89%E9%81%93%E7%AC%94%E8%AE%B0%E5%B7%A6%E4%B8%8B%E8%A7%92%E5%B9%BF%E5%91%8A"><span class="nav-number">1.</span> <span class="nav-text">去除网易有道笔记左下角广告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E6%98%AF%E4%B8%8D%E6%98%AF%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">判断一台机器是不是虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-%E5%85%A5%E7%AB%99%E8%A7%84%E5%88%99%E5%BC%80%E5%90%AF%E4%B8%8D%E7%94%9F%E6%95%88"><span class="nav-number">3.</span> <span class="nav-text">windows 入站规则开启不生效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E5%AE%B9%E5%99%A8%E5%86%85tomcat%E5%BA%94%E7%94%A8%E4%B8%8E%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4%E7%9B%B8%E5%B7%AE8%E4%B8%AA%E5%B0%8F%E6%97%B6"><span class="nav-number">4.</span> <span class="nav-text">docker 容器内tomcat应用与当前时间相差8个小时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node%E9%99%8D%E7%89%88%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">node降版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E6%B8%85%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">磁盘清理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%BB%B4%E7%9B%91%E6%8E%A7"><span class="nav-number">7.</span> <span class="nav-text">运维监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Windows-Terminal"><span class="nav-number">8.</span> <span class="nav-text">Windows Terminal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wsl%E8%A7%A3%E5%86%B3%E6%AF%8F%E6%AC%A1%E5%90%AF%E5%8A%A8IP%E5%9C%B0%E5%9D%80%E5%8F%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">9.</span> <span class="nav-text">wsl解决每次启动IP地址变化问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -413,7 +433,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -426,7 +446,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">38</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

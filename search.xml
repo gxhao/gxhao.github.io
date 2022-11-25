@@ -1,132 +1,543 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Windows重装后全自动下载所需软件和配置开发环境</title>
-    <url>//reimage/</url>
-    <content><![CDATA[<h2 id="初始化一键安装必备软件">初始化一键安装必备软件</h2>
-<p>右键点击开始菜单，powershell（管理员）运行下面脚本</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://github.com/gxhao2020/configuration-script-win/blob/main/install.ps1&#x27;))</span><br></pre></td></tr></table></figure>
-<h2 id="安装winget">安装winget</h2>
+    <title>NFS filesystem mount</title>
+    <url>//nfsmount/</url>
+    <content><![CDATA[<h1>使用nfs文件系统挂载</h1>
+<ol>
+<li>服务器端挂载配置  <a href="https://cloud.tencent.com/developer/article/1626660">https://cloud.tencent.com/developer/article/1626660</a></li>
+<li>参考文章    ：<a href="https://superuser.com/questions/1363062/how-to-share-a-directory-on-a-linux-machine-to-a-windows-machine-via-nfs">How to share a directory on a Linux machine to a Windows machine via NFS?</a></li>
+</ol>
+<h2 id="挂载相关命令">挂载相关命令</h2>
+<h3 id="Linux-side">Linux side:</h3>
+<ol>
+<li>Install the NFS server and utilities (nfs-utils or your distribution’s equivalent).  <code>sudo apt install nfs-kernel-server</code></li>
+<li>Create the directory <code>/srv/nfs</code>.<br>
+<code>sudo mkdir -p /srv/nfs4/backups</code></li>
+<li>Create a new empty directory under /srv/nfs, e.g. files.<br>
+Bind-mount the created directory to the directory containing you want to share, e.g.:<br>
+<code>sudo mount --bind /home/user/stuff/files /srv/nfs/files</code><br>
+Create or edit <code>/etc/exports</code>, and add the line:(the above assumes the Windows machine is on the same LAN as the Linux machine, with the subnet having a 192.168.0.0/16 prefix - adjust as needed).</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/srv/nfs 192.168.0.0/16(rw,all_squash,no_subtree_check,anonuid=65534,anongid=65534)</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>Start the NFS server<br>
+<code>sudo systemctl start nfs-server.service</code></li>
+</ol>
+<h3 id="Windows-side">Windows side:</h3>
+<ol>
+<li>In Control Panel, open Programs and Features, there find Add/remove Windows components, and enable Services for NFS and everything under it.</li>
+<li>Open a command prompt, and type:<br>
+<code>mount -o anon \\192.168.0.1\srv\nfs\files Z:</code><br>
+(assuming your Linux machine is at 192.168.0.1).</li>
+<li>The directory should now be available on the Z: drive. (Type start Z: at the command prompt to open it in Explorer).</li>
+</ol>
+<h3 id="FAQ">FAQ</h3>
+<h4 id="windows连接挂载显示网络连接失败（错误代码53）">windows连接挂载显示网络连接失败（错误代码53）</h4>
+<p>by Ubuntu <a href="https://ubuntuforums.org/showthread.php?t=1402655">https://ubuntuforums.org/showthread.php?t=1402655</a></p>
 <blockquote>
-<p>winget 是微软推出的命令行工具，可以输入简单的命令安装常用软件,<a href="https://www.cnblogs.com/gxhao/p/15871239.html">参考这里</a></p>
+<p>NFS server has an option of working in insecure mode (Allowing higher incoming port numbers). Windows NFS client often uses higher port numbers. You can enable this option by adding an option to the share<br>
+Example: /share *(insecure,rw)<br>
+在服务器端exports文件中添加insecure</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Install Winget</span><br><span class="line">if (-not $(Get-Command winget -ErrorAction SilentlyContinue)) &#123;</span><br><span class="line">    Write-Host &quot;Installing WinGet...&quot; -ForegroundColor Green</span><br><span class="line">    Start-Process &quot;ms-appinstaller:?source=https://aka.ms/getwinget&quot;</span><br><span class="line">    while(-not $(Get-Command winget -ErrorAction SilentlyContinue))</span><br><span class="line">    &#123;</span><br><span class="line">        Write-Host &quot;Winget is still not found!&quot; -ForegroundColor Yellow</span><br><span class="line">        Start-Sleep -Seconds 5</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="软件链接">软件链接</h2>
-<p><a href="https://dl.xdown.org/windows/i386/xdown-2.0.4.5.zip">xdown</a><br>
-<a href="https://www.mgnb.jp/download/MGNB.exe">mgnb</a><br>
-<a href="https://github.com/AutoDarkMode/Windows-Auto-Night-Mode/releases/download/10.1.0.10/AutoDarkModeX_10.1.0.10.exe">Auto Dark Model</a><br>
-<a href="https://download.ydstatic.com/notewebsite/downloads/YNote.exe">有道云笔记</a><br>
-<a href="https://download.zerotier.com/dist/ZeroTierOne.msi">ZeroTier</a><br>
-<a href="https://res.u-tools.cn/version2/uTools-2.4.3.exe">Utools</a></p>
-<p>通过powershell默认安装exe软件。</p>
+<h4 id="在windows创建文件显示无权访问">在windows创建文件显示无权访问</h4>
 <blockquote>
-<p><a href="https://stackoverflow.com/questions/47110728/powershell-download-and-run-exe-file">https://stackoverflow.com/questions/47110728/powershell-download-and-run-exe-file</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://stackoverflow.com/questions/45756791/install-software-using-powershell-script?rq=1">https://stackoverflow.com/questions/45756791/install-software-using-powershell-script?rq=1</a></p>
-</blockquote>
-<h1>设置篇</h1>
-<h2 id="设置Windows投影默认为第二屏幕">设置Windows投影默认为第二屏幕</h2>
-<blockquote>
-<p><a href="https://answers.microsoft.com/zh-hans/windows/forum/all/%E5%85%B3%E4%BA%8Ewin10%E7%9A%84%E6%8A%95%E5%BD%B1/e80b6da9-31c8-4b1a-a3df-4d91b3c6f974?auth=1">https://answers.microsoft.com/zh-hans/windows/forum/all/关于win10的投影/e80b6da9-31c8-4b1a-a3df-4d91b3c6f974?auth=1</a></p>
+<p><a href="https://graspingtech.com/mount-nfs-share-windows-10/">https://graspingtech.com/mount-nfs-share-windows-10/</a></p>
 </blockquote>
 <ol>
-<li>
-<p>点击开始按钮&gt;输入cmd&gt;右键点击搜索结果中的&quot;命令提示符&quot;&gt;以管理员身份运行</p>
-</li>
-<li>
-<p>在打开的命令提示符窗口中运行:</p>
-</li>
+<li>Open <code>regedit</code> by typing it in the search box end pressing Enter.</li>
+<li>Browse to <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ClientForNFS\CurrentVersion\Default</code>.</li>
+<li>Create a new <code>New DWORD (32-bit) Value</code> inside the <code>Default</code> folder named <code>AnonymousUid</code> and assign the <code>UID</code> found on the <code>UNIX</code> directory as shared by the NFS system.</li>
+<li>Create a new <code>New DWORD (32-bit&quot;) Value</code> inside the <code>Default</code> folder named <code>AnonymousGid</code> and assign the GID found on the UNIX directory as shared by the NFS system.</li>
+<li>Restart the NFS client or reboot the machine to apply the changes.</li>
 </ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">notepad C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\SecondOnly.bat</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>确认新建文件,粘贴下面内容到记事本中:</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">@echo off</span><br><span class="line"></span><br><span class="line">DisplaySwitch.exe /external</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>
-<p>保存并关闭记事本程序</p>
-</li>
-<li>
-<p>重启电脑看一下是否成功了呢</p>
-</li>
-</ol>
-<h2 id="完全删除小组件">完全删除小组件</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 卸载</span></span><br><span class="line">winget uninstall MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装</span></span><br><span class="line">winget install 9MSSGKG348SP</span><br></pre></td></tr></table></figure>
-<h2 id="配置ssh私钥">配置ssh私钥</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &#x27;gxhao&#x27;  </span><br><span class="line">git config --global user.email &#x27;1625546088@qq.com&#x27;</span><br><span class="line"># 生成密钥（注意设置git账号密码</span><br><span class="line">ssh-keygen -t rsa -C &#x27;1625546088@qq.com&#x27;</span><br><span class="line"># 检测是否配置成功</span><br><span class="line"> ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-<h2 id="配置idea插件地址">配置idea插件地址</h2>
+<h4 id="Windows输入mount提示：位于命令管道位置-1-的-cmdlet-New-PSDrive-请为以下参数提供值-Name-E-PSProvider-C">Windows输入mount提示：<code>位于命令管道位置 1 的 cmdlet New-PSDrive 请为以下参数提供值:Name: E PSProvider: C:</code></h4>
+<p>reason：缺少“基于UNIX的应用程序子系统”一项。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">New-PSDrive -Name &quot;z&quot; -Root &quot;\\10.147.17.145\srv\nfs&quot; -Persist -PSProvider &quot;FileSystem&quot;</span><br></pre></td></tr></table></figure>
+<p>参考stackoverflow</p>
 <blockquote>
-<p><a href="https://plugins.zhile.io">https://plugins.zhile.io</a></p>
+<p><a href="https://stackoverflow.com/questions/57582910/powershell-cant-run-mount">https://stackoverflow.com/questions/57582910/powershell-cant-run-mount</a></p>
 </blockquote>
-<p>jrebel 激活</p>
-<blockquote>
-<p><a href="http://jrebel.whrj999.com/3d64b43e-0da7-40a3-925a-844e5a57aea8">http://jrebel.whrj999.com/3d64b43e-0da7-40a3-925a-844e5a57aea8</a></p>
-</blockquote>
-<h2 id="设置git代理">设置git代理</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://gist.githubusercontent.com/162554/b14669da81dd9574cc7ae34955be7fbe/raw/86a5b82f47a8f5e9c822a749782dc08e6d59b230/SetProxy.psm1&#x27;))</span><br><span class="line">$ git config --global git.proxy http://127.0.0.1:1080</span><br><span class="line">$ git config --global http.proxy http://127.0.0.1:1080</span><br><span class="line">$ git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">http.https://github.com.proxy=socks5://127.0.0.1:10808</span><br></pre></td></tr></table></figure>
-<h2 id="激活Windows">激活Windows</h2>
-<blockquote>
-<p><a href="https://msguides.com/windows-11">https://msguides.com/windows-11</a></p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX</span><br><span class="line"># 获取激活服务器地址   https://kms.msguides.com/</span><br><span class="line">slmgr /skms s8.uk.to</span><br><span class="line">slmgr /ato</span><br><span class="line"></span><br><span class="line"># office </span><br><span class="line">https://www.grameen-info.org/free-microsoft-office-2016-product-key/</span><br></pre></td></tr></table></figure>
-<h1>FAQ</h1>
-<h2 id="锁屏桌面壁纸不更新">锁屏桌面壁纸不更新</h2>
-<p>我刚刚解决了这个问题。先将&quot;<strong>Windows 聚焦</strong>&quot; 改为 “<strong>图片</strong>”,再删除<code>C:\Users\gxhao\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\Settings</code><br>
-目录下<code>settings.dat</code>和<code>roaming.lock</code>这两个文件。（注意是隐藏的文件）再 由 “图片” 改回 “Windows 聚焦”。稍等，OK!</p>
-<p>之后就可以看到:<br>
-<code>...\Microsoft.Windows.ContentDeliveryManager_***\LocalState\Assets</code><br>
-文件夹里下载了一批聚焦图片<br>
-<code>..\Microsoft.Windows.ContentDeliveryManager_***\settings</code><br>
-目录下重新生成了settings.dat文件。</p>
+<h4 id="重启nfs服务">重启nfs服务**</h4>
+<p><code> sudo /etc/init.d/nfs-kernel-server restart</code></p>
+<h4 id="验证是否正常使用">验证是否正常使用**</h4>
+<p><code> sudo cat /proc/fs/nfsd/versions</code></p>
 ]]></content>
       <categories>
         <category>deployment</category>
       </categories>
       <tags>
-        <tag>windows</tag>
-        <tag>reimage</tag>
+        <tag>nfs</tag>
+        <tag>mount</tag>
       </tags>
   </entry>
   <entry>
-    <title>没有静态公网ip如何稳定访问家里的设备</title>
-    <url>//cloudflare-ddns/</url>
-    <content><![CDATA[<h2 id="前置条件">前置条件</h2>
-<ul>
-<li>Linux系统或者可以装docker的路由器</li>
-<li>域名</li>
-<li><a href="https://www.cloudflare.com/zh-cn/">cloudflare</a>账号</li>
-</ul>
-<h2 id="开整">开整</h2>
-<h3 id="1、创建配置文件">1、创建配置文件</h3>
-<p>新建一个DDNS目录并创建<code>config.json</code>配置文件，文件内容如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;cloudflare&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;authentication&quot;: &#123;</span><br><span class="line">        &quot;api_token&quot;: &quot;api_token_here&quot;,</span><br><span class="line">        &quot;api_key&quot;: &#123;</span><br><span class="line">          &quot;api_key&quot;: &quot;api_key_here&quot;,</span><br><span class="line">          &quot;account_email&quot;: &quot;your_email_here&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;zone_id&quot;: &quot;your_zone_id_here&quot;,</span><br><span class="line">      &quot;subdomains&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;remove_or_replace_with_your_subdomain&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;a&quot;: true,</span><br><span class="line">  &quot;aaaa&quot;: true,</span><br><span class="line">  &quot;purgeUnknownRecords&quot;: false</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>参数说明：</p>
-<p><strong>api_token</strong>：<br>
-在cloudflare账户的<a href="https://dash.cloudflare.com/profile/api-tokens">个人配置</a>中设置。</p>
-<p>.、<img data-src="/blog-imgs/image/ddns1.png" alt="ddns1"><br>
-<strong>zone_id</strong>:<br>
-在cloudflare账户的域名配置右下角Api下<br>
-<strong>name</strong>:<br>
-三级域名前缀，例如我想设置访问域名为<strong><a href="http://gxhao.xhaosoft.com">gxhao.xhaosoft.com</a></strong>，这边设置为gxhao</p>
-<h3 id="2、-使用Docker-compose-运行">2、 使用Docker-compose 运行</h3>
-<p>编写docekr-compose.yaml 文件。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &#x27;3.7&#x27;</span><br><span class="line">services:</span><br><span class="line">  cloudflare-ddns:</span><br><span class="line">    image: timothyjmiller/cloudflare-ddns:latest</span><br><span class="line">    container_name: cloudflare-ddns</span><br><span class="line">    security_opt:</span><br><span class="line">      - no-new-privileges:true</span><br><span class="line">    network_mode: &#x27;host&#x27;</span><br><span class="line">    environment:</span><br><span class="line">      - PUID=1000</span><br><span class="line">      - PGID=1000</span><br><span class="line">    volumes:</span><br><span class="line">      - /YOUR/PATH/HERE/config.json:/config.json</span><br><span class="line">    restart: unless-stopped</span><br></pre></td></tr></table></figure>
-<p>运行：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker-compose up .</span><br></pre></td></tr></table></figure>
-<h2 id="最后">最后</h2>
-<p>大功告成，现在你可以在cloudflare中看到一条ip域名映射记录，并且每五分钟更新一次。现在你就可以使用你自定义的域名访问家里的设备了。</p>
-<h2 id="链接">链接</h2>
+    <title>docker开启代理</title>
+    <url>//dockerproxy/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>在国内网路情况下docker 拉取DockerHub仓库的镜像是非常慢的，这时候我们经常使用镜像加速器来解决这一问题，但是镜像加速器并不是始终生效的，在一些情况下可能会失效。<br>
+<a href="https://github.com/docker-practice/docker-registry-cn-mirror-test/actions">docker rigster test</a>每天提供了镜像的测试功能。如果你经常使用代理的话，这边可以配置Docker代理。</p>
+<h1>安装</h1>
 <blockquote>
-<p><a href="https://github.com/timothymiller/cloudflare-ddns">https://github.com/timothymiller/cloudflare-ddns</a></p>
+<p>The Docker daemon uses the HTTP_PROXY, HTTPS_PROXY, and NO_PROXY environmental  variables in its start-up environment to configure HTTP or HTTPS proxy behavior. You  cannot configure these environment variables using the daemon.json file.</p>
+</blockquote>
+<h2 id="1-创建docker-service-d文件夹">1. 创建<code>docker.service.d</code>文件夹</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir -p /etc/systemd/system/docker.service.d</span><br></pre></td></tr></table></figure>
+<h2 id="2-创建http-proxy-conf文件">2. 创建<code>http-proxy.conf</code>文件</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">touch http-proxy.conf</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="3-编写文件内容">3. 编写文件内容</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=&quot;HTTPS_PROXY=127.0.0.1:7890&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="4-重启docker">4.重启docker</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+<h2 id="5-验证">5. 验证</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl show --property=Environment docker</span><br></pre></td></tr></table></figure>
+<h1>FAQ</h1>
+<h2 id="拉取镜像报错">拉取镜像报错</h2>
+<blockquote>
+<p>Using default tag: latest<br>
+Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">https://registry-1.docker.io/v2/</a>”: proxyconnect tcp: EOF</p>
+</blockquote>
+<ul>
+<li>重置dns解析服务器<br>
+<a href="https://www.cxyzjd.com/article/a460467324/117607753">https://www.cxyzjd.com/article/a460467324/117607753</a></li>
+<li>检查<code>/etc/systemd/system/docker.service.dhttp-proxy.conf</code> 配置文件</li>
+</ul>
+<h1>参考</h1>
+<blockquote>
+<p><a href="https://docs.docker.com/config/daemon/systemd/#httphttps-proxy">https://docs.docker.com/config/daemon/systemd/#httphttps-proxy</a></p>
 </blockquote>
 ]]></content>
       <categories>
         <category>deployment</category>
       </categories>
       <tags>
-        <tag>network</tag>
-        <tag>DDNS</tag>
+        <tag>docker</tag>
+        <tag>proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021年终总结</title>
+    <url>//2021Summary/</url>
+    <content><![CDATA[<h2 id="前言">前言</h2>
+<p>从2020年毕业到现在参加工作也一年多了，回顾这一年的经历，有一些想法想记录和总结一下，等以后回头再看的时候也算是对自己有个交代。其实之前的时候都没有写过类似年终总结的，只是受到公司年终总结和it行业人员的一些启发，来回顾一下2021年自己的成长和对2022年的一些展望。</p>
+<h2 id="工作">工作</h2>
+<h3 id="刚进入工作时期">刚进入工作时期</h3>
+<p>我所在的学校是华中地区的一所二本院校，学校内并没有很强的IT技术氛围。我毕业的时候一度以为自己毕业就失业，不过幸运的是我能够在2020年9月入职到<strong>国泰新点</strong>作为我程序员生涯的起点，回想自己刚入职的那段时间，整天提心吊胆，害怕领导会因为我技术太菜把我辞退（不过现在已经没有这种想法了）。当时的想法就是能够熬过六个月试用期，这样公司就不会随意辞退我了。</p>
+<h3 id="工作一段时间之后的折磨痛苦">工作一段时间之后的折磨痛苦</h3>
+<p>在同事y及领导的帮助下，工作到还顺利，任务也不会很多，2020年的时间就这样一天天的度过了。我认为我真正成为一名程序员，真正作为IT世界的初探者还是在今年同事y离职及我正式转正后，同事y离职后他原来的项目就转交到了我和我领导上、去年刚接手的维护项目也转到了我头上、去年的开发项目今年也开始开发。随着这一系列的变动，我的压力倍增。新接手的维护项目作为领导给我的试水项目，让我全权复制，但是这个项目虽然是维护期，但是还是有一堆奇奇怪怪的BUG，经常排查一个BUG修复需要三四天，但是这三四天之中领导又会安排其他的任务。导致我在2021年四五月份经常处于早上8点30上班，处理一会自己项目问题，处理一下领导项目问题，写一下其他项目需求，然后就到了晚上11、12点，接着第二天继续这样。一度有离职的念头，但是想到才刚转正不久，这时候离职可能外面的公司不太认同工作经验，再加上疫情原因。还是坚持了下来。</p>
+<h3 id="自我排解及释压">自我排解及释压</h3>
+<p>大概在5月份的时候，公司组织了一次旅游（我一向讨厌旅游，觉得山水小时候天庭见，并没有很新奇，而且还要应付领导和同事，这让我感觉很麻烦），这次旅游虽然仅仅两天时间，但使我从之前的状态调整过来，领悟到在<strong>工作中人并不需要给自己太大的压力</strong>，这让自己的神经会整体处于非常紧张的状态。应该放松心情，公司并不会因为你个人的工作而改变什么，<strong>工作是永远做不完的</strong>。接下来的工作还算是张弛有度，算是比较轻松的度过了7、8、9、10、11月，完成一些新老系统对接和数据交换工作。12月份真正作为的一个项目的开发负责人。作为主要开发，完成系统功能部署编写。</p>
+<h2 id="学习">学习</h2>
+<p><strong>我不可能一辈子从事程序员工作，但是程序始终是我喜欢的东西之一。</strong></p>
+<h3 id="刚开始学习的迷茫">刚开始学习的迷茫</h3>
+<p>大学期间荒废了四年最好的时光。导致我并没有自主学习的能力。在今年上半年想学习Spring和微服务一些知识，只能通过视频的方式来学习。但是视频一个是非常浪费时间，还有就是前面学，过一段时间就忘了，而且内容都非常基础（看文档十分钟，看视频两个小时）。我感觉到非常折磨，同时每天看视频到夜里2点，第二天上班经常迟到。这对我造成了非常大的困扰。</p>
+<h3 id="学习的转机">学习的转机</h3>
+<p>通过偶然的机会认识到在微软工作的一个程序员<a href="https://anduin.aiursoft.com/?p=1">Anduin</a>，他的确算是我程序生涯引路人之一。从他的博客及视频中我学到了很多不一样的程序知识，例如DevOps、现代软件工程、JWT的前身与发展、消息发送及接收等等，也学习了一些在开源时间做贡献的方法和完整的软件开发流程。最重要的是我学习到了全新的搜索方式–<strong>使用英语搜索</strong>，我通过这种搜索方式，排查一些服务器问题和日常开发查找资料的效率得到了极大的提升。</p>
+<h3 id="学习的方法">学习的方法</h3>
+<p>通过一段时间的探索，我现在已经掌握了基本学习的一些方法。如果你想学一门新技术，可以稍微看一些浅显易懂的入门视频，但是不要继续看视频了，主要通过项目和书籍进行学习。例如我想学习docker，那么我只需要看视频大概了解下容器的相关概念和docker的发展就足够了，接下来就需要找一个比较熟悉的项目，配合相关文档，一步步的根据文档来部署该项目，通过各种方式进阶部署优化，理解每一个步骤的意义。如果这样进行学习的话，不仅成就感满满，而且非常容易记忆。</p>
+<h3 id="目前学习内容的总结">目前学习内容的总结</h3>
+<p>总而言之，这一年我主要学习了docker的使用，springboot的自动装配和简化配置原理，spring简化版的源码，shell的基本使用，服务器相关知识，网络的相关知识及搭建内网网路中心。给家里的电脑安装Ubuntu，远程部署一些小应用。DevOps的概念，部署gitlab runner，通过ci/cd快速完成开发交付。GitHub的使用。</p>
+<h2 id="生活">生活</h2>
+<h3 id="消费">消费</h3>
+<p>我是一个不怎么注重生活品质的人，但是今年依旧买了不少东西，包含27寸2k显示器、任天堂switch、华硕无畏pro14笔记本。显示器刚开始是想在家方便写代码玩游戏用的，刚开始还觉得挺大的，后来一段时间还作为switch的显示器用，不过最近一段时间由于玩游戏的频率减少、switch基本吃灰，公司21寸显示器实在辣眼睛，这个显示器搬到了公司里作为日常用显示器。switch是去年在一个朋友家玩的时候体验到的。今年也想体验下主机游戏，于是在四月份就买了switch，并且购买了健身环，借了塞尔达旷野之息。但是很快到八月份左右我就不怎么玩了，下班后只想躺着床上，目前switch也是处于吃灰状态。笔记本是11月份才买的，公司规定一些软件是禁止安装的，所以经常会检测到电脑异常。所以我觉得我可能需要一台个人用的笔记本，但是这个买完就后悔了，平常使用他基本用来看视频。在公司摸鱼学一些东西的时候也不可能再打开这台笔记本学习。所以目前还没用到这个笔记本的地方。</p>
+<h3 id="游玩">游玩</h3>
+<p>今年在中秋节前后找过一次高中好友小聚了一次，之后一般都是一个人生活，也习惯了一个人生活。后面去了一次苏州微软，去了一次在微软小冰大佬的新家。游戏塞尔达玩了一段时间，lol玩了一段时间。</p>
+<h3 id="交友">交友</h3>
+<p>主要是跟拍照的团队一起玩了两三次，认识了anduin，并且在苏州微软面基。相亲会参加了两次，但均无收获，第一次提前走了，第二次遇到一个老乡，但是因为性格差异，也没聊几天就结束了。</p>
+<h2 id="总结">总结</h2>
+<p>回顾这一年，感觉自己还是学习了不少知识，也清晰的知道自己的差距在哪里，虽然不说碌碌无为，但是感觉这一年学习到的东西还是太少了。希望自己新一年能在编程世界有所收获。</p>
+]]></content>
+      <categories>
+        <category>study</category>
+      </categories>
+      <tags>
+        <tag>心得</tag>
+        <tag>想法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pve安装openwrt、nas简单教程</title>
+    <url>//pveinstall/</url>
+    <content><![CDATA[<h2 id="基础配置">基础配置</h2>
+<h3 id="镜像配置">镜像配置</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 进入系统软件源配置文件目录</span></span><br><span class="line"><span class="built_in">cd</span> /etc/apt</span><br><span class="line"></span><br><span class="line"><span class="comment">## 将默认软件源配置文件进行备份</span></span><br><span class="line">cp sources.list sources.list.bak </span><br><span class="line"></span><br><span class="line"><span class="comment">## 替换系统软件仓库</span></span><br><span class="line"></span><br><span class="line">sed -i <span class="string">&#x27;s|^deb http://ftp.debian.org|deb https://mirrors.ustc.edu.cn|g&#x27;</span> /etc/apt/sources.list</span><br><span class="line"></span><br><span class="line">sed -i <span class="string">&#x27;s|^deb http://security.debian.org|deb https://mirrors.ustc.edu.cn/debian-security|g&#x27;</span> /etc/apt/sources.list </span><br><span class="line"></span><br><span class="line"><span class="comment"># 订阅源替换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 创建 PVE 免费源</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/os-release</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;deb https://mirrors.ustc.edu.cn/proxmox/debian/pve <span class="variable">$VERSION_CODENAME</span> pve-no-subscription&quot;</span> &gt; /etc/apt/sources.list.d/pve-no-subscription.list </span><br></pre></td></tr></table></figure>
+<h3 id="桌面配置">桌面配置</h3>
+<ul>
+<li>更新配置源</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 更新配置源</span></span><br><span class="line"><span class="comment"># 將enterprise ppa 移出套件庫</span></span><br><span class="line">mv /etc/apt/sources.list.d/pve-enterprise.list /etc/apt/sources.list.d/pve-enterprise.list.bk</span><br><span class="line"><span class="comment"># 將 non-enterprise ppa 加入套件庫</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;deb http://download.proxmox.com/debian/pve buster pve-no-subscription&quot;</span> &gt; /etc/apt/sources.list.d/pve-no-enterprise.list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新套件清單及系統</span></span><br><span class="line">apt update -qq &amp;&amp;  apt upgrade -y -qq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重開機</span></span><br><span class="line">reboot</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装桌面</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">#  安裝sudo等工具 (Option)</span></span><br><span class="line">apt install -y -qq sudo tmux vim htop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝Gnome桌面環境</span></span><br><span class="line">tasksel install desktop gnome-desktop</span><br><span class="line"></span><br><span class="line"><span class="comment">#  移除 network-manager (Option)</span></span><br><span class="line">apt remove network-manager-gnome  network-manager</span><br><span class="line"></span><br><span class="line"><span class="comment"># 啟用桌面環境</span></span><br><span class="line">systemctl set-default graphical.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加入使用者</span></span><br><span class="line">adduser &lt;USERNAME&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加入sudo群組(option)</span></span><br><span class="line">usermod -a -G sudo &lt;USERNAME&gt; </span><br><span class="line"></span><br><span class="line"><span class="comment"># 重開機</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h2 id="安装OpenWrt">安装OpenWrt</h2>
+<ul>
+<li>上传img2kvm、 openwrt.img</li>
+<li>执行镜像转换</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">chmod +x img2kvm</span><br><span class="line"></span><br><span class="line">./img2kvm Openwrt.img <span class="number">100</span> vm-<span class="number">100</span>-disk-<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>pve中添加这个磁盘并且修改启动顺序</li>
+<li>openwrt开机，并修改ip</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">vi etc/config/network </span><br><span class="line"></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p><img data-src="PVE-Suzhou%20ef44ecf8f4e74f608435ff9dbef690f5/Untitled.png" alt="Untitled"></p>
+<h2 id="NAS安装">NAS安装</h2>
+<h3 id="上传镜像">上传镜像</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./img2kvm synoboot.img 101 vm-101-disk-1</span><br></pre></td></tr></table></figure>
+<h3 id="pve配置">pve配置</h3>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">网络选择e1000、内存2G，磁盘类型为sata</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="安装">安装</h3>
+<p>打开地址：<a href="http://192.168.1.201:5000/">http://192.168.1.201:5000/</a></p>
+<p><img data-src="PVE-Suzhou%20ef44ecf8f4e74f608435ff9dbef690f5/Untitled%201.png" alt="Untitled"></p>
+<ul>
+<li>选择手动安装，选择<code>DSM_DS3615xs_23739.pat</code></li>
+</ul>
+<p><img data-src="PVE-Suzhou%20ef44ecf8f4e74f608435ff9dbef690f5/Untitled%202.png" alt="Untitled"></p>
+<ul>
+<li>配置Storage Pool 和Volume</li>
+</ul>
+<p><img data-src="PVE-Suzhou%20ef44ecf8f4e74f608435ff9dbef690f5/Untitled%203.png" alt="Untitled"></p>
+<ul>
+<li>Windows挂载NAS</li>
+</ul>
+<p><img data-src="PVE-Suzhou%20ef44ecf8f4e74f608435ff9dbef690f5/Untitled%204.png" alt="Untitled"></p>
+<h2 id="链接">链接</h2>
+<h3 id="u盘处理">u盘处理</h3>
+<p><a href="https://zhuanlan.zhihu.com/p/37772825">U盘启动盘怎么复原为普通U盘</a></p>
+<h3 id="pve初始化">pve初始化</h3>
+<p><a href="https://www.bilibili.com/read/cv17670431">[ Proxmox 折腾手记 ] PVE初始化配置</a></p>
+<p><a href="https://www.bilibili.com/read/cv17671660?spm_id_from=333.999.0.0">[ Proxmox 折腾手记 ] PVE系统调整</a></p>
+<h3 id="安装桌面环境">安装桌面环境</h3>
+<p><a href="https://blog.404nofound.com/post/install-on-proxmox/">Proxmox 安裝 Gnome</a></p>
+<h3 id="OpenWrt作为旁路网关">OpenWrt作为旁路网关</h3>
+<p><a href="https://sspai.com/post/68511">Openwrt 作为旁路网关（不是旁路由、单臂路由）的终极设置方法，破解迷思 - 少数派</a></p>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>pve</tag>
+        <tag>openwrt</tag>
+        <tag>nas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SQL Server 死锁问题排查</title>
+    <url>//sql-lock/</url>
+    <content><![CDATA[<p>参考：<br>
+<a href="https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-lock-transact-sql?view=sql-server-ver15">微软官方api</a></p>
+<h2 id="问题日志描述">问题日志描述</h2>
+<blockquote>
+<p>事务(进程 ID 140)与另一个进程被死锁在 锁 | 通信缓冲区 资源上，并且已被选作死锁牺牲品。请重新运行该事务</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:196)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1454)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:388)        </span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:338)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.TDSCommand.ex</span><br></pre></td></tr></table></figure>
+<h2 id="问题排查">问题排查</h2>
+<h3 id="1、查询哪些进程导致的死锁">1、查询哪些进程导致的死锁</h3>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> request_session_id spid, object_name( resource_associated_entity_id )</span><br><span class="line">tablename <span class="keyword">from</span> sys.dm_tran_locks <span class="keyword">where</span> resource_type <span class="operator">=</span> <span class="string">&#x27;object&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2、查询死锁的原因">2、查询死锁的原因</h3>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Who(spid <span class="type">int</span>,</span><br><span class="line">    ecid <span class="type">int</span>,</span><br><span class="line">    status nvarchar(<span class="number">50</span>),</span><br><span class="line">    loginname nvarchar(<span class="number">50</span>),</span><br><span class="line">    hostname nvarchar(<span class="number">50</span>),</span><br><span class="line">    blk <span class="type">int</span>,</span><br><span class="line">    dbname nvarchar(<span class="number">50</span>),</span><br><span class="line">    cmd nvarchar(<span class="number">50</span>),</span><br><span class="line">    request_ID <span class="type">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Lock(spid <span class="type">int</span>,</span><br><span class="line">    dpid <span class="type">int</span>,</span><br><span class="line">    objid <span class="type">int</span>,</span><br><span class="line">    indld <span class="type">int</span>,</span><br><span class="line">    [Type]  nvarchar(<span class="number">20</span>),</span><br><span class="line">    Resource nvarchar(<span class="number">50</span>),</span><br><span class="line">    Mode nvarchar(<span class="number">10</span>),</span><br><span class="line">    Status nvarchar(<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Who    <span class="keyword">EXEC</span> sp_who active  </span><br><span class="line"><span class="comment">--看哪个引起的阻塞，blk \</span></span><br><span class="line"> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Lock     <span class="keyword">EXEC</span> sp_lock  </span><br><span class="line"><span class="comment">--看锁住了那个资源id，objid </span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@DBName</span> nvarchar(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@DBName</span><span class="operator">=</span><span class="string">&#x27;czggzy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> #Who.<span class="operator">*</span> <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname<span class="operator">=</span><span class="variable">@DBName</span></span><br><span class="line"><span class="keyword">SELECT</span> #Lock.<span class="operator">*</span> <span class="keyword">FROM</span> #Lock</span><br><span class="line">    <span class="keyword">JOIN</span> #Who</span><br><span class="line">        <span class="keyword">ON</span> #Who.spid<span class="operator">=</span>#Lock.spid</span><br><span class="line">            <span class="keyword">AND</span> dbname<span class="operator">=</span><span class="variable">@DBName</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--最后发送到SQL Server的语句</span></span><br><span class="line"><span class="keyword">DECLARE</span> crsr <span class="keyword">Cursor</span> <span class="keyword">FOR</span>     <span class="keyword">SELECT</span> blk <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span> <span class="keyword">AND</span> blk <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@blk</span> <span class="type">int</span>;</span><br><span class="line"><span class="keyword">open</span> crsr;</span><br><span class="line"><span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line">WHILE (@<span class="variable">@FETCH</span>_STATUS  <span class="operator">=</span>  <span class="number">0</span>)<span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line">    dbcc inputbuffer(<span class="variable">@blk</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">close</span> crsr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DEALLOCATE</span> crsr;</span><br><span class="line"><span class="comment">--锁定的资源</span></span><br><span class="line"> <span class="keyword">SELECT</span> #Who.spid,</span><br><span class="line">hostname,</span><br><span class="line">objid,</span><br><span class="line">[type],</span><br><span class="line">mode,</span><br><span class="line">object_name(objid) <span class="keyword">as</span> objName <span class="keyword">FROM</span> #Lock    <span class="keyword">JOIN</span> #Who        <span class="keyword">ON</span> #Who.spid <span class="operator">=</span>#Lock.spid             <span class="keyword">AND</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span>    <span class="keyword">WHERE</span> objid <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Who;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Lock;</span><br></pre></td></tr></table></figure>
+<h2 id="问题处理">问题处理</h2>
+<h3 id="杀死进程">杀死进程</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kill spid  --杀死进程</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>sql</tag>
+        <tag>lock</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu 21.10 安装后找不到无线wifi问题排查</title>
+    <url>//ubuntu-wifi/</url>
+    <content><![CDATA[<h2 id="起因">起因</h2>
+<p>家用笔记本在更新win11 最新的更新后频繁出现系统黑屏进入休眠状态的问题，但是我系统设置<code>休眠状态</code>为永不休眠。一气之下选择更换系统为 <code>Ubuntu（21.10）</code>（听说gnome40挺好用的</p>
+<p>装好后出现了找不到wifi模块的问题，因为笔记本没有网线接口，有线网络也没法使用了。经过网上的搜索排查，最终解决，以下记录一下解决的思路。</p>
+<h2 id="解决">解决</h2>
+<h3 id="确定网卡型号">确定网卡型号</h3>
+<p>通过厂商的下载中心，<a href="https://www.asus.com/support/Download-Center/">华硕全球支持中心</a>查询到我这台电脑的网卡型号为<strong>MT7921</strong>。</p>
+<p><img data-src="" alt="图片1"></p>
+<h3 id="是否是驱动问题">是否是驱动问题</h3>
+<p>查看相关问题说MT7921在Linux内核为5.12以下不会自动识别,但是Ubuntu21.10内核为lunux kernel 5.13.应该不是这个问题</p>
+<h3 id="linux防火墙">linux防火墙</h3>
+<p>看<a href="https://miloserdov.org/?p=6899">这个帖子</a>说即使<code>linux</code>内核高于5.12也会因为防火墙问题导致无法查找wifi模块，安装linux防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install linux-firmware</span><br></pre></td></tr></table></figure>
+<h3 id="关闭快速启动">关闭快速启动</h3>
+<p>在<a href="https://bbs.archlinux.org/viewtopic.php?id=267229">archlinux</a> 的论坛上翻到一个安装了防火墙仍然不起作用的回答。</p>
+<blockquote>
+<p>There is a bug report with not much more information in the upstream repository:<br>
+<a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a><br>
+If you dual-boot with windows, disable its fast-startup mode. <a href="https://wiki.archlinux.org/title/Dual_b">https://wiki.archlinux.org/title/Dual_b</a> … ibernation</p>
+</blockquote>
+<p>定位到github issue,通过完全关闭电脑，并且拔掉电源线再启动解决。幸运的是我也是通过这种方法解决的。</p>
+<h2 id="参考">参考</h2>
+<blockquote>
+<p><a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://bbs.archlinux.org/viewtopic.php?id=267229">https://bbs.archlinux.org/viewtopic.php?id=267229</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth">https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://miloserdov.org/?p=6899">https://miloserdov.org/?p=6899</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>ubuntu</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu MATE Install</title>
+    <url>//ubuntu-install/</url>
+    <content><![CDATA[<h1>Ubuntu MATE安装及初始配置</h1>
+<h2 id="前言">前言</h2>
+<p>家里有个老电脑、还是在我上初中的时候买的，到现在他的使用率也很低了。考虑配置为amd双核、4G内存、250G硬盘，拿来搭一个小型的Linux服务器，用来学习和跑一些常用的软件还是很不错的。以下是操作详情。</p>
+<h2 id="系统下载及安装">系统下载及安装</h2>
+<blockquote>
+<p>Ubuntu MATE is an impressive lightweight Linux distro that runs fast enough on older computers. It features the MATE desktop – so the user interface might seem a little different at first but it’s easy to use as well.</p>
+</blockquote>
+<p>此次使用的是<strong>Ubuntu MATE</strong>,如果你需要使用其他系统，以下操作方式类似</p>
+<h3 id="1-下载iso镜像文件">1. 下载iso镜像文件</h3>
+<p><a href="https://ubuntu-mate.org/download/amd64/">官方地址</a></p>
+<h3 id="2-刻录镜像文件到u盘">2. 刻录镜像文件到u盘</h3>
+<p>使用<a href="https://rufus.ie/en/">rufus</a>刻录工具进行镜像刻录，使用默认配置。</p>
+<h3 id="3-系统安装">3. 系统安装</h3>
+<p>开机按<code>F12</code>选择u盘进行默认安装，<strong>图形化安装</strong>基本使用默认配置安装就可以。<br>
+界面大概是这样<br>
+<img data-src="https://note.youdao.com/yws/api/personal/file/129741D0E59A44EB9969ADFDDB1A010F?method=download&amp;shareKey=c36fcbdab60d0ee03411abcd6efe0778" alt=""></p>
+<h2 id="软件安装">软件安装</h2>
+<p>系统安装完之后需要一些必要的软件安装及配置</p>
+<h3 id="1、SSH服务端">1、SSH服务端</h3>
+<p>初始系统中是没有ssh软件的，我们也就无法通过ssh远程访问，需要安装ssh。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 安装ssh</span><br><span class="line">sudo apt install ssh</span><br><span class="line"># 启用ssh服务</span><br><span class="line">sudo service ssh enable</span><br></pre></td></tr></table></figure>
+<h3 id="2、zeroTier安装（可选）">2、zeroTier安装（可选）</h3>
+<p>因为家里是内网，如果不在家连接到电脑，需要安装<a href="https://www.zerotier.com/download/">ZeroTIer</a>。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 下载curl工具</span><br><span class="line">sudo apt install curl</span><br><span class="line"># 下载zerotier</span><br><span class="line">curl -s https://install.zerotier.com | sudo bash</span><br><span class="line"># 查看相关信息</span><br><span class="line">zerotier-cli info</span><br><span class="line"># 加入局域网，xxx为zero中心的16位网络标识码</span><br><span class="line">sudo zerotier-cli join xxx</span><br><span class="line"># 卸载</span><br><span class="line">yum erase zerotier-one</span><br></pre></td></tr></table></figure>
+<h3 id="3、speedtest（可选）">3、speedtest（可选）</h3>
+<p>下载完第一件事当然是测个速了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash</span><br><span class="line"># 安装</span><br><span class="line">sudo apt-get install speedtest</span><br><span class="line"># 使用</span><br><span class="line">speedtest</span><br></pre></td></tr></table></figure>
+<p>测完我们发现网速一般情况下没跑到宽带网速上限，以下需要设置一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 安装ethtool工具</span><br><span class="line">sudo apt install ethtool</span><br><span class="line">## 设置网速</span><br><span class="line">sudo ethtool -s enp2s5 speed 100 duplex full autoneg on</span><br></pre></td></tr></table></figure>
+<p>设置开机自启动(Ubuntu)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 创建文件</span><br><span class="line">/etc/systemd/system/foo.service</span><br><span class="line">## 添加脚本</span><br><span class="line">[Unit]</span><br><span class="line">Description=Job that runs your user script</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/some/command</span><br><span class="line">Type=oneshot</span><br><span class="line">RemainAfterExit=yes</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">## 执行脚本</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl enable foo.service</span><br></pre></td></tr></table></figure>
+<h3 id="4、docker-安装">4、docker 安装</h3>
+<p>docker作为容器，部署使用常用应用非常方便，安装一下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 添加软件源密钥</span><br><span class="line">curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg</span><br><span class="line"># 添加docker软件源</span><br><span class="line">echo  &quot;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \</span><br><span class="line">  $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br><span class="line"># 更新缓存</span><br><span class="line">sudo apt-get update</span><br><span class="line"># 安装docker</span><br><span class="line">sudo apt-get install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="5、安装clash-for-linux">5、安装clash for linux</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget -P /home/gxhao/Downloads https://github.com/Dreamacro/clash/releases/download/v1.9.0/clash-linux-amd64-v1.9.0.gz</span><br></pre></td></tr></table></figure>
+<h3 id="6、关闭系统休眠">6、关闭系统休眠</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#查看休眠状态</span><br><span class="line">systemctl status sleep.target</span><br><span class="line"># 执行关闭休眠功能</span><br><span class="line">sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target</span><br></pre></td></tr></table></figure>
+<h2 id="引用">引用</h2>
+<p>Ubuntu MATE介绍</p>
+<blockquote>
+<p><a href="https://itsfoss.com/ubuntu-mate-20-04-review/">https://itsfoss.com/ubuntu-mate-20-04-review/</a></p>
+</blockquote>
+<p>网速为10mb/s设置</p>
+<blockquote>
+<p><a href="https://phoenixnap.com/kb/ethtool-command-change-speed-duplex-ethernet-card-linux">https://phoenixnap.com/kb/ethtool-command-change-speed-duplex-ethernet-card-linux</a></p>
+</blockquote>
+<p>网速设置为自启动</p>
+<blockquote>
+<p><a href="https://portal.whitesandshosting.com/index.php/knowledgebase/6/Linux---change-the-speed-and-duplex-settings-of-an-Ethernet-card.html">https://portal.whitesandshosting.com/index.php/knowledgebase/6/Linux---change-the-speed-and-duplex-settings-of-an-Ethernet-card.html</a></p>
+</blockquote>
+<p>如何设置命令行开机自启动</p>
+<blockquote>
+<p><a href="https://askubuntu.com/questions/814/how-to-run-scripts-on-start-up">https://askubuntu.com/questions/814/how-to-run-scripts-on-start-up</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>ubuntu</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux 部署clash的三种方式</title>
+    <url>//clashlinux/</url>
+    <content><![CDATA[<h2 id="前言">前言</h2>
+<p>Clash for Windows 是一款非常好用的代理软件，它通过简单的配置能实现通过代理的网路自动切换直连或者代理。也提供了允许局域网其他设备连接和游戏模式等非常好i用的功能。在Windows的图形化界面操作非常友好。由于我家里有台设备是Linux Ubuntu。想通过这个软件走代理。以下是配置三种方法</p>
+<h2 id="linux常规安装">linux常规安装</h2>
+<h3 id="1-下载文件">1. 下载文件</h3>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget  https://github.com/Dreamacro/clash/releases/download/v1.8.0/clash-freebsd-amd64-v1.8.0.gz</span><br></pre></td></tr></table></figure>
+<h3 id="2-解压">2. 解压</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gunzip</span><br></pre></td></tr></table></figure>
+<h3 id="3-配置">3. 配置</h3>
+<p>将订阅的配置文件移动到解压目录并重命名为<code>config.yaml</code></p>
+<h3 id="4、启动">4、启动</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x ./clash-linux-XXXX</span><br><span class="line">./clash-linux-XXXX -d .</span><br></pre></td></tr></table></figure>
+<h3 id="5、自启动">5、自启动</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#创建service文件</span><br><span class="line">touch /etc/systemd/system/clash.service</span><br><span class="line"></span><br><span class="line">#编辑如下文本： </span><br><span class="line">[Unit] </span><br><span class="line">Description=clash daemon  </span><br><span class="line">[Service] </span><br><span class="line">Type=simple </span><br><span class="line">User=root </span><br><span class="line">ExecStart=/home/username/下载/Clash/clash -d /home/username/下载/Clash/ </span><br><span class="line">Restart=on-failure  </span><br><span class="line">[Install] </span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">## 刷新系统服务并设置为自启动</span><br><span class="line">sudo systemctl daemon-reload </span><br><span class="line">sudo systemctl enable clash </span><br><span class="line">sudo systemctl start clash </span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="docker部署">docker部署</h2>
+<p>需要先在本地创建config.yaml文件</p>
+<h3 id="1-编辑docker-compose配置文件">1. 编辑docker-compose配置文件</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  clash:</span><br><span class="line">    # ghcr.io/dreamacro/clash</span><br><span class="line">    # ghcr.io/dreamacro/clash-premium</span><br><span class="line">    # dreamacro/clash</span><br><span class="line">    # dreamacro/clash-premium</span><br><span class="line">    image: dreamacro/clash</span><br><span class="line">    container_name: clash</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config.yaml:/root/.config/clash/config.yaml</span><br><span class="line">      # - ./ui:/ui # dashboard volume</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;7890:7890&quot;</span><br><span class="line">      - &quot;7891:7891&quot;</span><br><span class="line">      # - &quot;8080:8080&quot; # external controller (Restful API)</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    network_mode: &quot;bridge&quot; # or &quot;host&quot; on Linux</span><br></pre></td></tr></table></figure>
+<h3 id="2-启动">2. 启动</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ docker-compose up -d</span><br></pre></td></tr></table></figure>
+<h3 id="3-访问">3. 访问</h3>
+<p><a href="http://clash.razord.top/#/proxies">http://clash.razord.top/#/proxies</a></p>
+<h2 id="通过flatpak安装clash-for-windows">通过<a href="https://flatpak.org/setup/Ubuntu">flatpak</a>安装clash for windows</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install clash </span><br></pre></td></tr></table></figure>
+<h2 id="参考">参考</h2>
+<blockquote>
+<p><a href="https://www.cnblogs.com/rogunt/p/15127947.html">https://www.cnblogs.com/rogunt/p/15127947.html</a> #普通方式部署clash</p>
+</blockquote>
+<blockquote>
+<p><a href="https://github.com/Dreamacro/clash/wiki/clash-as-a-daemon#docker">https://github.com/Dreamacro/clash/wiki/clash-as-a-daemon#docker</a> #docekr 部署clash</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>proxy</tag>
+        <tag>linux</tag>
+        <tag>clash</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>shell proxy via proxychains-ng</title>
+    <url>//shell-proxy/</url>
+    <content><![CDATA[<h2 id="Introduce">Introduce</h2>
+<p>Usually when we use <code>GNU/Linux</code> we visit some external websites, and in many cases the relevant content is downloaded through a shell, such as <code>git</code>,<code>wget</code>,etc.</p>
+<p>At this point we need to speed up access by setting up a proxy .<a href="https://github.com/rofl0r/proxychains-ng">proxychains-ng</a> is very simple and convenient.</p>
+<p>Although we can enable the current shell agent via export <code>export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</code>,but he is not permanent solution.</p>
+<h2 id="Download-compile-and-install">Download compile and install</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> download</span></span><br><span class="line">git clone https://github.com/rofl0r/proxychains-ng</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> enter folder</span></span><br><span class="line">cd proxychains-ng</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> complie</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./configure --prefix=/usr --sysconfdir=/etc</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make install</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make install-config (安装proxychains.conf配置文件)</span></span><br></pre></td></tr></table></figure>
+<h2 id="configration">configration</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">View profile location</span></span><br><span class="line">proxychains4 printenv` </span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">edit profile</span></span><br><span class="line">[ProxyList] </span><br><span class="line">socks5  127.0.0.1 7890</span><br><span class="line">http    127.0.0.1 7890</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> modify <span class="built_in">alias</span>(zsh)</span></span><br><span class="line">vi .zshrc</span><br><span class="line">alias pc=&quot;proxychains4&quot;</span><br><span class="line">source .zshrc </span><br></pre></td></tr></table></figure>
+<p>Congratulations,you now have fast access through a proxy</p>
+<p>Thanks</p>
+<blockquote>
+<p><a href="https://www.hi-linux.com/posts/48321.html#vip-container">https://www.hi-linux.com/posts/48321.html#vip-container</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>proxy</tag>
+        <tag>shell</tag>
+        <tag>deploy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Use Samba to share files in Linux and Windows</title>
+    <url>//samba-share/</url>
+    <content><![CDATA[<h2 id="1、Introduction">1、Introduction</h2>
+<p>Samba is a free software for linking the UNIX series of operating systems with the Microsoft Windows operating system’s <strong>SMB / CIFS</strong> (Server Message Block / Common Internet File System) network protocol. The third edition not only visits and shares SMB folders and printers, which can also be integrated into Windows Server domains, playing a domain control station (Domain Controller) and joining Active Directory members. In short, this software is a bridge between Windows and UNIX series operating systems, so that the resources are interoperable.</p>
+<h2 id="2、Install-Samba-Server-on-Linux（Ubuntu）">2、Install Samba Server on Linux（Ubuntu）</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt -y update</span><br><span class="line">sudo apt -y install samba</span><br></pre></td></tr></table></figure>
+<h2 id="3、-Configure-Samba-server-Share-on-Ubuntu">3、 Configure Samba server Share on Ubuntu</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir -p /home/share</span><br><span class="line"># Access to All without Authentication</span><br><span class="line">sudo chmod 777 /home/share</span><br></pre></td></tr></table></figure>
+<p>Samba uses configuration file in <code>/etc/samba/smb.conf</code>. If you change this configuration file, the changes do not take effect until you restart the Samba daemon</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[global]</span><br><span class="line"></span><br><span class="line"># Configure correct UTP</span><br><span class="line">  unix charset = UTF-8</span><br><span class="line"># Change this to the workgroup/NT-domain name your Samba server will be part of</span><br><span class="line">   workgroup = WORKGROUP</span><br><span class="line">   bind interfaces only = yes</span><br><span class="line"></span><br><span class="line"># Set share configuration at the end</span><br><span class="line">[Docs]</span><br><span class="line">   path = /home/share</span><br><span class="line">   writable = yes</span><br><span class="line">   guest ok = yes</span><br><span class="line">   guest only = yes</span><br><span class="line">   create mode = 0777</span><br><span class="line">   directory mode = 0777</span><br></pre></td></tr></table></figure>
+<h2 id="4、Test-and-Config-Samba-Clinet">4、Test and Config Samba Clinet</h2>
+<p>To access a Samba share on the Linux system ,you need to install and configure Samba client .</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt -y install smbclient cifs-utils</span><br><span class="line"># test </span><br><span class="line">smbclient //sambaserver/share -U sambausername</span><br></pre></td></tr></table></figure>
+<h2 id="5、-Use-Windows-link-Samba-shared-folders">5、 Use Windows link Samba shared folders</h2>
+<p>Open up File Explorer and then right-click on <code>This PC</code> (in the left pane). From the resulting context menu, select Add a network location (Figure A)</p>
+<p><img data-src="https://1123213.aiur.site/samba4window.png" alt=""></p>
+<h2 id="Refer-to">Refer to</h2>
+<blockquote>
+<p><a href="https://computingforgeeks.com/install-and-configure-samba-server-share-on-ubuntu/">install-and-configure-samba-server-share-on-ubuntu</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.techrepublic.com/article/how-to-connect-to-linux-samba-shares-from-windows-10/">How to connect to Linux Samba shares from Windows 10</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.redhat.com/sysadmin/samba-windows-linux">Mounting and mapping shares between Windows and Linux with Samba</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>deploy</tag>
+        <tag>Samba</tag>
+        <tag>Server</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用Svn Hooks触发自动部署流水线</title>
+    <url>//svn-cicd/</url>
+    <content><![CDATA[<h2 id="缘起">缘起</h2>
+<p>项目上使用<a href="https://dev.epoint.com.cn/clouddev-web/frame/fui/pages/themes/clouddev/clouddev">集成开发平台</a>构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要<strong>提交代码</strong>-&gt;<strong>集成开发平台更新</strong>-&gt;<strong>服务器远程构建更新</strong>。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码<strong>自动</strong>进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。</p>
+<h2 id="思路">思路</h2>
+<ol>
+<li>gitlab 有个配置项<a href="http://xxx/mtjt/custom/-/hooks">Webhooks</a>可以触发集成开发平台构建。</li>
+</ol>
+<blockquote>
+<p>Webhooks enable you to send notifications to web applications in response to events in a group or project.</p>
+</blockquote>
+<ol start="2">
+<li>svn应该有相关触发事件</li>
+<li>编写个后台Restful接口，svn触发这个接口，这个接口触发集成开发平台更新</li>
+</ol>
+<h2 id="调研与设计">调研与设计</h2>
+<h3 id="svn监听如何实现？">svn监听如何实现？</h3>
+<h4 id="1-svn本身仓库自带了hooks功能">1. svn本身仓库自带了hooks功能</h4>
+<p>在svn仓库的hooks文件夹也自带了相关的模板。配置相关shell命令即可使用<br>
+<img data-src="https://gxhao.aiur.site/svnhook1.png" alt=""><br>
+<em>没有访问项目svn仓库的权限，此实现方法不考虑。</em>(否决)</p>
+<h4 id="2-svn-开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor">2. svn 开发人员开发了基于apache开源的svn提交监听工具-<a href="https://tools.stefankueng.com/CommitMonitor.html">CommitMonitor</a></h4>
+<p><em>这个工具可以监听svn提交操作，然后发送通知在桌面右下角。但是于我而言，我不需要他在右下角提醒我，我需要他提供一个通知的api，我可以利用这个api去做一些别的事情。很遗憾没有找到</em>（否决）</p>
+<h4 id="3-TortoiseSVN-提供的Hooks-Script脚本">3. TortoiseSVN 提供的<a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">Hooks Script</a>脚本</h4>
+<p>查看官方介绍，貌似此方法是一种比较可行的方法，且貌似官方文档上没有限定必须是什么类型的脚本。</p>
+<h3 id="脚本如何选择？">脚本如何选择？</h3>
+<h4 id="1-shell-脚本">1.shell 脚本</h4>
+<p>直接编写shell执行访问Rest接口或者相关jar包，但是这样在执行后会有一堆提交报错（实际是执行成功的），类似这样：<br>
+<img data-src="https://gxhao.aiur.site/svnhook2.png" alt=""><br>
+这可能导致体验不太好，<s>明明我提交了完了，你却说我提交错了</s></p>
+<h4 id="2-JavaScript">2.JavaScript</h4>
+<p>js可以编写http请求的代码，然后利用<code>node</code>去执行脚本。考虑环境兼容性，大部分人电脑应该没有安装node相关工具包。</p>
+<h4 id="3-Wscript">3.<a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">Wscript</a></h4>
+<p>这是微软在<code>Windows98</code>上就推出的Windows系统自带的脚本，可以理解为<code>Windows js</code>,这样环境就不用担心了，开始编写<code>Wscript</code>脚本代码。</p>
+<h2 id="开发与测试">开发与测试</h2>
+<h3 id="编写代码">编写代码</h3>
+<p>Wscript有个很方便的对象（<code>WinHttp.WinHttpRequest.5.1</code>），可以直接访问http请求。<br>
+编写Wscript代码如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
+<h3 id="配置TortoiseSvn">配置TortoiseSvn</h3>
+<p><img data-src="https://gxhao.aiur.site/svnhook.png" alt=""></p>
+<p><code>Hook Type</code>选择Post-Commit-Hook，即在提交完成时触发。<code>Working Copy Path</code> 选择你要提交的代码目录（可配置多个）。<code>Command Line To Execute</code>选择你要执行的Wscript脚本(注意双引号)。</p>
+<h3 id="测试提交">测试提交</h3>
+<p>结果大概时这样：</p>
+<p><img data-src="https://gxhao.aiur.site/svnhook3.png" alt=""></p>
+<h2 id="目前存在的一些问题">目前存在的一些问题</h2>
+<ol>
+<li>只能在TortoiseSvn的工具中提交才能触发，ide提交不会触发。</li>
+<li>集成平台构建完成后没有相关通知到msg/邮件。</li>
+</ol>
+<h2 id="结语">结语</h2>
+<p>引用：</p>
+<blockquote>
+<p><a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript</a></p>
+</blockquote>
+<p>感谢：</p>
+<p><strong>非常感谢中研院庄晟琪，顾疆飞两位大佬的帮助和支持</strong>，希望此脚本能够对大家在开发时有所帮助，提高开发效率，减少更新构建时间。</p>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>DevOps</tag>
+        <tag>Gitlab</tag>
+        <tag>CI/CD</tag>
       </tags>
   </entry>
   <entry>
@@ -175,137 +586,6 @@
         <tag>DevOps</tag>
         <tag>jenkins</tag>
         <tag>batch</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>如何创建属于自己的博客</title>
-    <url>/creatmyselfblog/</url>
-    <content><![CDATA[<h2 id="事件起因">事件起因</h2>
-<p>在2022年初的时候，因为一直使用的有道云笔记出现同步错误问题（一台电脑上写的在另一个电脑始终无法同步过来），同时也想把自己的想法和平常遇到问题的解决方式分享给其他人，希望能够对别人有所帮助，于是有了创建自己博客的想法。</p>
-<h2 id="在cnblogs上创建博客">在cnblogs上创建博客</h2>
-<p>出于成本的考虑，自建博客需要在云服务上购买一系列的基础设施，还有要考虑日常运维等问题。博客嘛，肯定是内容为主，所以在目前国内非常成熟的博客园搭建了一套<a href="https://www.cnblogs.com/gxhao">自己的博客</a>。稍微换了点主题，大概是长这样的：</p>
-<p><img data-src="/blog-imgs/image/selfblog1.png" alt=""></p>
-<p>看上去也很简单美观，而且编写也很方便，但是使用过程中也有一些小问题。</p>
-<h3 id="markdown图片保存">markdown图片保存</h3>
-<p>在博客园写博客有个很难受的一点是，我刚开始使用有道云笔记作为博客的草稿。所以出现了一个问题，博客的草稿的图片非常难插入，本地markdown图片还好，上传到网页端因为链接消失的问题，图片需要能够在网页上访问。为此我尝试了各种办法：</p>
-<ol>
-<li>
-<p>刚开始的时候使用的是利用有道云笔记的图片分享功能，大概是这样的<a href="https://zhuanlan.zhihu.com/p/149200483">有道云笔记markdown插入图片方法 - 知乎 (zhihu.com)</a>。这样就导致我每次想往博客里面插入图片就很麻烦，而且还是重复性操作。</p>
-</li>
-<li>
-<p>后来又考虑使用<a href="https://drive.aiursoft.com/?show=direct">Home - AiurDrive (aiursoft.com)</a>。这样也只需要上传图片到网站，然后引用即可。但是这种方式也存在因为某些原因网站偶尔无法访问导致链接失效和改变文件夹名称导致链接失效的问题，再去调整就很麻烦了。</p>
-</li>
-</ol>
-<h3 id="资料展示灵活">资料展示灵活</h3>
-<p>有的时候想在博客上加一个别的栏目，或者别的功能，因为寄托于博客园本身的架构，像拓展的话很困难。</p>
-<h3 id="独立域名">独立域名</h3>
-<p>虽然说访问博客园官网再加上自己主页的后缀访问起来也很方便，但是总是感觉隔一层怪怪的感觉。还是使用自己的域名访问更清真一些。</p>
-<h2 id="自建博客">自建博客</h2>
-<h3 id="通过Github-Pages创建博客。">通过Github Pages创建博客。</h3>
-<ol>
-<li>首先我们需要在GitHub上创建username.github.io的仓库</li>
-<li>将<a href="https://hexo.io/zh-cn/docs/github-pages">Hexo</a>部署上去。</li>
-<li>访问 <a href="http://username.github.io">username.github.io</a></li>
-</ol>
-<h3 id="申请域名">申请域名</h3>
-<ol>
-<li>我们可以通过世界最大的域名售卖网站<a href="https://hk.godaddy.com/">GoDaddy</a>购买，注意不要选择额外的服务。我是通过银联购买的（不得不说，银联的支付才是悄无声息！）</li>
-<li>购买完成后，我们可以通过<a href="https://dash.cloudflare.com/">cloudflare</a>配置域名防护、CDN、域名服务器等。</li>
-<li>在cloudflare的DNS配置中配置域名解析，配置一个A记录到GitHub网址，例如<code>185.199.109.153</code>，配置另一个CNAME记录到你自己的博客地址,例如 <a href="http://username.github.io">username.github.io</a>。</li>
-</ol>
-<h3 id="部署在其他网站">部署在其他网站</h3>
-<p>也可以将博客部署在其他网站，这里主要推荐三个比较好用的网站。</p>
-<ol>
-<li><a href="https://id.heroku.com/login">heroku</a><br>
-主要适用于部署后端服务，java等，有一个问题是付款支持的账户较少。<br>
-<img data-src="/blog-imgs/image/myselfblog2.png" alt=""></li>
-<li><a href="https://vercel.com/dashboard">vercel</a><br>
-主要用来部署前端服务，部署起来非常的方便快捷，而且提供完善的pipline，预发环境，自定义域名等服务，用来部署博客非常合适<br>
-<img data-src="/blog-imgs/image/myselfblog1.png" alt=""></li>
-<li><a href="https://codelabs.developers.google.com/codelabs/cloud-app-engine-springboot/index.html?index=..%2F..index#8">Google Cloud Platform</a><br>
-提供完善的稳定和命令函支持也非常方便</li>
-</ol>
-<h2 id="链接">链接</h2>
-<p><a href="https://hackmd.io/@Heidi-Liu/note-hexo-github">Hexo部署</a><br>
-<a href="https://segmentfault.com/a/1190000021923137">基于Hexo的matery主题搭建博客并深度优化</a></p>
-]]></content>
-      <categories>
-        <category>website-primer</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-        <tag>ssl</tag>
-        <tag>domain</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux 部署clash的三种方式</title>
-    <url>//clashlinux/</url>
-    <content><![CDATA[<h2 id="前言">前言</h2>
-<p>Clash for Windows 是一款非常好用的代理软件，它通过简单的配置能实现通过代理的网路自动切换直连或者代理。也提供了允许局域网其他设备连接和游戏模式等非常好i用的功能。在Windows的图形化界面操作非常友好。由于我家里有台设备是Linux Ubuntu。想通过这个软件走代理。以下是配置三种方法</p>
-<h2 id="linux常规安装">linux常规安装</h2>
-<h3 id="1-下载文件">1. 下载文件</h3>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget  https://github.com/Dreamacro/clash/releases/download/v1.8.0/clash-freebsd-amd64-v1.8.0.gz</span><br></pre></td></tr></table></figure>
-<h3 id="2-解压">2. 解压</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gunzip</span><br></pre></td></tr></table></figure>
-<h3 id="3-配置">3. 配置</h3>
-<p>将订阅的配置文件移动到解压目录并重命名为<code>config.yaml</code></p>
-<h3 id="4、启动">4、启动</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">chmod +x ./clash-linux-XXXX</span><br><span class="line">./clash-linux-XXXX -d .</span><br></pre></td></tr></table></figure>
-<h3 id="5、自启动">5、自启动</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#创建service文件</span><br><span class="line">touch /etc/systemd/system/clash.service</span><br><span class="line"></span><br><span class="line">#编辑如下文本： </span><br><span class="line">[Unit] </span><br><span class="line">Description=clash daemon  </span><br><span class="line">[Service] </span><br><span class="line">Type=simple </span><br><span class="line">User=root </span><br><span class="line">ExecStart=/home/username/下载/Clash/clash -d /home/username/下载/Clash/ </span><br><span class="line">Restart=on-failure  </span><br><span class="line">[Install] </span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">## 刷新系统服务并设置为自启动</span><br><span class="line">sudo systemctl daemon-reload </span><br><span class="line">sudo systemctl enable clash </span><br><span class="line">sudo systemctl start clash </span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="docker部署">docker部署</h2>
-<p>需要先在本地创建config.yaml文件</p>
-<h3 id="1-编辑docker-compose配置文件">1. 编辑docker-compose配置文件</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &#x27;3&#x27;</span><br><span class="line">services:</span><br><span class="line">  clash:</span><br><span class="line">    # ghcr.io/dreamacro/clash</span><br><span class="line">    # ghcr.io/dreamacro/clash-premium</span><br><span class="line">    # dreamacro/clash</span><br><span class="line">    # dreamacro/clash-premium</span><br><span class="line">    image: dreamacro/clash</span><br><span class="line">    container_name: clash</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config.yaml:/root/.config/clash/config.yaml</span><br><span class="line">      # - ./ui:/ui # dashboard volume</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;7890:7890&quot;</span><br><span class="line">      - &quot;7891:7891&quot;</span><br><span class="line">      # - &quot;8080:8080&quot; # external controller (Restful API)</span><br><span class="line">    restart: unless-stopped</span><br><span class="line">    network_mode: &quot;bridge&quot; # or &quot;host&quot; on Linux</span><br></pre></td></tr></table></figure>
-<h3 id="2-启动">2. 启动</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ docker-compose up -d</span><br></pre></td></tr></table></figure>
-<h3 id="3-访问">3. 访问</h3>
-<p><a href="http://clash.razord.top/#/proxies">http://clash.razord.top/#/proxies</a></p>
-<h2 id="通过flatpak安装clash-for-windows">通过<a href="https://flatpak.org/setup/Ubuntu">flatpak</a>安装clash for windows</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">flatpak install clash </span><br></pre></td></tr></table></figure>
-<h2 id="参考">参考</h2>
-<blockquote>
-<p><a href="https://www.cnblogs.com/rogunt/p/15127947.html">https://www.cnblogs.com/rogunt/p/15127947.html</a> #普通方式部署clash</p>
-</blockquote>
-<blockquote>
-<p><a href="https://github.com/Dreamacro/clash/wiki/clash-as-a-daemon#docker">https://github.com/Dreamacro/clash/wiki/clash-as-a-daemon#docker</a> #docekr 部署clash</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>proxy</tag>
-        <tag>linux</tag>
-        <tag>clash</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>日常常用小技巧</title>
-    <url>//deploy-use/</url>
-    <content><![CDATA[<h2 id="去除网易有道笔记左下角广告">去除网易有道笔记左下角广告</h2>
-<p>在安装目录，找到 <strong>\YoudaoNote\theme\default\skin.xml</strong> 删除</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;PanelAd Bounds=&quot;0,0,0,161&quot; DockStyle=&quot;bottom&quot;&gt; &lt;/PanelAd&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="判断一台机器是不是虚拟机">判断一台机器是不是虚拟机</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemd-detect-virt</span><br></pre></td></tr></table></figure>
-<h2 id="windows-入站规则开启不生效">windows 入站规则开启不生效</h2>
-<p>检查专用与公用网络配置。这俩并不公用一个网络配置文件</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">设置某网络为专用链接</span><br><span class="line">Get-NetConnectionProfile</span><br><span class="line"></span><br><span class="line">Set-NetConnectionProfile  -InterfaceIndex 18 -NetworkCategory Private</span><br></pre></td></tr></table></figure>
-<h2 id="docker-容器内tomcat应用与当前时间相差8个小时">docker 容器内tomcat应用与当前时间相差8个小时</h2>
-<p>在<code>catalina.sh</code>配置文件中加入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export JAVA_OPTS=&quot;$JAVA_OPTS -Duser.timezone=Asia/shanghai&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="node降版本">node降版本</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Determining your Node version</span><br><span class="line"></span><br><span class="line">node -v  // or node --version</span><br><span class="line">npm -v   // npm version or long npm --version</span><br><span class="line"># Ensure that you have n installed</span><br><span class="line"></span><br><span class="line">sudo npm install -g n // -g for global installation </span><br><span class="line"># Upgrading to the latest stable version</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br><span class="line"># Changing to a specific version</span><br><span class="line"></span><br><span class="line">sudo n 16.13.0</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>deploy</tag>
-        <tag>CI/CD</tag>
-        <tag>life</tag>
       </tags>
   </entry>
   <entry>
@@ -384,250 +664,323 @@
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu 21.10 安装后找不到无线wifi问题排查</title>
-    <url>//ubuntu-wifi/</url>
-    <content><![CDATA[<h2 id="起因">起因</h2>
-<p>家用笔记本在更新win11 最新的更新后频繁出现系统黑屏进入休眠状态的问题，但是我系统设置<code>休眠状态</code>为永不休眠。一气之下选择更换系统为 <code>Ubuntu（21.10）</code>（听说gnome40挺好用的</p>
-<p>装好后出现了找不到wifi模块的问题，因为笔记本没有网线接口，有线网络也没法使用了。经过网上的搜索排查，最终解决，以下记录一下解决的思路。</p>
-<h2 id="解决">解决</h2>
-<h3 id="确定网卡型号">确定网卡型号</h3>
-<p>通过厂商的下载中心，<a href="https://www.asus.com/support/Download-Center/">华硕全球支持中心</a>查询到我这台电脑的网卡型号为<strong>MT7921</strong>。</p>
-<p><img data-src="" alt="图片1"></p>
-<h3 id="是否是驱动问题">是否是驱动问题</h3>
-<p>查看相关问题说MT7921在Linux内核为5.12以下不会自动识别,但是Ubuntu21.10内核为lunux kernel 5.13.应该不是这个问题</p>
-<h3 id="linux防火墙">linux防火墙</h3>
-<p>看<a href="https://miloserdov.org/?p=6899">这个帖子</a>说即使<code>linux</code>内核高于5.12也会因为防火墙问题导致无法查找wifi模块，安装linux防火墙</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt install linux-firmware</span><br></pre></td></tr></table></figure>
-<h3 id="关闭快速启动">关闭快速启动</h3>
-<p>在<a href="https://bbs.archlinux.org/viewtopic.php?id=267229">archlinux</a> 的论坛上翻到一个安装了防火墙仍然不起作用的回答。</p>
-<blockquote>
-<p>There is a bug report with not much more information in the upstream repository:<br>
-<a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a><br>
-If you dual-boot with windows, disable its fast-startup mode. <a href="https://wiki.archlinux.org/title/Dual_b">https://wiki.archlinux.org/title/Dual_b</a> … ibernation</p>
-</blockquote>
-<p>定位到github issue,通过完全关闭电脑，并且拔掉电源线再启动解决。幸运的是我也是通过这种方法解决的。</p>
-<h2 id="参考">参考</h2>
-<blockquote>
-<p><a href="https://github.com/openwrt/mt76/issues/548">https://github.com/openwrt/mt76/issues/548</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://bbs.archlinux.org/viewtopic.php?id=267229">https://bbs.archlinux.org/viewtopic.php?id=267229</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth">https://askubuntu.com/questions/1346617/ubuntu-20-04-does-not-have-mediatek-driver-mt7921-for-wifi-bluetooth</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://miloserdov.org/?p=6899">https://miloserdov.org/?p=6899</a></p>
-</blockquote>
+    <title>如何创建属于自己的博客</title>
+    <url>/creatmyselfblog/</url>
+    <content><![CDATA[<h2 id="事件起因">事件起因</h2>
+<p>在2022年初的时候，因为一直使用的有道云笔记出现同步错误问题（一台电脑上写的在另一个电脑始终无法同步过来），同时也想把自己的想法和平常遇到问题的解决方式分享给其他人，希望能够对别人有所帮助，于是有了创建自己博客的想法。</p>
+<h2 id="在cnblogs上创建博客">在cnblogs上创建博客</h2>
+<p>出于成本的考虑，自建博客需要在云服务上购买一系列的基础设施，还有要考虑日常运维等问题。博客嘛，肯定是内容为主，所以在目前国内非常成熟的博客园搭建了一套<a href="https://www.cnblogs.com/gxhao">自己的博客</a>。稍微换了点主题，大概是长这样的：</p>
+<p><img data-src="/blog-imgs/image/selfblog1.png" alt=""></p>
+<p>看上去也很简单美观，而且编写也很方便，但是使用过程中也有一些小问题。</p>
+<h3 id="markdown图片保存">markdown图片保存</h3>
+<p>在博客园写博客有个很难受的一点是，我刚开始使用有道云笔记作为博客的草稿。所以出现了一个问题，博客的草稿的图片非常难插入，本地markdown图片还好，上传到网页端因为链接消失的问题，图片需要能够在网页上访问。为此我尝试了各种办法：</p>
+<ol>
+<li>
+<p>刚开始的时候使用的是利用有道云笔记的图片分享功能，大概是这样的<a href="https://zhuanlan.zhihu.com/p/149200483">有道云笔记markdown插入图片方法 - 知乎 (zhihu.com)</a>。这样就导致我每次想往博客里面插入图片就很麻烦，而且还是重复性操作。</p>
+</li>
+<li>
+<p>后来又考虑使用<a href="https://drive.aiursoft.com/?show=direct">Home - AiurDrive (aiursoft.com)</a>。这样也只需要上传图片到网站，然后引用即可。但是这种方式也存在因为某些原因网站偶尔无法访问导致链接失效和改变文件夹名称导致链接失效的问题，再去调整就很麻烦了。</p>
+</li>
+</ol>
+<h3 id="资料展示灵活">资料展示灵活</h3>
+<p>有的时候想在博客上加一个别的栏目，或者别的功能，因为寄托于博客园本身的架构，像拓展的话很困难。</p>
+<h3 id="独立域名">独立域名</h3>
+<p>虽然说访问博客园官网再加上自己主页的后缀访问起来也很方便，但是总是感觉隔一层怪怪的感觉。还是使用自己的域名访问更清真一些。</p>
+<h2 id="自建博客">自建博客</h2>
+<h3 id="通过Github-Pages创建博客。">通过Github Pages创建博客。</h3>
+<ol>
+<li>首先我们需要在GitHub上创建username.github.io的仓库</li>
+<li>将<a href="https://hexo.io/zh-cn/docs/github-pages">Hexo</a>部署上去。</li>
+<li>访问 <a href="http://username.github.io">username.github.io</a></li>
+</ol>
+<h3 id="申请域名">申请域名</h3>
+<ol>
+<li>我们可以通过世界最大的域名售卖网站<a href="https://hk.godaddy.com/">GoDaddy</a>购买，注意不要选择额外的服务。我是通过银联购买的（不得不说，银联的支付才是悄无声息！）</li>
+<li>购买完成后，我们可以通过<a href="https://dash.cloudflare.com/">cloudflare</a>配置域名防护、CDN、域名服务器等。</li>
+<li>在cloudflare的DNS配置中配置域名解析，配置一个A记录到GitHub网址，例如<code>185.199.109.153</code>，配置另一个CNAME记录到你自己的博客地址,例如 <a href="http://username.github.io">username.github.io</a>。</li>
+</ol>
+<h3 id="部署在其他网站">部署在其他网站</h3>
+<p>也可以将博客部署在其他网站，这里主要推荐三个比较好用的网站。</p>
+<ol>
+<li><a href="https://id.heroku.com/login">heroku</a><br>
+主要适用于部署后端服务，java等，有一个问题是付款支持的账户较少。<br>
+<img data-src="/blog-imgs/image/myselfblog2.png" alt=""></li>
+<li><a href="https://vercel.com/dashboard">vercel</a><br>
+主要用来部署前端服务，部署起来非常的方便快捷，而且提供完善的pipline，预发环境，自定义域名等服务，用来部署博客非常合适<br>
+<img data-src="/blog-imgs/image/myselfblog1.png" alt=""></li>
+<li><a href="https://codelabs.developers.google.com/codelabs/cloud-app-engine-springboot/index.html?index=..%2F..index#8">Google Cloud Platform</a><br>
+提供完善的稳定和命令函支持也非常方便</li>
+</ol>
+<h2 id="链接">链接</h2>
+<p><a href="https://hackmd.io/@Heidi-Liu/note-hexo-github">Hexo部署</a><br>
+<a href="https://segmentfault.com/a/1190000021923137">基于Hexo的matery主题搭建博客并深度优化</a></p>
 ]]></content>
       <categories>
-        <category>deployment</category>
+        <category>website-primer</category>
       </categories>
       <tags>
-        <tag>ubuntu</tag>
-        <tag>linux</tag>
+        <tag>blog</tag>
+        <tag>ssl</tag>
+        <tag>domain</tag>
       </tags>
   </entry>
   <entry>
-    <title>docker开启代理</title>
-    <url>//dockerproxy/</url>
-    <content><![CDATA[<h1>前言</h1>
-<p>在国内网路情况下docker 拉取DockerHub仓库的镜像是非常慢的，这时候我们经常使用镜像加速器来解决这一问题，但是镜像加速器并不是始终生效的，在一些情况下可能会失效。<br>
-<a href="https://github.com/docker-practice/docker-registry-cn-mirror-test/actions">docker rigster test</a>每天提供了镜像的测试功能。如果你经常使用代理的话，这边可以配置Docker代理。</p>
-<h1>安装</h1>
+    <title>日常常用小技巧</title>
+    <url>//deploy-use/</url>
+    <content><![CDATA[<h2 id="去除网易有道笔记左下角广告">去除网易有道笔记左下角广告</h2>
+<p>在安装目录，找到 <strong>\YoudaoNote\theme\default\skin.xml</strong> 删除</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;PanelAd Bounds=&quot;0,0,0,161&quot; DockStyle=&quot;bottom&quot;&gt; &lt;/PanelAd&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="判断一台机器是不是虚拟机">判断一台机器是不是虚拟机</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">systemd-detect-virt</span><br></pre></td></tr></table></figure>
+<h2 id="windows-入站规则开启不生效">windows 入站规则开启不生效</h2>
+<p>检查专用与公用网络配置。这俩并不公用一个网络配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">设置某网络为专用链接</span><br><span class="line">Get-NetConnectionProfile</span><br><span class="line"></span><br><span class="line">Set-NetConnectionProfile  -InterfaceIndex 18 -NetworkCategory Private</span><br></pre></td></tr></table></figure>
+<h2 id="docker-容器内tomcat应用与当前时间相差8个小时">docker 容器内tomcat应用与当前时间相差8个小时</h2>
+<p>在<code>catalina.sh</code>配置文件中加入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export JAVA_OPTS=&quot;$JAVA_OPTS -Duser.timezone=Asia/shanghai&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="node降版本">node降版本</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -</span><br><span class="line">sudo apt-get install -y nodejs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Determining your Node version</span><br><span class="line"></span><br><span class="line">node -v  // or node --version</span><br><span class="line">npm -v   // npm version or long npm --version</span><br><span class="line"># Ensure that you have n installed</span><br><span class="line"></span><br><span class="line">sudo npm install -g n // -g for global installation </span><br><span class="line"># Upgrading to the latest stable version</span><br><span class="line"></span><br><span class="line">sudo n stable</span><br><span class="line"># Changing to a specific version</span><br><span class="line"></span><br><span class="line">sudo n 16.13.0</span><br></pre></td></tr></table></figure>
+<h2 id="磁盘清理">磁盘清理</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 进入磁盘清理命令</span><br><span class="line">diskpart</span><br><span class="line">## 选择清理的磁盘</span><br><span class="line">select disk 1</span><br><span class="line">## 清理</span><br><span class="line">clean</span><br></pre></td></tr></table></figure>
+<h2 id="运维监控">运维监控</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 查看内存使用情况</span><br><span class="line">free</span><br><span class="line">## 服务器实时情况</span><br><span class="line">dstat</span><br><span class="line">## 其他</span><br><span class="line">htop iotop top</span><br></pre></td></tr></table></figure>
+<h2 id="Windows-Terminal">Windows Terminal</h2>
+<p>配置文件地址</p>
 <blockquote>
-<p>The Docker daemon uses the HTTP_PROXY, HTTPS_PROXY, and NO_PROXY environmental  variables in its start-up environment to configure HTTP or HTTPS proxy behavior. You  cannot configure these environment variables using the daemon.json file.</p>
+<p>C:\Users\16255\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState</p>
 </blockquote>
-<h2 id="1-创建docker-service-d文件夹">1. 创建<code>docker.service.d</code>文件夹</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir -p /etc/systemd/system/docker.service.d</span><br></pre></td></tr></table></figure>
-<h2 id="2-创建http-proxy-conf文件">2. 创建<code>http-proxy.conf</code>文件</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">touch http-proxy.conf</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="3-编写文件内容">3. 编写文件内容</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=&quot;HTTPS_PROXY=127.0.0.1:7890&quot;</span><br></pre></td></tr></table></figure>
-<h2 id="4-重启docker">4.重启docker</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
-<h2 id="5-验证">5. 验证</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl show --property=Environment docker</span><br></pre></td></tr></table></figure>
-<h1>FAQ</h1>
-<h2 id="拉取镜像报错">拉取镜像报错</h2>
-<blockquote>
-<p>Using default tag: latest<br>
-Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">https://registry-1.docker.io/v2/</a>”: proxyconnect tcp: EOF</p>
-</blockquote>
+<h2 id="wsl解决每次启动IP地址变化问题">wsl解决每次启动IP地址变化问题</h2>
 <ul>
-<li>重置dns解析服务器<br>
-<a href="https://www.cxyzjd.com/article/a460467324/117607753">https://www.cxyzjd.com/article/a460467324/117607753</a></li>
-<li>检查<code>/etc/systemd/system/docker.service.dhttp-proxy.conf</code> 配置文件</li>
+<li>取消默认的NAT</li>
+<li>开启Hyper-V manager</li>
 </ul>
-<h1>参考</h1>
-<blockquote>
-<p><a href="https://docs.docker.com/config/daemon/systemd/#httphttps-proxy">https://docs.docker.com/config/daemon/systemd/#httphttps-proxy</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>proxy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>shell proxy via proxychains-ng</title>
-    <url>//shell-proxy/</url>
-    <content><![CDATA[<h2 id="Introduce">Introduce</h2>
-<p>Usually when we use <code>GNU/Linux</code> we visit some external websites, and in many cases the relevant content is downloaded through a shell, such as <code>git</code>,<code>wget</code>,etc.</p>
-<p>At this point we need to speed up access by setting up a proxy .<a href="https://github.com/rofl0r/proxychains-ng">proxychains-ng</a> is very simple and convenient.</p>
-<p>Although we can enable the current shell agent via export <code>export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890</code>,but he is not permanent solution.</p>
-<h2 id="Download-compile-and-install">Download compile and install</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> download</span></span><br><span class="line">git clone https://github.com/rofl0r/proxychains-ng</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> enter folder</span></span><br><span class="line">cd proxychains-ng</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> complie</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./configure --prefix=/usr --sysconfdir=/etc</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make install</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make install-config (安装proxychains.conf配置文件)</span></span><br></pre></td></tr></table></figure>
-<h2 id="configration">configration</h2>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">View profile location</span></span><br><span class="line">proxychains4 printenv` </span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">edit profile</span></span><br><span class="line">[ProxyList] </span><br><span class="line">socks5  127.0.0.1 7890</span><br><span class="line">http    127.0.0.1 7890</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> modify <span class="built_in">alias</span>(zsh)</span></span><br><span class="line">vi .zshrc</span><br><span class="line">alias pc=&quot;proxychains4&quot;</span><br><span class="line">source .zshrc </span><br></pre></td></tr></table></figure>
-<p>Congratulations,you now have fast access through a proxy</p>
-<p>Thanks</p>
-<blockquote>
-<p><a href="https://www.hi-linux.com/posts/48321.html#vip-container">https://www.hi-linux.com/posts/48321.html#vip-container</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>proxy</tag>
-        <tag>shell</tag>
-        <tag>deploy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL Server 死锁问题排查</title>
-    <url>//sql-lock/</url>
-    <content><![CDATA[<p>参考：<br>
-<a href="https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-lock-transact-sql?view=sql-server-ver15">微软官方api</a></p>
-<h2 id="问题日志描述">问题日志描述</h2>
-<blockquote>
-<p>事务(进程 ID 140)与另一个进程被死锁在 锁 | 通信缓冲区 资源上，并且已被选作死锁牺牲品。请重新运行该事务</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerException.makeFromDatabaseError(SQLServerException.java:196)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerStatement.getNextResult(SQLServerStatement.java:1454)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement.doExecutePreparedStatement(SQLServerPreparedStatement.java:388)        </span><br><span class="line">at com.microsoft.sqlserver.jdbc.SQLServerPreparedStatement$PrepStmtExecCmd.doExecute(SQLServerPreparedStatement.java:338)</span><br><span class="line">at com.microsoft.sqlserver.jdbc.TDSCommand.ex</span><br></pre></td></tr></table></figure>
-<h2 id="问题排查">问题排查</h2>
-<h3 id="1、查询哪些进程导致的死锁">1、查询哪些进程导致的死锁</h3>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> request_session_id spid, object_name( resource_associated_entity_id )</span><br><span class="line">tablename <span class="keyword">from</span> sys.dm_tran_locks <span class="keyword">where</span> resource_type <span class="operator">=</span> <span class="string">&#x27;object&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="2、查询死锁的原因">2、查询死锁的原因</h3>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Who(spid <span class="type">int</span>,</span><br><span class="line">    ecid <span class="type">int</span>,</span><br><span class="line">    status nvarchar(<span class="number">50</span>),</span><br><span class="line">    loginname nvarchar(<span class="number">50</span>),</span><br><span class="line">    hostname nvarchar(<span class="number">50</span>),</span><br><span class="line">    blk <span class="type">int</span>,</span><br><span class="line">    dbname nvarchar(<span class="number">50</span>),</span><br><span class="line">    cmd nvarchar(<span class="number">50</span>),</span><br><span class="line">    request_ID <span class="type">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">Table</span> #Lock(spid <span class="type">int</span>,</span><br><span class="line">    dpid <span class="type">int</span>,</span><br><span class="line">    objid <span class="type">int</span>,</span><br><span class="line">    indld <span class="type">int</span>,</span><br><span class="line">    [Type]  nvarchar(<span class="number">20</span>),</span><br><span class="line">    Resource nvarchar(<span class="number">50</span>),</span><br><span class="line">    Mode nvarchar(<span class="number">10</span>),</span><br><span class="line">    Status nvarchar(<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Who    <span class="keyword">EXEC</span> sp_who active  </span><br><span class="line"><span class="comment">--看哪个引起的阻塞，blk \</span></span><br><span class="line"> <span class="keyword">INSERT</span> <span class="keyword">INTO</span> #Lock     <span class="keyword">EXEC</span> sp_lock  </span><br><span class="line"><span class="comment">--看锁住了那个资源id，objid </span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@DBName</span> nvarchar(<span class="number">20</span>);</span><br><span class="line"><span class="keyword">SET</span> <span class="variable">@DBName</span><span class="operator">=</span><span class="string">&#x27;czggzy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> #Who.<span class="operator">*</span> <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname<span class="operator">=</span><span class="variable">@DBName</span></span><br><span class="line"><span class="keyword">SELECT</span> #Lock.<span class="operator">*</span> <span class="keyword">FROM</span> #Lock</span><br><span class="line">    <span class="keyword">JOIN</span> #Who</span><br><span class="line">        <span class="keyword">ON</span> #Who.spid<span class="operator">=</span>#Lock.spid</span><br><span class="line">            <span class="keyword">AND</span> dbname<span class="operator">=</span><span class="variable">@DBName</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">--最后发送到SQL Server的语句</span></span><br><span class="line"><span class="keyword">DECLARE</span> crsr <span class="keyword">Cursor</span> <span class="keyword">FOR</span>     <span class="keyword">SELECT</span> blk <span class="keyword">FROM</span> #Who <span class="keyword">WHERE</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span> <span class="keyword">AND</span> blk <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">DECLARE</span> <span class="variable">@blk</span> <span class="type">int</span>;</span><br><span class="line"><span class="keyword">open</span> crsr;</span><br><span class="line"><span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line">WHILE (@<span class="variable">@FETCH</span>_STATUS  <span class="operator">=</span>  <span class="number">0</span>)<span class="keyword">BEGIN</span>;</span><br><span class="line"></span><br><span class="line">    dbcc inputbuffer(<span class="variable">@blk</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">FETCH</span> NEXT <span class="keyword">FROM</span> crsr <span class="keyword">INTO</span> <span class="variable">@blk</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">close</span> crsr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DEALLOCATE</span> crsr;</span><br><span class="line"><span class="comment">--锁定的资源</span></span><br><span class="line"> <span class="keyword">SELECT</span> #Who.spid,</span><br><span class="line">hostname,</span><br><span class="line">objid,</span><br><span class="line">[type],</span><br><span class="line">mode,</span><br><span class="line">object_name(objid) <span class="keyword">as</span> objName <span class="keyword">FROM</span> #Lock    <span class="keyword">JOIN</span> #Who        <span class="keyword">ON</span> #Who.spid <span class="operator">=</span>#Lock.spid             <span class="keyword">AND</span> dbname <span class="operator">=</span> <span class="variable">@DBName</span>    <span class="keyword">WHERE</span> objid <span class="operator">&lt;&gt;</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Who;</span><br><span class="line"></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">Table</span> #Lock;</span><br></pre></td></tr></table></figure>
-<h2 id="问题处理">问题处理</h2>
-<h3 id="杀死进程">杀死进程</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kill spid  --杀死进程</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>sql</tag>
-        <tag>lock</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Use Samba to share files in Linux and Windows</title>
-    <url>//samba-share/</url>
-    <content><![CDATA[<h2 id="1、Introduction">1、Introduction</h2>
-<p>Samba is a free software for linking the UNIX series of operating systems with the Microsoft Windows operating system’s <strong>SMB / CIFS</strong> (Server Message Block / Common Internet File System) network protocol. The third edition not only visits and shares SMB folders and printers, which can also be integrated into Windows Server domains, playing a domain control station (Domain Controller) and joining Active Directory members. In short, this software is a bridge between Windows and UNIX series operating systems, so that the resources are interoperable.</p>
-<h2 id="2、Install-Samba-Server-on-Linux（Ubuntu）">2、Install Samba Server on Linux（Ubuntu）</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt -y update</span><br><span class="line">sudo apt -y install samba</span><br></pre></td></tr></table></figure>
-<h2 id="3、-Configure-Samba-server-Share-on-Ubuntu">3、 Configure Samba server Share on Ubuntu</h2>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo mkdir -p /home/share</span><br><span class="line"># Access to All without Authentication</span><br><span class="line">sudo chmod 777 /home/share</span><br></pre></td></tr></table></figure>
-<p>Samba uses configuration file in <code>/etc/samba/smb.conf</code>. If you change this configuration file, the changes do not take effect until you restart the Samba daemon</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo vim /etc/samba/smb.conf</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[global]</span><br><span class="line"></span><br><span class="line"># Configure correct UTP</span><br><span class="line">  unix charset = UTF-8</span><br><span class="line"># Change this to the workgroup/NT-domain name your Samba server will be part of</span><br><span class="line">   workgroup = WORKGROUP</span><br><span class="line">   bind interfaces only = yes</span><br><span class="line"></span><br><span class="line"># Set share configuration at the end</span><br><span class="line">[Docs]</span><br><span class="line">   path = /home/share</span><br><span class="line">   writable = yes</span><br><span class="line">   guest ok = yes</span><br><span class="line">   guest only = yes</span><br><span class="line">   create mode = 0777</span><br><span class="line">   directory mode = 0777</span><br></pre></td></tr></table></figure>
-<h2 id="4、Test-and-Config-Samba-Clinet">4、Test and Config Samba Clinet</h2>
-<p>To access a Samba share on the Linux system ,you need to install and configure Samba client .</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt -y install smbclient cifs-utils</span><br><span class="line"># test </span><br><span class="line">smbclient //sambaserver/share -U sambausername</span><br></pre></td></tr></table></figure>
-<h2 id="5、-Use-Windows-link-Samba-shared-folders">5、 Use Windows link Samba shared folders</h2>
-<p>Open up File Explorer and then right-click on <code>This PC</code> (in the left pane). From the resulting context menu, select Add a network location (Figure A)</p>
-<p><img data-src="https://1123213.aiur.site/samba4window.png" alt=""></p>
-<h2 id="Refer-to">Refer to</h2>
-<blockquote>
-<p><a href="https://computingforgeeks.com/install-and-configure-samba-server-share-on-ubuntu/">install-and-configure-samba-server-share-on-ubuntu</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.techrepublic.com/article/how-to-connect-to-linux-samba-shares-from-windows-10/">How to connect to Linux Samba shares from Windows 10</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.redhat.com/sysadmin/samba-windows-linux">Mounting and mapping shares between Windows and Linux with Samba</a></p>
-</blockquote>
+<p><img data-src="https://gxhao.aiursoft.cn/image/img-c84ba9ee-a0b4-41b5-875d-38235d264a82.png" alt="file"></p>
+<p>开启Virtual Switch Manager<br>
+<img data-src="https://gxhao.aiursoft.cn/image/img-116c73f7-06bb-496f-a726-5d180289a1fb.png" alt="file"></p>
 ]]></content>
       <categories>
         <category>deployment</category>
       </categories>
       <tags>
         <tag>deploy</tag>
-        <tag>Samba</tag>
-        <tag>Server</tag>
+        <tag>CI/CD</tag>
+        <tag>life</tag>
       </tags>
   </entry>
   <entry>
-    <title>Ubuntu MATE Install</title>
-    <url>//ubuntu-install/</url>
-    <content><![CDATA[<h1>Ubuntu MATE安装及初始配置</h1>
-<h2 id="前言">前言</h2>
-<p>家里有个老电脑、还是在我上初中的时候买的，到现在他的使用率也很低了。考虑配置为amd双核、4G内存、250G硬盘，拿来搭一个小型的Linux服务器，用来学习和跑一些常用的软件还是很不错的。以下是操作详情。</p>
-<h2 id="系统下载及安装">系统下载及安装</h2>
+    <title>美丽的风景-张诚</title>
+    <url>//zhangcheng/</url>
+    <content><![CDATA[<h1>美丽的风景-张诚</h1>
+<p>“幸福是温暖而柔软的东西，它就在你身边，不在别处”。风景也是一样，把远望的目光收回来，不用你费尽周折，只需抬头、转身，或者俯首、侧目，你就会发现身边有最美的风景。点亮一盏灯，照亮周围的人，你，就是最美的风景。</p>
+<p><strong>“熊孩子”的精神家园</strong></p>
+<h2 id="记政务服务研发6部-张诚">记政务服务研发6部 张诚</h2>
+<p><strong>前言</strong></p>
+<p>王小波在《我的精神家园》中写过这么一段话：“假如我今天死掉，恐怕就不能像维特根斯坦一样说道：我度过了美好的一生；也不能像斯汤达一样说：活过，爱过，写过。我很怕落到什么都说不出的结果，所以正在努力工作。”</p>
+<p>他，是师生口中遵守纪律的好学生；他，是同事眼中敢闯敢拼的“熊孩子”。2016年6月毕业于江苏科技大学，同年7月进入新点政务服务的大家庭，他就是政务服务研发6部——张诚。人生轨道的转变，使他意识到自己已然不是当初那个懵懂的少年，每个人的内心都是一座孤岛，要想焕发生机，就必须学会经营自己的精神家园。</p>
+<p><img data-src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/daa1fc77-f63b-409a-89af-2fcf5c109085/Untitled.png" alt="Untitled"></p>
+<p><strong>初入职场</strong></p>
+<p>从学生到职场人的转变过程并不算漫长，张诚清楚记得刚进政务服务部门的那一天部门领导激励人心的话语：“你们都是有朝气的年轻人，有些新同事将被分配到政务服务，有些新同事会被分配到12345，不管你们在哪一个业务条线，要记住你们有研发群坚实的后盾，希望你们能在各自的岗位发光发热！”</p>
+<p>进入部门后，张诚加入了12345小组，当时项目开发人员比较紧张。组长耿源慧对他说：“年轻真好，还有很多路可以去选择，在路上也要记得仰望星空，脚踏实地。目前热线条线的开发资源紧张，但是条线依然平稳地发展，项目依然平稳地推进，靠的是开发前辈们的共同努力，12345机遇与挑战并存，希望你可以在其中发挥自己的作用，展现你的才华。”他便暗中发誓：不论如何，别人能做的事，自己也定能将其做成，并做好！物竞天择，适者生存。</p>
+<p>那段时间，张诚每晚要转3条地铁线才能到家，而后他会继续工作一个小时，对于不理解的业务，他会反复看前辈写下的代码；对于时间节点不是很急的需求，他也会在晚上提前做一些，例如建一个表，写一些开发文档。或许是这每天多做一点的习惯，使他能够快速适应政务热线的工作节奏，并对政务热线的业务有了自己的理解。</p>
+<p>2016年10月，仅入职三个月的张诚开始出省做项目。第一个出差地是济宁，该项目情况复杂，客户要求近乎严苛，掺杂着许多个性化的需求，并且有大量的统计分析。张诚与项目组的实施同事在现场加班加点，分工明确，半个月内完成了近百个需求，最终顺利将该项目验收。在项目一线，他不仅仅代表自己，也代表了公司，一言一行都体现着公司对外的良好形象。</p>
+<p>2017年5月，他开始担任南安项目开发负责人的角色，该项目于5月20日落地，客户提出需要在6月15日正式上线。项目周期短，任务重，张诚于5月23日开始驻场，紧接着，便是马不停蹄地开展起项目工作：和总包方电信开会商讨语音平台对接事宜→和客户商讨主流程→开始对接语音平台→修改主流程→短信平台对接→建设网站、APP、微信，截至6月13日全部功能开发完毕，6月14日已经达到上线要求。客户惊讶于建设的速度和质量，给了我司极高的评价，这也为后续商务成功谈下南安的其他项目奠定了基础。</p>
+<p>2017年7月，张诚投入到佛山12345项目和佛山南海民声热线的项目上，项目上没有办公场所，张诚和团队就在机房工作了整整大半年。在项目开发资源紧张的情况下，张诚所在团队不畏艰难，努力奋斗，顺利完成了项目验收。由于项目工期紧，他扮演过诸多角色：充当过咨询，给客户汇报方案；也会主动帮助实施兄弟们参与需求的调研，与客户沟通；期间还参与到了其他项目的工作之中。</p>
+<p><img data-src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/199c3688-6b71-46d1-b6a9-ca59b6412340/Untitled.png" alt="Untitled"></p>
+<p><strong>任重道远</strong></p>
+<p>问其是如何能在高压的工作环境中坚持下来的？他回答：信任。对公司的信任，对政务服务研发群的信任，对热线条线同事的信任，更是对自己的信任。</p>
+<p>南安项目初期，张诚也曾迷茫过，但在组内同事面前不敢表露太多，怕影响士气。困难时刻，部门伸出援手，安排人员协助其工作。项目组很快进入高效率、高并发的推进阶段。当看到需求清单上的功能一个个完成，项目有效地推进，张诚很是欣慰。</p>
+<p>江苏省12345，全国的第一个省级12345平台，时间紧，要求高，连客户一开始也没有清晰的需求。面对前所未有的困难，研发群领导亲自上阵协助项目组，公司高层亲临现场给予亲切慰问，兄弟们团结拼搏、玩命努力，都让张诚觉得工作特别有意义：加班再多，大家一起努力；熬夜再多，大家一起奋斗；客户要求再高，大家一起解决；项目有困难，大家一起扛。就算当月连续加班加点少有休息时间，就算大年初四还要去现场值班，只要一想到自己不是孤军奋战，项目能顺利推进，于他而言就是有意义的！</p>
+<p>工作的顺利开展，除去信任，更多的是责任感。2017年的南京分公司年会上，政务服务研发群袁总的一句话触动了他：“政务服务是我们的事业，关系到包括我们自己在内的每一个人，再苦再累都值得！”政务服务和政务热线都是面向广大人民群众的，一开始他对这话并没有太多感悟，但当自己去政务窗口办理事项后，在亲朋好友通过12345解决问题后，张诚的感悟就变得尤为深刻：为人民服务，不仅体现在国家层面的惠民政策上，也体现在我们所开发的系统上。当看到诉求的满意度为非常满意时，他仿若看到了电话那头的市民竖起了大拇指，自豪感油然而生。</p>
+<p><strong>传承</strong></p>
+<p>自2018年4月担任组长以来，张诚一直秉着把前辈教会他的东西传承下去的思想以身作则，严格带新人。“圣人常行无言之教”，他说自己不是圣人，但愿意按照这个标准去带人。他明白授人以鱼不如授人以渔，他们不清楚的，做的不对的，他都会提出合理性意见并给予耐心指导。张诚曾对新人们说过：“我是你们进入部门的第一个师傅，但我更希望成为你们的知心哥哥，我不希望你们从我这边学不到东西，只要你们肯学，我一定都教，或许我只能陪你们一段路，但我希望这段路是一条方向正确的路。”</p>
+<p>每个人都有自己的思维，所有的路只有自己走过才知道对错。通过制定组内工作规范（包括周会、代码评审、知识库、疑难工作反馈机制以及赏罚分明的制度）搭配不定期的一对一谈话，了解小组成员的工作和生活状态，有针对性地安排工作，小组成员的潜能被一一激发，效率得到明显提升，小组的绩效考核在部门中也是名列前茅。</p>
+<p><strong>劳逸结合</strong></p>
+<p>工作之余，张诚会抓紧时间给自己充电，反复学习工作中用的不太熟练的技术。他的爱好也很广泛，喜欢看书、打篮球，喜欢天文、摄影，他可以把自己扔在天台喂蚊子，只为拍到那最美的环形山。除此之外，他也喜欢种花种草种树，他有一个院子的花草。他擅长写作，在公司博客中发表的几篇文章都展现了他扎实的文字功底。那些项目组平淡的日子里，他记录下了一段段生动的故事，同事们都亲切地称呼他为“新点张树人”，这也是大家对他喜爱的特殊表达。</p>
+<p>他始终相信：劳逸结合才能更好地工作和生活！</p>
+<p><img data-src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/651fd9ec-4f8f-4614-bbb6-451b5d925bdb/Untitled.png" alt="Untitled"></p>
+<p>（月球上的环形山 张诚摄）</p>
+<p><strong>领导评价</strong></p>
+<p>张诚的特点是外向随性，但工作上认准的事情，却有一股不怕困难不服输的狠劲，这一点就是他的精华之所在。</p>
+<p><strong>卷尾语</strong></p>
+<p>张诚是新时代优秀青年的典型代表，他们思想新颖，敢闯敢拼。面对困难，奋勇向前，其中亦有辛苦和委屈，但他们却始终充满着希望，相信公司坚实的后盾，相信只要努力就能获得丰收的喜悦。这，或许就是一个“熊孩子”最好的精神家园。</p>
+]]></content>
+      <categories>
+        <category>study</category>
+      </categories>
+      <tags>
+        <tag>心得</tag>
+        <tag>优秀人物</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>没有静态公网ip如何稳定访问家里的设备</title>
+    <url>//cloudflare-ddns/</url>
+    <content><![CDATA[<h2 id="前置条件">前置条件</h2>
+<ul>
+<li>Linux系统或者可以装docker的路由器</li>
+<li>域名</li>
+<li><a href="https://www.cloudflare.com/zh-cn/">cloudflare</a>账号</li>
+</ul>
+<h2 id="开整">开整</h2>
+<h3 id="1、创建配置文件">1、创建配置文件</h3>
+<p>新建一个DDNS目录并创建<code>config.json</code>配置文件，文件内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;cloudflare&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;authentication&quot;: &#123;</span><br><span class="line">        &quot;api_token&quot;: &quot;api_token_here&quot;,</span><br><span class="line">        &quot;api_key&quot;: &#123;</span><br><span class="line">          &quot;api_key&quot;: &quot;api_key_here&quot;,</span><br><span class="line">          &quot;account_email&quot;: &quot;your_email_here&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;zone_id&quot;: &quot;your_zone_id_here&quot;,</span><br><span class="line">      &quot;subdomains&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;name&quot;: &quot;remove_or_replace_with_your_subdomain&quot;,</span><br><span class="line">          &quot;proxied&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;a&quot;: true,</span><br><span class="line">  &quot;aaaa&quot;: true,</span><br><span class="line">  &quot;purgeUnknownRecords&quot;: false</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<p><strong>api_token</strong>：<br>
+在cloudflare账户的<a href="https://dash.cloudflare.com/profile/api-tokens">个人配置</a>中设置。</p>
+<p>.、<img data-src="/blog-imgs/image/ddns1.png" alt="ddns1"><br>
+<strong>zone_id</strong>:<br>
+在cloudflare账户的域名配置右下角Api下<br>
+<strong>name</strong>:<br>
+三级域名前缀，例如我想设置访问域名为<strong><a href="http://gxhao.xhaosoft.com">gxhao.xhaosoft.com</a></strong>，这边设置为gxhao</p>
+<h3 id="2、-使用Docker-compose-运行">2、 使用Docker-compose 运行</h3>
+<p>编写docekr-compose.yaml 文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version: &#x27;3.7&#x27;</span><br><span class="line">services:</span><br><span class="line">  cloudflare-ddns:</span><br><span class="line">    image: timothyjmiller/cloudflare-ddns:latest</span><br><span class="line">    container_name: cloudflare-ddns</span><br><span class="line">    security_opt:</span><br><span class="line">      - no-new-privileges:true</span><br><span class="line">    network_mode: &#x27;host&#x27;</span><br><span class="line">    environment:</span><br><span class="line">      - PUID=1000</span><br><span class="line">      - PGID=1000</span><br><span class="line">    volumes:</span><br><span class="line">      - /YOUR/PATH/HERE/config.json:/config.json</span><br><span class="line">    restart: unless-stopped</span><br></pre></td></tr></table></figure>
+<p>运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker-compose up .</span><br></pre></td></tr></table></figure>
+<h2 id="最后">最后</h2>
+<p>大功告成，现在你可以在cloudflare中看到一条ip域名映射记录，并且每五分钟更新一次。现在你就可以使用你自定义的域名访问家里的设备了。</p>
+<h2 id="链接">链接</h2>
 <blockquote>
-<p>Ubuntu MATE is an impressive lightweight Linux distro that runs fast enough on older computers. It features the MATE desktop – so the user interface might seem a little different at first but it’s easy to use as well.</p>
-</blockquote>
-<p>此次使用的是<strong>Ubuntu MATE</strong>,如果你需要使用其他系统，以下操作方式类似</p>
-<h3 id="1-下载iso镜像文件">1. 下载iso镜像文件</h3>
-<p><a href="https://ubuntu-mate.org/download/amd64/">官方地址</a></p>
-<h3 id="2-刻录镜像文件到u盘">2. 刻录镜像文件到u盘</h3>
-<p>使用<a href="https://rufus.ie/en/">rufus</a>刻录工具进行镜像刻录，使用默认配置。</p>
-<h3 id="3-系统安装">3. 系统安装</h3>
-<p>开机按<code>F12</code>选择u盘进行默认安装，<strong>图形化安装</strong>基本使用默认配置安装就可以。<br>
-界面大概是这样<br>
-<img data-src="https://note.youdao.com/yws/api/personal/file/129741D0E59A44EB9969ADFDDB1A010F?method=download&amp;shareKey=c36fcbdab60d0ee03411abcd6efe0778" alt=""></p>
-<h2 id="软件安装">软件安装</h2>
-<p>系统安装完之后需要一些必要的软件安装及配置</p>
-<h3 id="1、SSH服务端">1、SSH服务端</h3>
-<p>初始系统中是没有ssh软件的，我们也就无法通过ssh远程访问，需要安装ssh。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 安装ssh</span><br><span class="line">sudo apt install ssh</span><br><span class="line"># 启用ssh服务</span><br><span class="line">sudo service ssh enable</span><br></pre></td></tr></table></figure>
-<h3 id="2、zeroTier安装（可选）">2、zeroTier安装（可选）</h3>
-<p>因为家里是内网，如果不在家连接到电脑，需要安装<a href="https://www.zerotier.com/download/">ZeroTIer</a>。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 下载curl工具</span><br><span class="line">sudo apt install curl</span><br><span class="line"># 下载zerotier</span><br><span class="line">curl -s https://install.zerotier.com | sudo bash</span><br><span class="line"># 查看相关信息</span><br><span class="line">zerotier-cli info</span><br><span class="line"># 加入局域网，xxx为zero中心的16位网络标识码</span><br><span class="line">sudo zerotier-cli join xxx</span><br><span class="line"># 卸载</span><br><span class="line">yum erase zerotier-one</span><br></pre></td></tr></table></figure>
-<h3 id="3、speedtest（可选）">3、speedtest（可选）</h3>
-<p>下载完第一件事当然是测个速了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash</span><br><span class="line"># 安装</span><br><span class="line">sudo apt-get install speedtest</span><br><span class="line"># 使用</span><br><span class="line">speedtest</span><br></pre></td></tr></table></figure>
-<p>测完我们发现网速一般情况下没跑到宽带网速上限，以下需要设置一下。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 安装ethtool工具</span><br><span class="line">sudo apt install ethtool</span><br><span class="line">## 设置网速</span><br><span class="line">sudo ethtool -s enp2s5 speed 100 duplex full autoneg on</span><br></pre></td></tr></table></figure>
-<p>设置开机自启动(Ubuntu)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">## 创建文件</span><br><span class="line">/etc/systemd/system/foo.service</span><br><span class="line">## 添加脚本</span><br><span class="line">[Unit]</span><br><span class="line">Description=Job that runs your user script</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/some/command</span><br><span class="line">Type=oneshot</span><br><span class="line">RemainAfterExit=yes</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">## 执行脚本</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl enable foo.service</span><br></pre></td></tr></table></figure>
-<h3 id="4、docker-安装">4、docker 安装</h3>
-<p>docker作为容器，部署使用常用应用非常方便，安装一下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 添加软件源密钥</span><br><span class="line">curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg</span><br><span class="line"># 添加docker软件源</span><br><span class="line">echo  &quot;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \</span><br><span class="line">  $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br><span class="line"># 更新缓存</span><br><span class="line">sudo apt-get update</span><br><span class="line"># 安装docker</span><br><span class="line">sudo apt-get install docker-ce docker-ce-cli containerd.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="5、安装clash-for-linux">5、安装clash for linux</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wget -P /home/gxhao/Downloads https://github.com/Dreamacro/clash/releases/download/v1.9.0/clash-linux-amd64-v1.9.0.gz</span><br></pre></td></tr></table></figure>
-<h3 id="6、关闭系统休眠">6、关闭系统休眠</h3>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#查看休眠状态</span><br><span class="line">systemctl status sleep.target</span><br><span class="line"># 执行关闭休眠功能</span><br><span class="line">sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target</span><br></pre></td></tr></table></figure>
-<h2 id="引用">引用</h2>
-<p>Ubuntu MATE介绍</p>
-<blockquote>
-<p><a href="https://itsfoss.com/ubuntu-mate-20-04-review/">https://itsfoss.com/ubuntu-mate-20-04-review/</a></p>
-</blockquote>
-<p>网速为10mb/s设置</p>
-<blockquote>
-<p><a href="https://phoenixnap.com/kb/ethtool-command-change-speed-duplex-ethernet-card-linux">https://phoenixnap.com/kb/ethtool-command-change-speed-duplex-ethernet-card-linux</a></p>
-</blockquote>
-<p>网速设置为自启动</p>
-<blockquote>
-<p><a href="https://portal.whitesandshosting.com/index.php/knowledgebase/6/Linux---change-the-speed-and-duplex-settings-of-an-Ethernet-card.html">https://portal.whitesandshosting.com/index.php/knowledgebase/6/Linux---change-the-speed-and-duplex-settings-of-an-Ethernet-card.html</a></p>
-</blockquote>
-<p>如何设置命令行开机自启动</p>
-<blockquote>
-<p><a href="https://askubuntu.com/questions/814/how-to-run-scripts-on-start-up">https://askubuntu.com/questions/814/how-to-run-scripts-on-start-up</a></p>
+<p><a href="https://github.com/timothymiller/cloudflare-ddns">https://github.com/timothymiller/cloudflare-ddns</a></p>
 </blockquote>
 ]]></content>
       <categories>
         <category>deployment</category>
       </categories>
       <tags>
-        <tag>ubuntu</tag>
-        <tag>linux</tag>
+        <tag>network</tag>
+        <tag>DDNS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>爱，失去，死亡-乔布斯斯坦福大学演讲</title>
+    <url>//sterven/</url>
+    <content><![CDATA[<p>本文是乔布斯生前最著名的一次演讲，乔布斯以三个关于 “爱、失去、死亡” 的故事为线索回顾了自己创建苹果公司的历程，以及自己对人生的顿悟的几个时刻。</p>
+<p>你们的时间很有限, 所以不要将他们浪费在重复其他人的生活上。不要被教条束缚, 那意味着你和其他人思考的结果一起生活。不要被其他人喧嚣的观点掩盖你真正的内心的声音。</p>
+<p>还有最重要的是, 你要有勇气去听从你直觉和心灵的指示——它们在某种程度上知道你想要成为什么样子，所有其他的事情都是次要的。</p>
+<p>很荣幸能和你们，来自世界最好大学之一的毕业生们，一块儿参加毕业典。老实说，我大学没有毕业，而今天恐怕是我一生中离大学毕业最近的一次。</p>
+<p>今天我想告诉大家来自我生活的三个故事。没什么大不了，只是三个故事而已。</p>
+<p>第一个故事，如何串起生命中的点滴</p>
+<p>我在里得大学读了六个月就退学了，但是在 18 个月之后，在真正退学之前还常去学校。为何我要选择退学呢？这还得从我出生之前说起。</p>
+<p>我的生母是一个年轻、未婚的大学毕业生，她决定让别人收养我。她有很强烈的信仰，想让我成长在一个大学毕业生的家庭里。有一对律师夫妇说好了要领养我，然而最后时刻，他们改变了主意，决定要个女孩。</p>
+<p>然后，我排在收养人名单中的养父母在一个深夜接到电话，“很意外，我们多了一个男婴，你们要吗？”“当然要！” 但是我的生母后来又发现养母没有大学毕业，养父甚至连高中都没有毕业，于是她拒绝在领养书上签字。几个月后，我的养父母保证会让我上大学，她妥协了。</p>
+<p>这便是我生命的开端。</p>
+<p>十七年后，我上大学了，但是我无知地选了一所和斯坦福一样贵的学校，几乎花掉蓝领阶层养父母一生的积蓄。六个月后，我觉得这并不值得，我看不出自己以后要做什么，也不知晓大学会怎样帮我指点迷津，而我却在花销父母一生的积蓄。所以我决定退学，并且相信没有做错。</p>
+<p>一开始非常吓人，但回忆起来，这却是我一生中作的最好的决定之一。从我退学的那一刻起，我可以停止一切不感兴趣的必修课，开始旁听那些有意思得多的课。</p>
+<p>事情并不那么美好。我没有宿舍可住，睡在朋友房间的地上。为了吃饭，我收集五分一个的旧可乐瓶，每个星期天晚上步行七英里到哈尔 - 克里什纳庙里改善一下一周的伙食。我喜欢这种生活方式。能够遵循自己的好奇和直觉前行后来被证明是多么的珍贵。让我来给你们举个例子。</p>
+<p>当时的里德大学提供可能是全国最好的书法指导。校园中每一张海报，抽屉上的每一张标签，都是漂亮的手写体。由于我已退学，不用修那些必修课，我决定选一门书法课上上。在这门课上，我学会了 “serif” 和 “sans-serif” 两种字体、学会了怎样在不同的字母组合中改变字间距、学会了怎样写出好的字来。</p>
+<p>这是一种科学无法捕捉的微妙，楚楚动人、充满历史底蕴和艺术性，我觉得自己被完全吸引了。当时我并不指望书法在以后的生活中能有什么实用价值。</p>
+<p>我很幸运，很早就发现自己喜欢做的事情。</p>
+<p>我二十岁的时候就和沃茨在父母的车库里开创了苹果公司。我们工作得很努力，十年后，苹果公司成长为拥有四千名员工，价值二十亿的大公司。我们刚刚推出了最好的创意，Macintosh 操作系统，在这之前的一年，也就是我刚过三十岁，我被解雇了。</p>
+<p>你怎么可能被一个亲手创立的公司解雇？事情是这样的，在公司成长期间，我雇佣了一个我们认为非常聪明，可以和我一起经营公司的人。一年后，我们对公司未来的看法产生分歧，董事会站在了他的一边。于是，在我三十岁的时候，我出局了，很公开地出局了。</p>
+<p>我整个成年生活的焦点没了，这很要命。一开始的几个月我真的不知道该干什么。我觉得我让公司的前一代创建者们失望了，我把传给我的权杖给弄丢了。我与戴维德 · 帕珂德和鲍勃 · 诺埃斯见面，试图为这彻头彻尾的失败道歉。我败得如此之惨以至于我想要逃离硅谷。</p>
+<p>但有个东西在慢慢地叫醒我：我还爱着我从事的行业。这次失败一点儿都没有改变这一点。我被逐了，但我仍爱着我的事业。我决定重新开始。</p>
+<p>当时我并没有看出来，但事实证明 “被苹果开除” 是发生在我身上最好的事。成功的重担被重新起步的轻松替代，对任何事情都不再特别看重，这让我感觉如此自由，进入一生中最有创造力的阶段。</p>
+<p>接下来的五年，我创立了一个叫 NeXT 的公司，接着又建立了 Pixar，然后与后来成为我妻子的女人相爱。Pixar 出品了世界第一个电脑动画电影：“玩具总动员”，现在它已经是世界最成功的动画制作工作室了。</p>
+<p>在一系列的成功运转后，苹果收购了 NeXT，我又回到了苹果。我们在 NeXT 开发的技术在苹果的复兴中起了核心作用，另外劳琳和我组建了一个幸福的家庭。</p>
+<p>我非常确信，如果我没有被苹果炒掉，这些就都不会发生。这个药的味道太糟了，但是我想病人需要它。</p>
+<p>有些时候，生活会给你迎头一棒。不要丧失信心。我确信唯一让我一路走下来的是我对自己所做事情的热爱。你必须去找你热爱的东西，对工作如此，对你的爱人也是这样的。工作会占据你生命中很大的一部分，你只有相信自己做的是伟大的工作，你才能怡然自得。如果你还没有找到，那么就继续找，不要停。全心全意地找，当你找到时，你会知道的。就像任何真诚的关系，随着时间的流逝，只会越来越紧密。所以继续找，不要停。</p>
+<p>我 17 岁的时候读到过一句话 “如果你把每一天都当作最后一天过，有一天你会发现你是正确的”。这句话给我留下了深刻的印象。从那以后，过去的 33 年，每天早上我都会对着镜子问自己：“如果今天是我的最后一天，我会不会做我想做的事情呢？” 如果连着一段时间，答案都是否定的的话，我就知道我需要改变一些东西了。</p>
+<p>提醒自己就要死了是我遇见的最大的帮助，帮我作了生命中的大决定。因为几乎任何事——所有的荣耀、骄傲、对难堪和失败的恐惧——在死亡面前都会消隐，留下真正重要的东西。提醒自己就要死亡是我知道的最好的方法，用来避开担心失去某些东西的陷阱。你已经赤裸裸了，没有理由不听从于自己的心愿。</p>
+<p>大约一年前，我被诊断出患了癌症。我早上七点半作了扫描，清楚地显示在我的胰腺有一个肿瘤。我当时都不知道胰腺是什么东西。医生们告诉我这几乎是无法治愈的，我还有三到六个月的时间。我的医生建议我回家，整理一切。在医生的辞典中，这就是 “准备死亡” 的意思。就是意味着把要对你小孩说十年的话在几个月内说完；意味着把所有东西搞定，尽量让你的家庭活得轻松一点；意味着你要说 “永别” 了。</p>
+<p>我整日都想着那诊断书的事情。后来有天晚上我做了一个活切片检查，他们将一个内窥镜伸进我的喉咙，穿过胃，到达肠道，用一根针在我的胰腺肿瘤上取了几个细胞。我当时是被麻醉的，但是我的妻子告诉我，那些医生在显微镜下看到细胞的时候开始尖叫，因为发现这竟然是一种非常罕见的可用手术治愈的胰腺癌症。我做了手术，现在，我痊愈了。</p>
+<p>这是我最接近死亡的时候，我也希望是我未来几十年里最接近死亡的一次。</p>
+<p>这次死里逃生让我比以往只知道死亡是一个有用而纯粹书面概念的时候更确信地告诉你们，没有人愿意死，即使那些想上天堂的人们也不愿意通过死亡来达到他们的目的。但是死亡是每个人共同的终点，没有人能够逃脱。也应该如此，因为死亡很可能是生命最好的发明。它去陈让新。现在，你们就是 “新”。但是有一天，不用太久，你们有会慢慢变老然后死去。</p>
+<p>抱歉，这很戏剧性，但却是真的。你们的时间是有限的，不要浪费在重复别人的生活上。不要被教条束缚，那意味着会和别人思考的结果一块儿生活。不要被其他人的喧嚣观点掩盖自己内心真正的声音。你的直觉和内心知道你想要变成什么样子。所有其他东西都是次要的。</p>
+<p>我年轻的时候，有一份叫做《完整地球目录》的好杂志，是我们这一代人的圣经之一。它是一个叫斯纠华特 · 布兰的、住在离这不远的曼罗公园的家伙创立的。他用诗一般的触觉将这份杂志带到世界。</p>
+<p>那是六十年代后期，个人电脑出现之前，所以这份杂志全是用打字机、剪刀和偏光镜制作的。有点像软皮包装的 google，不过却早了三十五年。它理想主义，全文充斥着灵巧的工具和伟大的想法。斯纠华特和他的小组出版了几期 “完整地球目录”，在完成使命之前，他们出版了最后一期。</p>
+<p>那是七十年代中期，和你们差不多大。最后一期的封底是一张清晨乡村小路的照片，如果你有冒险精神，可以自己找到这条路。下面有一句话，“保持饥饿，保持愚蠢”。这是他们的告别语，“求知若饥，虚心若愚”。我常以此勉励自己。现在，在你们即将踏上新旅程的时候，我也希望你们能这样。</p>
+<p>这是乔布斯在斯坦福大学上的演讲，一个短短不到 15 分钟的演讲，带给我们的却是无比的震撼。他讲了三个跟自己有关的小故事，它们发生在他生命中不同的时代。让我们感受到的是卓越和普通的差别，他的成功不是因为辍学，心智模式上的不同才是决定性的。从这篇演讲里，我们能够感受到的就是他对于对待生命的态度，这正是把卓越变成特质的原因。</p>
+]]></content>
+      <categories>
+        <category>study</category>
+      </categories>
+      <tags>
+        <tag>steven</tag>
+        <tag>apple</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows重装后全自动下载所需软件和配置开发环境</title>
+    <url>//reimage/</url>
+    <content><![CDATA[<h2 id="初始化一键安装必备软件">初始化一键安装必备软件</h2>
+<p>右键点击开始菜单，powershell（管理员）运行下面脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://github.com/gxhao/configuration-script-win/main/appInstall.ps1&#x27;))</span><br></pre></td></tr></table></figure>
+<h2 id="安装winget">安装winget</h2>
+<blockquote>
+<p>winget 是微软推出的命令行工具，可以输入简单的命令安装常用软件,<a href="https://www.cnblogs.com/gxhao/p/15871239.html">参考这里</a></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Install Winget</span><br><span class="line">if (-not $(Get-Command winget -ErrorAction SilentlyContinue)) &#123;</span><br><span class="line">    Write-Host &quot;Installing WinGet...&quot; -ForegroundColor Green</span><br><span class="line">    Start-Process &quot;ms-appinstaller:?source=https://aka.ms/getwinget&quot;</span><br><span class="line">    while(-not $(Get-Command winget -ErrorAction SilentlyContinue))</span><br><span class="line">    &#123;</span><br><span class="line">        Write-Host &quot;Winget is still not found!&quot; -ForegroundColor Yellow</span><br><span class="line">        Start-Sleep -Seconds 5</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="软件链接">软件链接</h2>
+<p><a href="https://dl.xdown.org/windows/i386/xdown-2.0.4.5.zip">xdown</a><br>
+<a href="https://www.mgnb.jp/download/MGNB.exe">mgnb</a><br>
+<a href="https://github.com/AutoDarkMode/Windows-Auto-Night-Mode/releases/download/10.1.0.10/AutoDarkModeX_10.1.0.10.exe">Auto Dark Model</a><br>
+<a href="https://download.ydstatic.com/notewebsite/downloads/YNote.exe">有道云笔记</a><br>
+<a href="https://download.zerotier.com/dist/ZeroTierOne.msi">ZeroTier</a><br>
+<a href="https://res.u-tools.cn/version2/uTools-2.4.3.exe">Utools</a></p>
+<p>通过powershell默认安装exe软件。</p>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/47110728/powershell-download-and-run-exe-file">https://stackoverflow.com/questions/47110728/powershell-download-and-run-exe-file</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/45756791/install-software-using-powershell-script?rq=1">https://stackoverflow.com/questions/45756791/install-software-using-powershell-script?rq=1</a></p>
+</blockquote>
+<h1>设置篇</h1>
+<h2 id="一键配置所需开发环境">一键配置所需开发环境</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://github.com/gxhao/configuration-script-win/main/config.ps1&#x27;))</span><br></pre></td></tr></table></figure>
+<h2 id="设置Windows投影默认为第二屏幕">设置Windows投影默认为第二屏幕</h2>
+<blockquote>
+<p><a href="https://answers.microsoft.com/zh-hans/windows/forum/all/%E5%85%B3%E4%BA%8Ewin10%E7%9A%84%E6%8A%95%E5%BD%B1/e80b6da9-31c8-4b1a-a3df-4d91b3c6f974?auth=1">https://answers.microsoft.com/zh-hans/windows/forum/all/关于win10的投影/e80b6da9-31c8-4b1a-a3df-4d91b3c6f974?auth=1</a></p>
+</blockquote>
+<ol>
+<li>
+<p>点击开始按钮&gt;输入cmd&gt;右键点击搜索结果中的&quot;命令提示符&quot;&gt;以管理员身份运行</p>
+</li>
+<li>
+<p>在打开的命令提示符窗口中运行:</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">notepad C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\SecondOnly.bat</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>确认新建文件,粘贴下面内容到记事本中:</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">@echo off</span><br><span class="line"></span><br><span class="line">DisplaySwitch.exe /external</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>
+<p>保存并关闭记事本程序</p>
+</li>
+<li>
+<p>重启电脑看一下是否成功了呢</p>
+</li>
+</ol>
+<h2 id="完全删除小组件">完全删除小组件</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 卸载</span></span><br><span class="line">winget uninstall MicrosoftWindows.Client.WebExperience_cw5n1h2txyewy</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装</span></span><br><span class="line">winget install 9MSSGKG348SP</span><br></pre></td></tr></table></figure>
+<h2 id="配置ssh私钥">配置ssh私钥</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &#x27;gxhao&#x27;  </span><br><span class="line">git config --global user.email &#x27;1625546088@qq.com&#x27;</span><br><span class="line"># 生成密钥（注意设置git账号密码</span><br><span class="line">ssh-keygen -t rsa -C &#x27;1625546088@qq.com&#x27;</span><br><span class="line"># 检测是否配置成功</span><br><span class="line"> ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<h2 id="配置idea插件地址">配置idea插件地址</h2>
+<blockquote>
+<p><a href="https://plugins.zhile.io">https://plugins.zhile.io</a></p>
+</blockquote>
+<p>jrebel 激活</p>
+<blockquote>
+<p><a href="http://jrebel.whrj999.com/3d64b43e-0da7-40a3-925a-844e5a57aea8">http://jrebel.whrj999.com/3d64b43e-0da7-40a3-925a-844e5a57aea8</a></p>
+</blockquote>
+<h2 id="设置git代理">设置git代理</h2>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">iex ((New-Object System.Net.WebClient).DownloadString(&#x27;https://gist.githubusercontent.com/162554/b14669da81dd9574cc7ae34955be7fbe/raw/86a5b82f47a8f5e9c822a749782dc08e6d59b230/SetProxy.psm1&#x27;))</span><br><span class="line">$ git config --global git.proxy http://127.0.0.1:1080</span><br><span class="line">$ git config --global http.proxy http://127.0.0.1:1080</span><br><span class="line">$ git config --global https.proxy http://127.0.0.1:1080</span><br><span class="line">http.https://github.com.proxy=socks5://127.0.0.1:10808</span><br></pre></td></tr></table></figure>
+<h2 id="激活Windows">激活Windows</h2>
+<blockquote>
+<p><a href="https://msguides.com/windows-11">https://msguides.com/windows-11</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX</span><br><span class="line"># 获取激活服务器地址   https://kms.msguides.com/</span><br><span class="line">slmgr /skms s8.uk.to</span><br><span class="line">slmgr /ato</span><br><span class="line"></span><br><span class="line"># office </span><br><span class="line">https://www.grameen-info.org/free-microsoft-office-2016-product-key/</span><br></pre></td></tr></table></figure>
+<h1>FAQ</h1>
+]]></content>
+      <categories>
+        <category>deployment</category>
+      </categories>
+      <tags>
+        <tag>windows</tag>
+        <tag>reimage</tag>
       </tags>
   </entry>
   <entry>
@@ -685,188 +1038,6 @@ Error response from daemon: Get “<a href="https://registry-1.docker.io/v2/">ht
         <tag>DevOps</tag>
         <tag>Gitlab</tag>
         <tag>CI/CD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用Svn Hooks触发自动部署流水线</title>
-    <url>//svn-cicd/</url>
-    <content><![CDATA[<h2 id="缘起">缘起</h2>
-<p>项目上使用<a href="https://dev.epoint.com.cn/clouddev-web/frame/fui/pages/themes/clouddev/clouddev">集成开发平台</a>构建部署已经有一段时间了，因为项目上使用的是svn，所以在更新系统的时候仍然需要<strong>提交代码</strong>-&gt;<strong>集成开发平台更新</strong>-&gt;<strong>服务器远程构建更新</strong>。由于提交代码和集成开发平台构建更新都是在公司内网进行的，那么我们可不可以将前两步合并为一步？也就是提交完代码<strong>自动</strong>进行集成开发平台更新，接着只需要在服务器端远程构建更新就可以了。</p>
-<h2 id="思路">思路</h2>
-<ol>
-<li>gitlab 有个配置项<a href="http://xxx/mtjt/custom/-/hooks">Webhooks</a>可以触发集成开发平台构建。</li>
-</ol>
-<blockquote>
-<p>Webhooks enable you to send notifications to web applications in response to events in a group or project.</p>
-</blockquote>
-<ol start="2">
-<li>svn应该有相关触发事件</li>
-<li>编写个后台Restful接口，svn触发这个接口，这个接口触发集成开发平台更新</li>
-</ol>
-<h2 id="调研与设计">调研与设计</h2>
-<h3 id="svn监听如何实现？">svn监听如何实现？</h3>
-<h4 id="1-svn本身仓库自带了hooks功能">1. svn本身仓库自带了hooks功能</h4>
-<p>在svn仓库的hooks文件夹也自带了相关的模板。配置相关shell命令即可使用<br>
-<img data-src="https://gxhao.aiur.site/svnhook1.png" alt=""><br>
-<em>没有访问项目svn仓库的权限，此实现方法不考虑。</em>(否决)</p>
-<h4 id="2-svn-开发人员开发了基于apache开源的svn提交监听工具-CommitMonitor">2. svn 开发人员开发了基于apache开源的svn提交监听工具-<a href="https://tools.stefankueng.com/CommitMonitor.html">CommitMonitor</a></h4>
-<p><em>这个工具可以监听svn提交操作，然后发送通知在桌面右下角。但是于我而言，我不需要他在右下角提醒我，我需要他提供一个通知的api，我可以利用这个api去做一些别的事情。很遗憾没有找到</em>（否决）</p>
-<h4 id="3-TortoiseSVN-提供的Hooks-Script脚本">3. TortoiseSVN 提供的<a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">Hooks Script</a>脚本</h4>
-<p>查看官方介绍，貌似此方法是一种比较可行的方法，且貌似官方文档上没有限定必须是什么类型的脚本。</p>
-<h3 id="脚本如何选择？">脚本如何选择？</h3>
-<h4 id="1-shell-脚本">1.shell 脚本</h4>
-<p>直接编写shell执行访问Rest接口或者相关jar包，但是这样在执行后会有一堆提交报错（实际是执行成功的），类似这样：<br>
-<img data-src="https://gxhao.aiur.site/svnhook2.png" alt=""><br>
-这可能导致体验不太好，<s>明明我提交了完了，你却说我提交错了</s></p>
-<h4 id="2-JavaScript">2.JavaScript</h4>
-<p>js可以编写http请求的代码，然后利用<code>node</code>去执行脚本。考虑环境兼容性，大部分人电脑应该没有安装node相关工具包。</p>
-<h4 id="3-Wscript">3.<a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">Wscript</a></h4>
-<p>这是微软在<code>Windows98</code>上就推出的Windows系统自带的脚本，可以理解为<code>Windows js</code>,这样环境就不用担心了，开始编写<code>Wscript</code>脚本代码。</p>
-<h2 id="开发与测试">开发与测试</h2>
-<h3 id="编写代码">编写代码</h3>
-<p>Wscript有个很方便的对象（<code>WinHttp.WinHttpRequest.5.1</code>），可以直接访问http请求。<br>
-编写Wscript代码如下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var http = WScript.CreateObject(&quot;WinHttp.WinHttpRequest.5.1&quot;); </span><br><span class="line">http.Open(&quot;POST&quot;, &quot;http://xxx/start&quot;, false);</span><br><span class="line">http.SetRequestHeader(&quot;Accept&quot;, &quot;*/*&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Accept-Language&quot;, &quot;zh-cn,zh&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;User-Agent&quot;, &quot;Mozilla/6.0&quot;);</span><br><span class="line">http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Referer&quot;, &quot;http://www.baidu.com/&quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Connection&quot;, &quot;Close &quot;);</span><br><span class="line">// http.SetRequestHeader(&quot;Content-Length&quot;, &quot;100&quot;);</span><br><span class="line">JSONString = &quot;&#123;\&quot;pipelineGuid\&quot; : \&quot;xxxxx\&quot;, \&quot;loginId\&quot;: \&quot;gxhao\&quot;&#125;&quot;;</span><br><span class="line">http.Send(JSONString);</span><br><span class="line">http.WaitForResponse(1000);</span><br><span class="line">WScript.Echo(http.ResponseText);</span><br></pre></td></tr></table></figure>
-<h3 id="配置TortoiseSvn">配置TortoiseSvn</h3>
-<p><img data-src="https://gxhao.aiur.site/svnhook.png" alt=""></p>
-<p><code>Hook Type</code>选择Post-Commit-Hook，即在提交完成时触发。<code>Working Copy Path</code> 选择你要提交的代码目录（可配置多个）。<code>Command Line To Execute</code>选择你要执行的Wscript脚本(注意双引号)。</p>
-<h3 id="测试提交">测试提交</h3>
-<p>结果大概时这样：</p>
-<p><img data-src="https://gxhao.aiur.site/svnhook3.png" alt=""></p>
-<h2 id="目前存在的一些问题">目前存在的一些问题</h2>
-<ol>
-<li>只能在TortoiseSvn的工具中提交才能触发，ide提交不会触发。</li>
-<li>集成平台构建完成后没有相关通知到msg/邮件。</li>
-</ol>
-<h2 id="结语">结语</h2>
-<p>引用：</p>
-<blockquote>
-<p><a href="https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks">https://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-settings.html#tsvn-dug-settings-hooks</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wscript</a></p>
-</blockquote>
-<p>感谢：</p>
-<p><strong>非常感谢中研院庄晟琪，顾疆飞两位大佬的帮助和支持</strong>，希望此脚本能够对大家在开发时有所帮助，提高开发效率，减少更新构建时间。</p>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>DevOps</tag>
-        <tag>Gitlab</tag>
-        <tag>CI/CD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2021年终总结</title>
-    <url>//2021Summary/</url>
-    <content><![CDATA[<h2 id="前言">前言</h2>
-<p>从2020年毕业到现在参加工作也一年多了，回顾这一年的经历，有一些想法想记录和总结一下，等以后回头再看的时候也算是对自己有个交代。其实之前的时候都没有写过类似年终总结的，只是受到公司年终总结和it行业人员的一些启发，来回顾一下2021年自己的成长和对2022年的一些展望。</p>
-<h2 id="工作">工作</h2>
-<h3 id="刚进入工作时期">刚进入工作时期</h3>
-<p>我所在的学校是华中地区的一所二本院校，学校内并没有很强的IT技术氛围。我毕业的时候一度以为自己毕业就失业，不过幸运的是我能够在2020年9月入职到<strong>国泰新点</strong>作为我程序员生涯的起点，回想自己刚入职的那段时间，整天提心吊胆，害怕领导会因为我技术太菜把我辞退（不过现在已经没有这种想法了）。当时的想法就是能够熬过六个月试用期，这样公司就不会随意辞退我了。</p>
-<h3 id="工作一段时间之后的折磨痛苦">工作一段时间之后的折磨痛苦</h3>
-<p>在同事y及领导的帮助下，工作到还顺利，任务也不会很多，2020年的时间就这样一天天的度过了。我认为我真正成为一名程序员，真正作为IT世界的初探者还是在今年同事y离职及我正式转正后，同事y离职后他原来的项目就转交到了我和我领导上、去年刚接手的维护项目也转到了我头上、去年的开发项目今年也开始开发。随着这一系列的变动，我的压力倍增。新接手的维护项目作为领导给我的试水项目，让我全权复制，但是这个项目虽然是维护期，但是还是有一堆奇奇怪怪的BUG，经常排查一个BUG修复需要三四天，但是这三四天之中领导又会安排其他的任务。导致我在2021年四五月份经常处于早上8点30上班，处理一会自己项目问题，处理一下领导项目问题，写一下其他项目需求，然后就到了晚上11、12点，接着第二天继续这样。一度有离职的念头，但是想到才刚转正不久，这时候离职可能外面的公司不太认同工作经验，再加上疫情原因。还是坚持了下来。</p>
-<h3 id="自我排解及释压">自我排解及释压</h3>
-<p>大概在5月份的时候，公司组织了一次旅游（我一向讨厌旅游，觉得山水小时候天庭见，并没有很新奇，而且还要应付领导和同事，这让我感觉很麻烦），这次旅游虽然仅仅两天时间，但使我从之前的状态调整过来，领悟到在<strong>工作中人并不需要给自己太大的压力</strong>，这让自己的神经会整体处于非常紧张的状态。应该放松心情，公司并不会因为你个人的工作而改变什么，<strong>工作是永远做不完的</strong>。接下来的工作还算是张弛有度，算是比较轻松的度过了7、8、9、10、11月，完成一些新老系统对接和数据交换工作。12月份真正作为的一个项目的开发负责人。作为主要开发，完成系统功能部署编写。</p>
-<h2 id="学习">学习</h2>
-<p><strong>我不可能一辈子从事程序员工作，但是程序始终是我喜欢的东西之一。</strong></p>
-<h3 id="刚开始学习的迷茫">刚开始学习的迷茫</h3>
-<p>大学期间荒废了四年最好的时光。导致我并没有自主学习的能力。在今年上半年想学习Spring和微服务一些知识，只能通过视频的方式来学习。但是视频一个是非常浪费时间，还有就是前面学，过一段时间就忘了，而且内容都非常基础（看文档十分钟，看视频两个小时）。我感觉到非常折磨，同时每天看视频到夜里2点，第二天上班经常迟到。这对我造成了非常大的困扰。</p>
-<h3 id="学习的转机">学习的转机</h3>
-<p>通过偶然的机会认识到在微软工作的一个程序员<a href="https://anduin.aiursoft.com/?p=1">Anduin</a>，他的确算是我程序生涯引路人之一。从他的博客及视频中我学到了很多不一样的程序知识，例如DevOps、现代软件工程、JWT的前身与发展、消息发送及接收等等，也学习了一些在开源时间做贡献的方法和完整的软件开发流程。最重要的是我学习到了全新的搜索方式–<strong>使用英语搜索</strong>，我通过这种搜索方式，排查一些服务器问题和日常开发查找资料的效率得到了极大的提升。</p>
-<h3 id="学习的方法">学习的方法</h3>
-<p>通过一段时间的探索，我现在已经掌握了基本学习的一些方法。如果你想学一门新技术，可以稍微看一些浅显易懂的入门视频，但是不要继续看视频了，主要通过项目和书籍进行学习。例如我想学习docker，那么我只需要看视频大概了解下容器的相关概念和docker的发展就足够了，接下来就需要找一个比较熟悉的项目，配合相关文档，一步步的根据文档来部署该项目，通过各种方式进阶部署优化，理解每一个步骤的意义。如果这样进行学习的话，不仅成就感满满，而且非常容易记忆。</p>
-<h3 id="目前学习内容的总结">目前学习内容的总结</h3>
-<p>总而言之，这一年我主要学习了docker的使用，springboot的自动装配和简化配置原理，spring简化版的源码，shell的基本使用，服务器相关知识，网络的相关知识及搭建内网网路中心。给家里的电脑安装Ubuntu，远程部署一些小应用。DevOps的概念，部署gitlab runner，通过ci/cd快速完成开发交付。GitHub的使用。</p>
-<h2 id="生活">生活</h2>
-<h3 id="消费">消费</h3>
-<p>我是一个不怎么注重生活品质的人，但是今年依旧买了不少东西，包含27寸2k显示器、任天堂switch、华硕无畏pro14笔记本。显示器刚开始是想在家方便写代码玩游戏用的，刚开始还觉得挺大的，后来一段时间还作为switch的显示器用，不过最近一段时间由于玩游戏的频率减少、switch基本吃灰，公司21寸显示器实在辣眼睛，这个显示器搬到了公司里作为日常用显示器。switch是去年在一个朋友家玩的时候体验到的。今年也想体验下主机游戏，于是在四月份就买了switch，并且购买了健身环，借了塞尔达旷野之息。但是很快到八月份左右我就不怎么玩了，下班后只想躺着床上，目前switch也是处于吃灰状态。笔记本是11月份才买的，公司规定一些软件是禁止安装的，所以经常会检测到电脑异常。所以我觉得我可能需要一台个人用的笔记本，但是这个买完就后悔了，平常使用他基本用来看视频。在公司摸鱼学一些东西的时候也不可能再打开这台笔记本学习。所以目前还没用到这个笔记本的地方。</p>
-<h3 id="游玩">游玩</h3>
-<p>今年在中秋节前后找过一次高中好友小聚了一次，之后一般都是一个人生活，也习惯了一个人生活。后面去了一次苏州微软，去了一次在微软小冰大佬的新家。游戏塞尔达玩了一段时间，lol玩了一段时间。</p>
-<h3 id="交友">交友</h3>
-<p>主要是跟拍照的团队一起玩了两三次，认识了anduin，并且在苏州微软面基。相亲会参加了两次，但均无收获，第一次提前走了，第二次遇到一个老乡，但是因为性格差异，也没聊几天就结束了。</p>
-<h2 id="总结">总结</h2>
-<p>回顾这一年，感觉自己还是学习了不少知识，也清晰的知道自己的差距在哪里，虽然不说碌碌无为，但是感觉这一年学习到的东西还是太少了。希望自己新一年能在编程世界有所收获。</p>
-]]></content>
-      <categories>
-        <category>study</category>
-      </categories>
-      <tags>
-        <tag>心得</tag>
-        <tag>想法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>NFS filesystem mount</title>
-    <url>//nfsmount/</url>
-    <content><![CDATA[<h1>使用nfs文件系统挂载</h1>
-<ol>
-<li>服务器端挂载配置  <a href="https://cloud.tencent.com/developer/article/1626660">https://cloud.tencent.com/developer/article/1626660</a></li>
-<li>参考文章    ：<a href="https://superuser.com/questions/1363062/how-to-share-a-directory-on-a-linux-machine-to-a-windows-machine-via-nfs">How to share a directory on a Linux machine to a Windows machine via NFS?</a></li>
-</ol>
-<h2 id="挂载相关命令">挂载相关命令</h2>
-<h3 id="Linux-side">Linux side:</h3>
-<ol>
-<li>Install the NFS server and utilities (nfs-utils or your distribution’s equivalent).  <code>sudo apt install nfs-kernel-server</code></li>
-<li>Create the directory <code>/srv/nfs</code>.<br>
-<code>sudo mkdir -p /srv/nfs4/backups</code></li>
-<li>Create a new empty directory under /srv/nfs, e.g. files.<br>
-Bind-mount the created directory to the directory containing you want to share, e.g.:<br>
-<code>sudo mount --bind /home/user/stuff/files /srv/nfs/files</code><br>
-Create or edit <code>/etc/exports</code>, and add the line:(the above assumes the Windows machine is on the same LAN as the Linux machine, with the subnet having a 192.168.0.0/16 prefix - adjust as needed).</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/srv/nfs 192.168.0.0/16(rw,all_squash,no_subtree_check,anonuid=65534,anongid=65534)</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>Start the NFS server<br>
-<code>sudo systemctl start nfs-server.service</code></li>
-</ol>
-<h3 id="Windows-side">Windows side:</h3>
-<ol>
-<li>In Control Panel, open Programs and Features, there find Add/remove Windows components, and enable Services for NFS and everything under it.</li>
-<li>Open a command prompt, and type:<br>
-<code>mount -o anon \\192.168.0.1\srv\nfs\files Z:</code><br>
-(assuming your Linux machine is at 192.168.0.1).</li>
-<li>The directory should now be available on the Z: drive. (Type start Z: at the command prompt to open it in Explorer).</li>
-</ol>
-<h3 id="FAQ">FAQ</h3>
-<h4 id="windows连接挂载显示网络连接失败（错误代码53）">windows连接挂载显示网络连接失败（错误代码53）</h4>
-<p>by Ubuntu <a href="https://ubuntuforums.org/showthread.php?t=1402655">https://ubuntuforums.org/showthread.php?t=1402655</a></p>
-<blockquote>
-<p>NFS server has an option of working in insecure mode (Allowing higher incoming port numbers). Windows NFS client often uses higher port numbers. You can enable this option by adding an option to the share<br>
-Example: /share *(insecure,rw)<br>
-在服务器端exports文件中添加insecure</p>
-</blockquote>
-<h4 id="在windows创建文件显示无权访问">在windows创建文件显示无权访问</h4>
-<blockquote>
-<p><a href="https://graspingtech.com/mount-nfs-share-windows-10/">https://graspingtech.com/mount-nfs-share-windows-10/</a></p>
-</blockquote>
-<ol>
-<li>Open <code>regedit</code> by typing it in the search box end pressing Enter.</li>
-<li>Browse to <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ClientForNFS\CurrentVersion\Default</code>.</li>
-<li>Create a new <code>New DWORD (32-bit) Value</code> inside the <code>Default</code> folder named <code>AnonymousUid</code> and assign the <code>UID</code> found on the <code>UNIX</code> directory as shared by the NFS system.</li>
-<li>Create a new <code>New DWORD (32-bit&quot;) Value</code> inside the <code>Default</code> folder named <code>AnonymousGid</code> and assign the GID found on the UNIX directory as shared by the NFS system.</li>
-<li>Restart the NFS client or reboot the machine to apply the changes.</li>
-</ol>
-<h4 id="Windows输入mount提示：位于命令管道位置-1-的-cmdlet-New-PSDrive-请为以下参数提供值-Name-E-PSProvider-C">Windows输入mount提示：<code>位于命令管道位置 1 的 cmdlet New-PSDrive 请为以下参数提供值:Name: E PSProvider: C:</code></h4>
-<p>reason：缺少“基于UNIX的应用程序子系统”一项。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">New-PSDrive -Name &quot;z&quot; -Root &quot;\\10.147.17.145\srv\nfs&quot; -Persist -PSProvider &quot;FileSystem&quot;</span><br></pre></td></tr></table></figure>
-<p>参考stackoverflow</p>
-<blockquote>
-<p><a href="https://stackoverflow.com/questions/57582910/powershell-cant-run-mount">https://stackoverflow.com/questions/57582910/powershell-cant-run-mount</a></p>
-</blockquote>
-<h4 id="重启nfs服务">重启nfs服务**</h4>
-<p><code> sudo /etc/init.d/nfs-kernel-server restart</code></p>
-<h4 id="验证是否正常使用">验证是否正常使用**</h4>
-<p><code> sudo cat /proc/fs/nfsd/versions</code></p>
-]]></content>
-      <categories>
-        <category>deployment</category>
-      </categories>
-      <tags>
-        <tag>nfs</tag>
-        <tag>mount</tag>
       </tags>
   </entry>
   <entry>
