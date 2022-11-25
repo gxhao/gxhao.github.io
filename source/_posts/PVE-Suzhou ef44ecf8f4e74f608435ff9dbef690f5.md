@@ -1,6 +1,12 @@
-# PVE-Suzhou
-
-菁英公寓pve-操作指南
+---
+title: pve安装openwrt、nas简单教程
+id: '32'
+tags: ['pve','openwrt','nas']
+categories:
+  - - deployment
+date: 2022-11-22 15:59:16
+url: /pveinstall
+---
 
 ## 基础配置
 
